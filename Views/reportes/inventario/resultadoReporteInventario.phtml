@@ -1,0 +1,147 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[69]//Código?></th>
+			<th><?php echo $lang_reportes[70]//Nombre?></th>
+			<th><?php echo $lang_reportes[71]//Precio?></th>
+			<th><?php echo $lang_reportes[80]//Cantidad?> (<?php echo $lang_reportes[40]//Sucursal?>: <?php echo $_SESSION['sucursalActual_nombreSucursal'] ?>)</th>
+			<th><?php echo $lang_reportes[101]//Descripción?></th>
+			<th><?php echo $lang_reportes[102]//Categoría?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoInventario as $listadoInventario1) {
+		
+		//$cantidadPacientes = $objetoReportes->propietarios_cantidadPacientes($listadoInventario1['idPropietario']);
+		
+?>
+		<tr>
+			<td><?php echo $listadoInventario1['codigo'] ?></td>	
+			<td><?php echo $listadoInventario1['nombre']?></td>
+			<td><?php echo $listadoInventario1['precio']?></td>
+			<td><?php echo $listadoInventario1['cantidad']?></td>
+			<td><?php echo $listadoInventario1['descripcion']?></td>		
+			<td><?php echo $listadoInventario1['nombreCategoria']?></td>
+					
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[69]//Código?></th>
+			<th><?php echo $lang_reportes[70]//Nombre?></th>
+			<th><?php echo $lang_reportes[71]//Precio?></th>
+			<th><?php echo $lang_reportes[80]//Cantidad?></th>
+			<th><?php echo $lang_reportes[101]//Descripción?></th>
+			<th><?php echo $lang_reportes[102]//Categoria?></th>
+			<th><?php echo $lang_reportes[103]//Proveedores?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoProductosExportar as $listadoInventario1) {
+		
+		$cantidades = $objetoReportes->inventario_consultarCantidadesProducto($listadoInventario1['idProducto']);
+		
+		$proveedores = $objetoReportes->inventario_consultarProveedoresProducto($listadoInventario1['idProducto']);
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoInventario1['codigo'] ?></td>	
+			<td><?php echo $listadoInventario1['nombre']?></td>
+			<td><?php echo $listadoInventario1['precio']?></td>
+			
+			<td>
+				<?php if(sizeof($cantidades) > 0){ ?>
+					
+				
+				
+				<table>
+					<tr>
+						<th><?php echo $lang_reportes[80]//Cantidad?></th>
+						<th><?php echo $lang_reportes[40]//Sucursal?></th>
+					</tr>
+				
+				<?php  foreach ($cantidades as $cantidades1) { ?>
+					
+					<tr>
+						<td><?php echo $cantidades1['cantidad'] ?></td>
+						<td><?php echo $cantidades1['nombreSucursal'] ?></td>
+					</tr>
+					
+				<?php } ?>
+				
+				</table>
+				
+				
+				<?php } ?>
+				
+			</td>
+			
+			<td><?php echo $listadoInventario1['descripcion']?></td>		
+			<td><?php echo $listadoInventario1['nombreCategoria']?></td>
+			
+			<td>
+				
+				<?php if( sizeof($proveedores) > 0 ){?>
+
+					<table>
+						<tr>
+							<th><?php echo $lang_reportes[104]//Costo?></th>
+							<th><?php echo $lang_reportes[105]//Proveedor?></th>
+							<th><?php echo $lang_reportes[32]//Télefono?></th>
+						</tr>
+					
+					<?php  foreach ($proveedores as $proveedores1) { ?>
+						
+						<tr>
+							<td><?php echo $proveedores1['costo'] ?></td>
+							<td><?php echo $proveedores1['nombreProveedor'] ?></td>
+							<td><?php echo $proveedores1['telefono1'] ?></td>
+						</tr>
+						
+					<?php } ?>
+					
+					</table>
+				
+				<?php } ?>
+				
+			</td>
+					
+		
+			
+		</tr>
+<?php		
+		$contador = $contador +1;
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

@@ -1,0 +1,236 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div> 
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_especies[0]//Especies?>
+									<?php
+									//saber si tiene permiso para crear especies
+										if(in_array("30", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_especies[1]//Nueva especie?>" onclick="mostrarFormNuevaEspecie()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+									//saber si tiene permiso para editar especies
+										if(in_array("31", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarEspecie" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_especies[2]//Editar especie?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarEspecie" name="form_editarEspecie" action="" method="post" >
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+						  					<input type="hidden" id="idEditarEspecie" name="idEditarEspecie" value="" />
+							  				<div class="input-field col s12 m8 l8">
+							  					<input type="text" id="editarNombreEspecie" name="editarNombreEspecie" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreEspecie" for="editarNombreEspecie"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_especies[3]//Nombre especie?></label>
+							  				</div>
+						  				</form>
+						  				<div class="input-field col s12 m4 l4 center-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionEspecie()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionEspecie()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar especie
+								
+									//saber si tiene permiso para crear especies
+										if(in_array("30", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevaEspecie" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevaEspecie" name="form_nuevaEspecie" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevaEspecie" name="envioNuevaEspecie"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="nombreEspecie" name="nombreEspecie" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreEspecie" for="nombreEspecie"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_especies[4]//Nombre de la nueva especie?></label> 
+						                      </div> 
+						                      
+						                  
+						                  
+							                  <div class="input-field col s12 m6 l6 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaEspecie()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaEspecie()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>
+							                  
+							                 </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nueva especie-->
+						  		<?php
+						  			}//fin permiso especie
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_especies[5]//Buscar especie (Escribe y selecciona)?>" id="buscarEspecie" type="text" class="validate" onkeypress="buscarEspecieListados()" >
+						<input type="hidden" id="idEspecieBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaEspecie()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_especies[6]//Activar especie?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_especies[7]//Desactivar especie?></span>
+						
+							<div id="resultadoEspeciesAjax">
+								
+							</div><!-- Fin para el resultado de las especies ajax-->
+							
+							<div id="resultadoEspecies">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_especies[8]//Especie?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoEspecies as $listadoEspecies1) {
+												
+												if($listadoEspecies1['estado'] == 'A'){																																																			//Desactivar especie
+													$btn = '<span id="spanB_'.$listadoEspecies1['idEspecie'].'"> <a id="'.$listadoEspecies1['idEspecie'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarEspecie(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_especies[7].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar especie
+													$btn = '<span id="spanB_'.$listadoEspecies1['idEspecie'].'"> <a id="'.$listadoEspecies1['idEspecie'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarEspecie(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_especies[6].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoEspecies1['idEspecie']."','".$listadoEspecies1['nombre']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("31", $_SESSION['permisos_usuario'] )){ ?> onclick="editarEspecie(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoEspecies1['nombre']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de las especies-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

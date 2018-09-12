@@ -1,0 +1,140 @@
+<main>
+
+ <div class="container">
+  
+   <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card  grey lighten-5">
+            <div class="card-content">
+              <span class="card-title">
+                  <h3 class="center-align"><?php echo $lang_sucursales[4]//Hola!. vamos a crear tu primera sucursal?></h3>
+              </span>
+              <p class="center-align orange-text text-darken-2" ><?php echo $lang_sucursales[5] //Antes de utilizar QuiaZack es necesario tener almenos una sucursal.?></p>
+              <br/>
+              <div class="row">
+                  <form class="col s12 m12 l12" id="form_primeraSucursal" name="form_primeraSucursal" action="<?php echo Config::ruta()?>Controllers/home/guardarPrimeraSucursal.php" method="post" enctype="multipart/form-data">
+                      
+                      <input type="hidden" id="idPais"   name="idPais"    value="0"/>
+                      <input type="hidden" id="idCiudad" name="idCiudad"  value="0"/>
+                      <input type="hidden" id="idBarrio" name="idBarrio"  value="0"/>
+                      
+                      <div class="row">
+                          
+                          <div class="input-field col s12 m6 l6">
+                              <input id="sucursal_nit"  name="sucursal_nit" type="text" class="validate" length="50" maxlength="50">
+                              <label id="label_sucursal_nit" for="sucursal_nit" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[0]//Identificación tributaria?></label>
+                          </div>
+                          
+                          <div class="input-field col s12 m6 l6">
+                              <input id="sucursal_nombre" name="sucursal_nombre" type="text" class="validate" length="100" maxlength="100">
+                              <label id="label_sucursal_nombre" for="sucursal_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[1]//Nombre de la sucursal?></label>
+                          </div>
+                          
+                      </div><!-- fin row-->
+                      
+                      <div class="row">
+                          
+                          <div class="input-field col s12 m6 l6">
+                              <input id="sucursal_leyendaEncabezado" name="sucursal_leyendaEncabezado" type="text" class="validate" length="300" maxlength="300">
+                              <label id="label_sucursal_leyendaEncabezado" for="sucursal_leyendaEncabezado"><?php echo $lang_sucursales[2] //Leyenda del encabezado?></label>
+                          </div>
+                        
+                        <div class="file-field input-field col s12 m6 l6">
+                              <div class="btn black">
+                                <span><?php echo $lang_sucursales[3] //Logo?></span>
+                                <input type="file" id="sucursal_logo" name="sucursal_logo">
+                              </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="<?php echo $lang_sucursales[6]//logo para la sucursal?>">
+                              </div>
+                        </div>
+                        
+                      </div>
+                      
+                      <div class="row">
+                          
+                          <div class="input-field col s12 m4 l4">
+                            <input id="sucursal_telefono1" name="sucursal_telefono1" type="text" class="validate" length="20" maxlength="20">
+                            <label id="label_sucursal_telefono1" for="sucursal_telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+                          </div>
+                          
+                          <div class="input-field col s12 m4 l4"> 
+                                <input id="sucursal_telefono2"  name="sucursal_telefono2" type="text" class="validate" length="20" maxlength="20">
+                                <label id="label_sucursal_telefono2" for="sucursal_telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[1]//Segundo teléfono?></label>
+                          </div>
+                          
+                          <div class="input-field col s12 m4 l4">
+                                <input id="sucursal_celular" name="sucursal_celular"  type="text" class="validate" length="20" maxlength="20">
+                                <label id="label_sucursal_celular" for="sucursal_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+                          </div>
+                          
+                      </div><!-- Fin row-->
+                      
+                      <div class="row">
+                          
+                          <div class="input-field col s12 m6 l6">
+                                <input id="sucursal_direccion" name="sucursal_direccion" type="text" class="validate" length="50" maxlength="50">
+                                <label id="label_sucursal_direccion" for="sucursal_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label> 
+                          </div>
+                          
+                          <div class="input-field col s12 m6 l6">
+                                <input id="sucursal_email" name="sucursal_email"  type="email" class="validate" length="100" maxlength="100">
+                                <label id="label_sucursal_email" for="sucursal_email" ><?php echo $lang_general[4]//E-mail?></label> 
+                          </div>
+                          
+                      </div><!-- Fin row-->
+                      
+                      <div class="row">
+                          
+                          <div class="input-field col s12 m4 l4">
+                                <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" >
+                                <label id="label_sucursal_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+                          </div>
+                          
+                          <div class="input-field col s12 m4 l4" data-hint="Debes crear la ciudad" data-hintPosition="top-middle">
+                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+                                <input id="ciudad" name="ciudad" type="text" class="validate" onkeypress="buscarCiudad()" disabled>
+                                <label id="label_sucursal_ciudad" for="ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+                          </div>
+                          
+                          <div class="input-field col s12 m4 l4" data-hint="Debes crear el barrio" data-hintPosition="top-middle">
+                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevoBarrio" href="#modal_nuevoBarrio" data-target="modal_nuevoBarrio" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//nuevo barrio ?>" style="cursor:pointer;  display:none;"></i>
+                                <input id="barrio" name="barrio" type="text" class="validate"  onkeypress="buscarBarrio()" disabled>
+                                <label id="label_sucursal_barrio" for="barrio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[7]//Barrio (Escriba y seleccione)?></label> 
+                          </div>
+                          
+                      </div><!-- fin row-->
+                      
+                      <div class="row">
+                        <div class="col s12 m12 l12 ">
+                          <a class="waves-effect waves-light btn right" onclick="validarGuardadoPrimeraSucursal()"><?php echo $lang_botones[2]//Guardar?></a>
+                        </div>
+                      </div>
+                      
+                      
+                      
+                  </form>
+              </div>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+     
+ </div>
+ 
+ 
+</main>
+
+
+<script>
+	$(document).ready(function () {
+		
+		var intro = introJs();
+		intro.showHints();
+	
+		});
+</script>
+ 
+ 

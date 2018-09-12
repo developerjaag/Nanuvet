@@ -1,0 +1,324 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              </span>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_proveedores[0]//Proveedores?>
+									
+									<?php
+							    		//saber si tiene permisos para adicionar proveedores
+										if(in_array("48", $_SESSION['permisos_usuario'] )){
+									?>
+									
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_proveedores[1]//Nuevo proveedor?>" onclick="mostrarFormNuevoProveedor()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			
+						  			<?php
+										}
+									?>
+						  			
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+							    		//saber si tiene permisos para editar proveedores
+										if(in_array("47", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarProveedor" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_proveedores[2]//Editar proveedor?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarProveedor" name="form_editarProveedor" action="" method="post" >
+						  					
+						  					<input type="hidden" id="editar_idProveedor" name="editar_idProveedor" value="" />
+						  					
+						                    <div class="row">
+                          
+						                      <div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="editar_identificativo" name="editar_identificativo" type="text" class="validate" length="50" maxlength="50" >
+					          							<label id="label_editar_identificativo" for="editar_identificativo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[3]//Identificación?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="editar_nombre" name="editar_nombre" type="text" class="validate" length="100" maxlength="100" >
+					          							<label id="label_editar_nombre" for="editar_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[4]//Nombre?></label>
+							  						</div>
+							  					</div>
+						                      
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_telefono1" name="editar_telefono1" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_editar_telefono1" for="editar_telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[5]//Teléfono?> 1</label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_telefono2" name="editar_telefono2" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_editar_telefono2" for="editar_telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[5]//Teléfono?> 2</label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_celular" name="editar_celular" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_editar_celular" for="editar_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[6]//Celular?></label>
+							  						</div>
+						          				</div>
+						          				
+						          				
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m6 l6">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_direccion" name="editar_direccion" type="text" class="validate"  length="50" maxlength="50"  >
+					          							<label id="label_editar_direccion" for="editar_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[7]//Dirección?></label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m6 l6">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_email" name="editar_email" type="text" class="validate"  length="100" maxlength="100"  >
+					          							<label id="label_editar_email" for="editar_email" data-error="El E-mail no es valido" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >E-mail</label>
+							  						</div>
+						          				</div>
+						          				
+						          				
+						          			</div><!-- Fin row-->
+							  				
+						  				</form>
+						  				
+						  				<div class="input-field col s12 m12 l12 right-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionProveedor()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionProveedor()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  				}//fin if permiso editar proveedor
+								
+							    		//saber si tiene permisos para adicionar proveedores
+										if(in_array("48", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevoProveedor" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoProveedor" name="form_nuevoProveedor" action="" method="post">						  					
+						                    <input type="hidden" id="envioNuevoProveedor" name="envioNuevoProveedor"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      <div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="identificativo" name="identificativo" type="text" class="validate" length="50" maxlength="50" >
+					          							<label id="label_identificativo" for="identificativo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[3]//Identificación?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="nombre" name="nombre" type="text" class="validate" length="100" maxlength="100" >
+					          							<label id="label_nombre" for="nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[4]//Nombre?></label>
+							  						</div>
+							  					</div>
+						                      
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="telefono1" name="telefono1" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_telefono1" for="telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[5]//Teléfono?> 1</label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="telefono2" name="telefono2" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_telefono2" for="telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[5]//Teléfono?>  2</label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="celular" name="celular" type="text" class="validate"  length="20" maxlength="20"  >
+					          							<label id="label_celular" for="celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[6]//Celular?></label>
+							  						</div>
+						          				</div>
+						          				
+						          				
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m6 l6">
+						          					<div class="input-field">							  							 
+							  							<input id="direccion" name="direccion" type="text" class="validate"  length="50" maxlength="50"  >
+					          							<label id="label_direccion" for="direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_proveedores[7]//Dirección?></label>
+							  						</div>
+						          				</div>
+						          				
+						          				<div class="col s12 m6 l6">
+						          					<div class="input-field">							  							 
+							  							<input id="email" name="email" type="text" class="validate"  length="100" maxlength="100"  >
+					          							<label id="label_email" for="email" data-error="El E-mail no es valido" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >E-mail</label>
+							  						</div>
+						          				</div>
+						          				
+						          				
+						          			</div><!-- Fin row-->
+						          			
+						          			
+						                  	<div>
+						                  	
+							                  <div class="input-field col s12 m12 l12 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoProveedor()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoProveedor()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>						  					
+						  					
+						  					</div><!-- fin row-->
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo proveedor-->
+						  		<?php
+						  			}//fin if permiso crear proveedore
+						  		?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="Buscar proveedor (Escribe y selecciona)" id="buscarProveedor" type="text" class="validate" onkeypress="buscarProveedor()" >
+						<input type="hidden" id="idProveedorBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaProveedor()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_proveedores[8]//Activar proveedor?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_proveedores[9]//Desactivar proveedor?></span>
+						
+							<div id="resultadoProveedoresAjax">
+								
+							</div><!-- Fin para el resultado de los proveedores ajax-->
+							
+							<div id="resultadoProveedores">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_proveedores[3]//Identificación?></th>
+											<th><?php echo $lang_proveedores[4]//Nombre?></th>
+											<th><?php echo $lang_proveedores[5]//Teléfono?> 1</th>
+											<th><?php echo $lang_proveedores[5]//Teléfono?> 2</th>
+											<th><?php echo $lang_proveedores[6]//Celular?></th>
+											<th><?php echo $lang_proveedores[7]//Dirección?></th>
+											<th>E-mail</th>
+											<th><?php echo $lang_proveedores[10]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php
+										
+											foreach ($listadoproveedores as $listadoproveedores1) {
+																	
+												if($listadoproveedores1['estado'] == "A"){																																																						//Desactivar proveedor
+													$btn = '<span id="spanP_'.$listadoproveedores1['idProveedor'].'"> <a id="'.$listadoproveedores1['idProveedor'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarProveedor(this.id)"  data-position="bottom" data-delay="50" data-tooltip="'.$lang_proveedores[9].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																															//Activar proveedor
+													$btn = '<span id="spanP_'.$listadoproveedores1['idProveedor'].'"> <a id="'.$listadoproveedores1['idProveedor'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarProveedor(this.id)" data-position="bottom" data-delay="50" data-tooltip="'.$lang_proveedores[8].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}				
+																
+												$parametros = "'".$listadoproveedores1['idProveedor']."','".$listadoproveedores1['nombre']."','".$listadoproveedores1['telefono1']."','".$listadoproveedores1['telefono2']."','".$listadoproveedores1['celular']."','".$listadoproveedores1['direccion']."','".$listadoproveedores1['email']."','".$listadoproveedores1['identificativoNit']."'";				
+										?>					
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?> onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['identificativoNit']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['nombre']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['telefono1']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['telefono2']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['celular']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['direccion']?></td>
+												<td <?php if(in_array("47", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProveedor(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoproveedores1['email']?></td>
+												<td  ><?php echo $btn?></td>
+											</tr>
+														
+													
+										<?php		
+											}//fin foreach
+										
+										?>
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los proveedores-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

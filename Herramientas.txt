@@ -1,0 +1,2 @@
+Herramienta para realizar pruebas del responsive:
+http://www.responsinator.com

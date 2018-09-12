@@ -1,0 +1,511 @@
+<!-- Modal para decidir la forma de impresion -->
+
+<div id="modal_impresionHC" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_historiaClinica[10]//Imprimir historia clínica?></h4>
+      <br />
+      <div class="row">
+      	<div class="col s12 center-align">      		
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCFechas/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[11]//Por fechas?></a>
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCElementos/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[12]//Agrupando elementos?></a>
+      	</div>
+      </div>
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-red btn-flat"><?php echo $lang_botones[5]//Cancelar?></a>
+    </div>
+  </div>
+
+
+<!-- Fin  Modal para decidir la forma de impresion -->
+
+<!-- Modal para texto observaciones -->
+
+<div id="modal_observacionesFormula" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observaciones" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="formula_ObtenerTxtObservacionesFormula()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el observaciones -->
+
+<!-- Modal para personalizado de observaciones-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoObservacionesFormula" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_formulas[0]//Personalizados observaciones de formulación?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoOF" type="text" class="validate" onkeypress="formula_buscarPersonalizadoObservacionesFormula()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_formulas[1]//Observaciones de fromulación?></label>
+            	<input type="hidden" id="idPersonalizadoObservacionesFormulaBuscado" name="idPersonalizadoObservacionesFormulaBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoObservacionesFormula">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoObservacionesFormula()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+<!-- Modal para personalizado de observaciones de formula-->
+
+
+
+<main>
+		
+	 <div class="row">
+ 	
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+					<div class="row">
+						<div class="col s12 l12 m12">
+					 			
+					 		<a href="http://www.nanuvet.com/nuevo/<?php echo $datosPP_idPropietario?>">
+							  <div class="chip" style="cursor: pointer;" >
+							    <?php echo $lang_consultas[9]//Propietario:?> <?php echo "(".$datosPP_identificacionPropietario.") ".$datosPP_nombrePropietario." ".$datosPP_apellidoPropietario." -- ".$datosPP_celularPropietario?>
+							  </div>
+							</a>	
+							  
+							  <div class="chip">
+							  	
+							  	<?php
+							  		if($datosPP_urlFotoPaciente != ""){
+							  	?>
+							  			<img  src="<?php echo "../../../Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$datosPP_urlFotoPaciente ?>" alt="foto">
+							  	<?php
+							  		}
+									
+									if($datosPP_sexoPaciente == 'M'){
+										$sexoP	= $lang_consultas[10]/*Macho*/;
+									}else{
+										$sexoP	= $lang_consultas[11]/*Hembra*/;
+									}
+									
+									if($datosPP_esterilizadoPaciente == "Si"){
+										$esterilizadoP = $lang_consultas[12]/*Si*/;
+									}else{
+										$esterilizadoP = $lang_consultas[13]/*No*/;
+									}
+									
+							  	?>							  								  
+							    					<!-- -Nombre: -->												<!-- -Sexo:-->								<!-- -Edad:-->															<!-- -Esterilizado:-->								<!-- -Raza: -->
+							    <?php echo "<u>/".$lang_consultas[14]."</u> ".$datosPP_nombrePaciente."   <u>/".$lang_consultas[15]."</u> ".$sexoP."   <u>/".$lang_consultas[16]."</u> ".$datosPP_edadPacientePaciente."   <u>/".$lang_consultas[17]."</u> ".$esterilizadoP."   <u>/".$lang_consultas[18]."</u> ".$datosPP_nombreRazaPaciente ?>
+							
+								  <?php							  
+								  	if(sizeof($comprobarHospitalizacionActiva) > 0){
+								  ?>
+								  	
+								  		<div class="chip orange">
+								  			<?php echo $lang_historiaClinica[13]//Paciente Hospitalizado?>
+								  		</div>
+								  	
+								  <?php
+								  	}
+								  ?>
+							
+							  </div>
+							  
+								<a class="btn-floating waves-effect waves-light black tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_historiaClinica[10]//Imprimir historia clínica?>" onclick="tipoImpresionHistoriaClinica()" ><i class="fa fa-print" aria-hidden="true"></i></a>
+        
+					 	</div>
+					</div>
+
+					<div class="row">
+						
+						<div class="col s12 m12 l12 ">
+													
+						<ul class="tabs" style="overflow-x: auto !important;">
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/cirugias/')" class="black-text" ><?php echo $lang_historiaClinica[0]//Cirugías?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalCirugias?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/consultas/')" class="black-text" ><?php echo $lang_historiaClinica[1]//Consultas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalConsultas?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/desparasitantes/')" class="black-text" ><?php echo $lang_historiaClinica[2]//Desparasitantes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuDesparasitantes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/examenes/')" class="black-text" ><?php echo $lang_historiaClinica[3]//Exámenes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalExamenes?></span></a></li>
+					        <li class="tab col s1 m1 l1 grey lighten-2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/formulas/')" class="black-text active" ><?php echo $lang_historiaClinica[4]//Formulas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalFormulas?></span></a></li>
+					        <li class="tab col s2 m2 l2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/hospitalizacion/')" class="black-text" ><?php echo $lang_historiaClinica[5]//Hospitalizaciones?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalHospitalizaciones?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/vacunas/')" class="black-text" ><?php echo $lang_historiaClinica[6]//Vacunas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalVacunas?></span></a></li>
+					        
+						</ul>
+							
+						</div>
+						
+					</div><!-- Fin row-->
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								<h4 id="tituloLi" class="center-align"><?php echo $lang_formulas[2]//Nueva fórmula?>
+									<?php
+									//saber si tiene permiso para nueva formula
+										if(in_array("64", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_formulas[2]//Nueva fórmula?>" onclick="abrirFormNuevaFormula()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}//fin permiso crear formula
+						  			?>
+						  			
+						  		</h4>						  		
+						  		<br />
+									<?php
+									//saber si tiene permiso para nueva formula
+										if(in_array("64", $_SESSION['permisos_usuario'] )){
+									?>
+								<div id="hidden_nuevaFormula" style="display:none;" >
+									
+									<div class="col s12 m12 l12">
+			                      		<h4 class="center-align"><?php echo $lang_formulas[2]//Nueva fórmula?></h4>
+			                      	</div>
+			                      	
+			                      	<form id="form_nuevaFormula" name="form_nuevaFormula" method="post" action="" >
+										 		
+										<input type="hidden" id="hidden_evioFormNuevaFormula" name="hidden_evioFormNuevaFormula" value="enviar" />
+								 		<input type="hidden" id="idPaciente" name="idPaciente" value="<?php echo $_GET['id1'] ?>" />
+								 		<input type="hidden" id="contadorIF" name="contadorIF" value="0" />
+										
+										<input type="hidden" id="idPacienteReplica" name="idPacienteReplica" value="<?php echo $datosPP_idReplica?>" />
+									
+										<div class="row">									 			
+										 		
+								    		<div class="input-field col s12 m12 l12">
+								    			
+								    			<span class="prefix">
+								    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_observacionesFormula" style="cursor: pointer;" ></i>
+								    					<?php
+														//saber si tiene permiso para personalizados
+															if(in_array("1", $_SESSION['permisos_usuario'] )){
+														?>
+								    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoObservacionesFormula" style="cursor: pointer;"></i>
+								    					<?php
+															}
+														?>
+								    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="formula_limpiarTextareaObservacionesFormula()"></i>
+								    				</span>
+								    				
+								    				<div id="tituloObservaciones" style="display: none;">
+								    					<div>
+								    						<span style="text-align: center;"><h5><?php echo $lang_formulas[3]//Observaciones de la fórmula?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="formula_recuperarTextareaObservaciones()"></i> </h5> </span>
+								    					</div>
+								    					
+								    				</div>
+								    				
+								    				<span id="contenidoTextoTexarea_observaciones" style="display: none;"></span>
+								    				
+								    				
+								    				<div id="contenidoEditorObservaciones" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+								    					
+								    				</div>		
+								    									    					
+											        <textarea id="observaciones" name="observaciones" class="materialize-textarea" style="max-height: 8rem; min-height: 8rem !important; overflow-y: scroll;"></textarea>
+											        <label id="label_observaciones" for="observaciones"><?php echo $lang_formulas[3]//Observaciones de la fórmula?> </label>
+											        
+								    		</div>
+							    		
+							    		</div><!-- Fin row -->
+									
+									
+									
+									
+										 <div class="row">
+										 	
+										 		<div class="col s12 m3 l3 input-field">
+									    			
+									    				<!--<i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoMedicamento" data-target="modal_nuevoMedicamento" data-position="right" data-delay="50" data-tooltip="Nuevo medicamento" style="cursor:pointer;" onclick="limpiarModalNuevoMedicamento()"></i>-->
+									    				<input id="buscarMedicamento" type="text" class="validate" onkeypress="formula_buscarMedicamento()">
+												    	<label id="label_buscarMedicamento" for="buscarMedicamento" data-error="<?php echo $lang_formulas[5]//El medicamento ya se adicionó?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_formulas[4]//Buscar medicamento?></label>
+											    														    		
+									    		</div><!-- Fin col-->
+									    		
+									    		<div class="col s12 m2 l2 input-field">
+
+									    				<input id="cantidad" type="text" class="validate" onkeypress="return soloNumeros(event)">
+												    	<label id="label_cantidad" for="cantidad" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_formulas[6]//Cantidad?></label>
+											    														    		
+									    		</div><!-- Fin col-->
+
+									    		<div class="col s12 m2 l2 input-field">
+
+									    				<input id="frecuencia" type="text" class="validate" length="20" maxlength="20">
+												    	<label id="label_frecuencia" for="frecuencia" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_formulas[7]//Frecuencia?></label>
+											    														    		
+									    		</div><!-- Fin col-->
+									    		
+									    		<div class="col s12 m3 l3 input-field">
+
+									    				<input id="dosificacion" type="text" class="validate" length="50" maxlength="50">
+												    	<label id="label_dosificacion" for="dosificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_formulas[8]//Dosificación?></label>
+											    														    		
+									    		</div><!-- Fin col-->
+									    		
+									    		<div class="col s12 m2 l2 input-field">
+
+									    				<select id="viaAdministracion" name="viaAdministracion" >
+													      <option value="" disabled selected><?php echo $lang_formulas[9]//Elija una opción?></option>
+													      <option value="Oral"><?php echo $lang_formulas[10]//Oral?></option>
+													      <option value="Tópica"><?php echo $lang_formulas[11]//Tópica?></option>
+													      <option value="Transdérmica"><?php echo $lang_formulas[12]//Transdérmica?></option>
+													      <option value="Oftálmica"><?php echo $lang_formulas[13]//Oftálmica?></option>
+													      <option value="Ótica"><?php echo $lang_formulas[14]//Ótica?></option>
+													      <option value="Intranasal"><?php echo $lang_formulas[15]//Intranasal?></option>
+													      <option value="Rectal"><?php echo $lang_formulas[16]//Rectal?></option>
+													      <option value="Vaginal"><?php echo $lang_formulas[17]//Vaginal?></option>
+													      <option value="Intravenosa"><?php echo $lang_formulas[18]//Intravenosa?></option>
+													      <option value="Intramuscular"><?php echo $lang_formulas[19]//Intramuscular?></option>
+													      <option value="Subcutánea"><?php echo $lang_formulas[20]//Subcutánea?></option>
+													      <option value="" disabled></option>
+													    </select>
+													    <label><?php echo $lang_formulas[21]//Vía de administración?></label>
+											    														    		
+									    		</div><!-- Fin col-->
+
+										 	
+									    </div><!-- Fin row-->
+									    	
+									    <div class="row">
+									    	
+									    	
+									    	<div class="col s12 m8 l8 input-field">
+									    													    			
+							    				<textarea id="observacionesMedicamento" name="observacionesMedicamento" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+										        <label id="label_observacionesMedicamento" for="observacionesMedicamento"><?php echo $lang_formulas[22]//Observaciones del medicamento?></label>
+											    			
+											 </div>
+											 
+											 <div class="col s12 m4 l4 center-align">
+											 	
+											 	<input type="hidden" id="idMedicamentoBuscadoItems" name="idMedicamentoBuscadoItems" value="0" />
+								    			<input type="hidden" id="nombreMedicamentoBuscadoItems" name="nombreMedicamentoBuscadoItems" value="0" />
+								    														    			
+								    			<a class="waves-effect red darken-1 btn" onclick="limpiarMedicamentoBuscadoItems()"><?php echo $lang_botones[10]//Limpiar?></a>
+								    			<a class="waves-effect waves-light btn" onclick="adicionarMedicamentoBuscadoItems()"><?php echo $lang_formulas[23]//Adicionar?></a>
+											 </div>
+											 
+											 <div class="col s12 m12 l12 center-align">
+								    			<span id="textoErrorAdicionarMedicamentoItem" style="display: none;"><?php echo $lang_formulas[24]//El medicamento para adicionar no es valido?></span>
+								    			<span id="textoErrorAdicionarMedicamentoItem2" style="display: none;"><?php echo $lang_formulas[5]//El medicamento ya se adicionó?></span>
+								    			<span id="textoErrorAdicionarMedicamentoItem3" style="display: none;"><?php echo $lang_formulas[25]//Debe elegir una vía de administración?></span>
+								    			<span id="errorAdicionarMedicamentoItem" class="red-text">&nbsp;</span>
+								    		 </div>
+											 
+											 
+											 
+									    </div><!-- Fin row-->
+									    														    										    			
+									    								    				
+						    			</form>
+						    				
+						    				<span id="removerMedicamento" style="display: none;"><?php echo $lang_formulas[26]//Remover medicamento?></span>
+									    	
+									    	<div class="row">
+									    											    		
+									    		<div class="col s12 m12 l12">
+									    			
+							    			      <ul class="collection with-header" id="ul_Medicamentos">
+											        <li class="collection-header"><h5 class="center-align"><?php echo $lang_formulas[27]//Medicamentos?></h5></li>											        
+											      </ul>
+											      
+									    		</div>
+									    		
+									    	</div><!-- Fin row-->
+									    	
+									    	<div class="row">
+									    		<div class="col s12 m12 l12 right-align">
+									    			<span id="textoErrorGuardandoFormula" style="display: none;"><?php echo $lang_formulas[28]//Debe adicionar almenos un medicamento?></span>
+									    			<span id="errorGuardadoFormula" class="red-text">&nbsp;</span>
+									    		</div>
+									    		<div class="col s12 m12 l12 right-align">
+									    			
+									    			<!-- textos para mostrar alerta cancelar examen-->
+									       			<span id="estaSeguro" style="display: none;"><?php echo $lang_formulas[30]//Esta seguro de cancelar la formula??></span>
+									       			<span id="Seperderan" style="display: none;"><?php echo $lang_consultas[53]//Se perderán todos los datos?></span>
+									       			<span id="SiCancelarla" style="display: none;"><?php echo $lang_consultas[54]//Si, cancelarla?></span>
+									    			
+									              	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaFormula()"><?php echo $lang_botones[5]//Cancelar?></a>					  								
+		                    						<a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaFormula()"><?php echo $lang_botones[2]//Guardar?></a>									    			
+									    		</div>
+									    	</div>
+									    		    	
+									<br />
+								</div><!-- Fin div para nueva formula-->
+								<?php
+						  				}//fin permiso crear formula
+						  			?>
+						  	</li>
+						  	
+						</ul>
+					</div><!-- Fin col-->
+				</div><!-- Fin row-->
+
+
+
+
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+					
+						  <ul class="collapsible popout" data-collapsible="accordion">
+						  	
+						
+							<?php
+								foreach ($listadoFormulas as $listadoFormulas1) {
+									
+									//consultar los detalles de la formula (items o medicamentos)
+									$detalleFormula	= $objetoFormulas->consultarDetalleFormula($listadoFormulas1['idFormula']);
+							?>	
+									<li>							
+								      	<div class="collapsible-header">
+								      		<i class="fa fa-file-text" aria-hidden="true"></i><?php echo $listadoFormulas1['fecha']." ".$listadoFormulas1['hora']." / ".$listadoFormulas1['nombreUsuario']." ".$listadoFormulas1['apellido']." / ".$listadoFormulas1['nombreSucursal']?>
+
+									
+										</div>
+										
+									  	<div class="collapsible-body">
+						      				<br />
+						      				
+								      		<div class="col s12 m2 l2 center-align valign">
+								      			<a href="http://www.nanuvet.com/impresiones/formulas/<?php echo $listadoFormulas1['idFormula']  ?>/" target="_blank" class="waves-effect waves-light btn"><i class="fa fa-print left" aria-hidden="true"></i><?php echo $lang_botones[9]//Imprimir?></a>
+								      		</div>
+								      		<div>
+								      			
+								      		</div>
+						      				<div class="row">
+						      		
+									      		<div class="col s12 m12 l12" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+											      	
+											      		
+											      		<h6><b><?php echo $lang_formulas[29]//Observaciones?>:</b></h6>
+											      		<p>
+			 												<?php echo $listadoFormulas1['observaciones'] ?> 
+											      		</p>
+											      	
+									      		</div>
+									      		
+									      	</div><!-- Fin row-->
+									      	
+								      	 	  <ul class="collection with-header">
+										        <li class="collection-header"><h4><?php echo $lang_formulas[27]//Medicamentos?></h4></li>
+										        
+										        <?php
+										        	foreach ($detalleFormula as $detalleFormula1) {
+										        		
+														
+														
+												?>
+														<li class="collection-item">
+															<div>
+																<b><?php echo "(".$detalleFormula1['codigo'].")  ".$detalleFormula1['nombre'] ?></b> 
+																<?php 
+																	echo "(<i>".$detalleFormula1['observacion']."</i>) --- <b> Cantidad:</b>".$detalleFormula1['cantidad'].
+																 			" -<b>Frecuencia:</b>".$detalleFormula1['frecuencia']." -<b>Dosificación:</b>".$detalleFormula1['dosificacion'].
+																 			" -<b>Vía administración:</b>".$detalleFormula1['via']." (<i>".$detalleFormula1['observacionM']."</i>)"
+																 ?>  
+															</div>
+														</li>
+												<?php		
+														
+													}//fin foreach
+										        ?>
+										        
+										        
+										      </ul>
+										      
+										      <br />
+										      <br />
+						      			
+						      			</div>
+										
+									</li>	
+										
+							
+							<?php
+								}//fin foreach
+							?>
+						
+						  	
+						  </ul>
+					</div>
+				</div>
+
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+
+	
+</main>
+
+<script>
+	$(document).ready(function () {
+		//funcion para evitar que se salga del sitio y perder los cambios
+			window.onbeforeunload = function(e) {
+				  e = e || window.event,
+				  message = "Seguro que desea salir sin guardar?";
+				 
+				  // show alert if there are some unsaved form
+				  if ($('.unsavedForm').size()) {
+				    // For IE and Firefox
+				                if (e) {
+				                  e.returnValue = message;
+				                }
+				                // For Safari
+				                return message;
+				  }
+				};
+				
+				
+	});
+</script>

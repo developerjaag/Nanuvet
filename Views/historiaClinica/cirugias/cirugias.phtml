@@ -1,0 +1,1037 @@
+<!-- Modal para decidir la forma de impresion -->
+
+<div id="modal_impresionHC" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_historiaClinica[10]//Imprimir historia clínica?></h4>
+      <br />
+      <div class="row">
+      	<div class="col s12 center-align">      		
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCFechas/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[11]//Por fechas?></a>
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCElementos/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[12]//Agrupando elementos?></a>
+      	</div>
+      </div>
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-red btn-flat"><?php echo $lang_botones[5]//Cancelar?></a>
+    </div>
+  </div>
+
+
+<!-- Fin  Modal para decidir la forma de impresion -->
+
+
+<!-- Modal para notas aclaratorias -->
+<?php
+//saber si tiene permiso para notas aclaratorias
+	if(in_array("88", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_notasAclaratorias" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_historiaClinica[7]//Notas aclaratorias?></h4> 
+      
+      <div class="row  valign-wrappe">
+      	
+        <form class="col s12 m12 l12">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <textarea id="textoNotaAclaratoria" name="textoNotaAclaratoria" class="materialize-textarea"></textarea>              
+              <label id="label_textoNotaAclaratoria"  for="textoNotaAclaratoria" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_historiaClinica[8]//Texto para la nota aclaratoria?></label>
+              
+              <input type="hidden" id="idCirugiaNotaAclaratoria" name="idCirugiaNotaAclaratoria" value="" />
+            </div>          
+          </form>   
+            <div class="col s12 m4 l4 valign">
+            	<a class="waves-effect waves-light btn" onclick="guardarNotaAclaratoriaCirugia()"><?php echo $lang_botones[2] //Guardar?></a>
+            </div> 
+            
+          </div><!-- Fin row-->
+        
+          <hr/>
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaNotasAclaratorias" >
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        
+      </div>
+      
+    </div>
+    <div class="modal-footer">      
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_botones[3]//Cerrar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso notas aclaratorias
+?>
+<!-- Modal para notas aclaratorias-->
+
+
+<!-- Modal para crear un nuevo diagnostico-->
+<?php
+//saber si tiene permiso para crear diagnosticos
+	if(in_array("21", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_nuevoDiagnostico" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+    	<h4 class="center-align"><?php echo $lang_cirugias [7]//Nueva cirugía?></h4> 
+       
+       <div class="row">
+  				<form class="col s12 m12 l12" id="form_nuevoDiagnosticoCirugia" name="form_nuevoDiagnosticoCirugia" action="" method="post">  					
+                    
+                    <div class="row">
+  
+                      
+                      <div class="input-field col s12 m6 l6">						                            
+                            <input id="nombreDiagnostico" name="nombreDiagnostico" type="text" class="validate" length="100" maxlength="100">
+                            <label id="label_nombreDiagnostico" for="nombreDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_cirugias [19]//Nombre de la nueva cirugía?></label> 
+                      </div> 
+                      
+                      <div class="input-field col s12 m4 l4">						                            
+                            <input id="codigoDiagnostico" name="codigoDiagnostico" type="text" class="validate" length="10" maxlength="10">
+                            <label id="label_codigoDiagnostico" for="codigoDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_cirugias [20]//Código de la nueva cirugía?></label> 
+                      </div> 
+                      
+                      <div class="input-field col s12 m2 l2">						                            
+                            <i id="btnGenerarCodigo" class="fa fa-random fa-2x tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodiagnosticoConsulta('codigoDiagnostico')"></i> 
+                      </div> 
+                      
+                    </div>
+                      
+                   <div class="row">
+                      
+                      <div class="input-field col s12 m6 l6">						                            
+                           <input id="observacionDiagnostico" name="observacionDiagnostico" type="text" class="validate" length="200" maxlength="200">
+                           <label id="label_observacionDiagnostico" for="observacionDiagnostico" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[6]//Observación?></label>
+                      </div> 
+                      
+                      <div class="input-field col s12 m4 l4">		
+                      	   <i class="fa fa-usd prefix" aria-hidden="true"></i>				                            
+                           <input id="precioDiagnostico" name="precioDiagnostico" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumerosPuntos(event)" >																	<!-- Precio-->
+                           <label id="label_precioDiagnostico" for="precioDiagnostico" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[7]." ".$lang_general[13]//(Utilizar punto solo para decimales)?></label>
+                      </div> 
+                      
+                  </div><!-- fin row-->
+                  
+                  <div class="row">
+                  	
+	                  <div class="input-field col s12 m12 l12 right-align">							                  	
+	                    <a class="waves-effect waves-light btn" onclick="guardarNuevoDiagnosticoCirugia()"><?php echo $lang_botones[2]//Guardar?></a>
+	                  </div>
+                  
+                  </div><!-- fin row-->
+  					
+  					
+  				</form>
+  			</div><!-- Fin row-->
+       
+       
+    </div>
+    <div class="modal-footer">  	    
+	      <a class="modal-action modal-close waves-effect red darken-1 btn" ><?php echo $lang_botones[3]//Cerrar?></a>     
+    </div>
+  </div>
+
+<?php
+	}//fin if permiso crear diagnosticos
+?>
+<!--Fin  Modal para crear un nuevo diagnostico-->
+
+
+
+<!-- Modal para texto  el motivo de cirugia -->
+
+<div id="modal_motivoCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_motivoCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="cirugia_ObtenerTxtMotivoCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+<!--Fin  Modal para el motivo de cirugia -->
+
+
+<!-- Modal para personalizado de motivo de cirugia-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoMotivoCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_cirugias [21]//Personalizados motivo de la intervención?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoMCI" type="text" class="validate" onkeypress="cirugia_buscarPersonalizadoMotivoCirugia()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_cirugias[14]//Motivo de la intervención quirurgica?></label>
+            	<input type="hidden" id="idPersonalizadoMotivoCirugiaBuscado" name="idPersonalizadoMotivoCirugiaBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoMotivoCirugia">
+
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoMotivoCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+<!-- Modal para personalizado de motivo de cirugia-->
+
+
+
+<!-- Modal para texto observaciones de cirugia -->
+
+<div id="modal_observacionesCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observacionesCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="cirugia_ObtenerTxtObservacionesCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el observaciones de cirugia -->
+
+<!-- Modal para personalizado de observaciones de cirugia-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoObservacionesCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_consultas[2] //Personalizados observaciones de consulta?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoOCI" type="text" class="validate" onkeypress="cirugia_buscarPersonalizadoObservacionesCirugia()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_cirugias[15]//Observaciones de la intervención quirúrgica?></label>
+            	<input type="hidden" id="idPersonalizadoObservacionesCirugiaBuscado" name="idPersonalizadoObservacionesCirugiaBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoObservacionesCirugia">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoObservacionesCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+<!-- Modal para personalizado de observaciones de cirugia-->
+
+
+
+<!-- Modal para texto complicaciones de cirugia -->
+
+<div id="modal_complicaicones" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_complicaiconesCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="cirugia_ObtenerTxtComplicacionesCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+<!--Fin  Modal para el complicaciones de cirugia -->
+
+
+
+
+<!-- Modal para texto plan de cirugia -->
+
+<div id="modal_planCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_planCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="cirugia_ObtenerTxtPlanCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+<!--Fin  Modal para el plan de cirugia -->
+
+<!-- Modal para personalizado de plan de cirugia-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoPlanCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_cirugias [22]//Personalizados plan y recomendaciones a seguir?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoPCI" type="text" class="validate" onkeypress="cirugia_buscarPersonalizadoPlanCirugia()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_cirugias [23]//Plan y recomendaciones a seguir de la intervención quirúrgica?></label>
+            	<input type="hidden" id="idPersonalizadoPlanCirugiaBuscado" name="idPersonalizadoPlanCirugiaBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoPlanCirugia">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoPlanCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+<!-- Modal para personalizado de plan de cirugia-->
+
+
+
+
+<main>
+		
+	 <div class="row">
+ 	
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+					<div class="row">
+						<div class="col s12 l12 m12">
+							
+					 			
+					 		 
+					 		<a href="http://www.nanuvet.com/nuevo/<?php echo $datosPP_idPropietario?>">
+							  <div class="chip" style="cursor: pointer;" >
+							    <?php echo $lang_consultas[9]//Propietario:?> <?php echo "(".$datosPP_identificacionPropietario.") ".$datosPP_nombrePropietario." ".$datosPP_apellidoPropietario." -- ".$datosPP_celularPropietario?>
+							  </div>
+							</a>								  
+							  <div class="chip">
+							  	
+							  	<?php
+							  		if($datosPP_urlFotoPaciente != ""){
+							  	?>
+							  			<img  src="<?php echo "../../../Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$datosPP_urlFotoPaciente ?>" alt="foto">
+							  	<?php
+							  		}
+									
+									if($datosPP_sexoPaciente == 'M'){
+										$sexoP	= $lang_consultas[10]/*Macho*/;
+									}else{
+										$sexoP	= $lang_consultas[11]/*Hembra*/;
+									}
+									
+									if($datosPP_esterilizadoPaciente == "Si"){
+										$esterilizadoP = $lang_consultas[12]/*Si*/;
+									}else{
+										$esterilizadoP = $lang_consultas[13]/*No*/;
+									}
+									
+									$datosPP_edadPacientePaciente = str_replace("años", $lang_historiaClinica[16], $datosPP_edadPacientePaciente);
+									$datosPP_edadPacientePaciente = str_replace("meses", $lang_historiaClinica[15], $datosPP_edadPacientePaciente);
+									$datosPP_edadPacientePaciente = str_replace("días", $lang_historiaClinica[17], $datosPP_edadPacientePaciente);
+									
+							  	?>							  								  
+							    					<!-- -Nombre: -->												<!-- -Sexo:-->								<!-- -Edad:-->															<!-- -Esterilizado:-->								<!-- -Raza: -->
+							    <?php echo "<u>/".$lang_consultas[14]."</u> ".$datosPP_nombrePaciente."   <u>/".$lang_consultas[15]."</u> ".$sexoP."   <u>/".$lang_consultas[16]."</u> ".$datosPP_edadPacientePaciente."   <u>/".$lang_consultas[17]."</u> ".$esterilizadoP."   <u>/".$lang_consultas[18]."</u> ".$datosPP_nombreRazaPaciente ?>
+
+<?php							  
+							  	if(sizeof($comprobarHospitalizacionActiva) > 0){
+							  ?>
+							  	
+							  		<div class="chip orange">
+							  			<?php echo $lang_historiaClinica[13]//Paciente Hospitalizado?>
+							  		</div>
+							  	
+							  <?php
+							  	}
+							  ?>
+
+							  </div>
+							  
+							   <a class="btn-floating waves-effect waves-light black tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_historiaClinica[10]//Imprimir historia clínica?>" onclick="tipoImpresionHistoriaClinica()" ><i class="fa fa-print" aria-hidden="true"></i></a>
+							  
+        
+					 	</div>
+					</div>
+
+					<div class="row">
+						
+						<div class="col s12 m12 l12 ">
+													
+						<ul class="tabs" style="overflow-x: auto !important;">
+					        <li class="tab col s1 m1 l1 grey lighten-2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/cirugias/')" class="black-text active" ><?php echo $lang_historiaClinica[0]//Cirugías?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalCirugias?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/consultas/')" class="black-text" ><?php echo $lang_historiaClinica[1]//Consultas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalConsultas?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/desparasitantes/')" class="black-text" ><?php echo $lang_historiaClinica[2]//Desparasitantes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuDesparasitantes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/examenes/')" class="black-text" ><?php echo $lang_historiaClinica[3]//Exámenes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalExamenes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/formulas/')" class="black-text" ><?php echo $lang_historiaClinica[4]//Formulas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalFormulas?></span></a></li>
+					        <li class="tab col s2 m2 l2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/hospitalizacion/')" class="black-text" ><?php echo $lang_historiaClinica[5]//Hospitalizaciones?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalHospitalizaciones?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/vacunas/')" class="black-text" ><?php echo $lang_historiaClinica[6]//Vacunas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalVacunas?></span></a></li>
+					        
+						</ul>
+							
+						</div>
+						
+					</div><!-- Fin row-->
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								<h4 id="tituloLi" class="center-align"><?php echo $lang_cirugias[0]//Intervenciones quirúrgicas?>
+									<?php
+									//saber si tiene permiso para cirugias
+										if(in_array("91", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_cirugias[1]//Nueva intervención quirúrgica?>" onclick="abrirFormNuevaCirugia()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}//fin permiso nueva cirugia
+						  			?>
+						  		</h4>						  		
+						  		<br />
+						  		
+						  		
+						  		<?php
+									//saber si tiene permiso para cirugias
+										if(in_array("91", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_nuevaCirugia" style="display: none;">
+						  			
+						  			
+						  			<form id="form_nuevaCirugia" name="form_nuevaCirugia" action="" method="post">
+						  				<input type="hidden" id="envioNuevoCirugia" name="envioNuevoCirugia" value="envio" />
+										<input type="hidden" id="edadActualPaciente" name="edadActualPaciente" value="<?php echo $datosPP_edadPacientePaciente ?>" />
+										<input type="hidden" id="idPaciente" name="idPaciente" value="<?php echo $_GET['id1'] ?>" />
+									
+										<input type="hidden" id="idPacienteReplica" name="idPacienteReplica" value="<?php echo $datosPP_idReplica?>" />
+									
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_cirugias[2]//Intervención quirúrgica?></h4>
+				                      	</div>
+						  				
+						  				<div class="row">
+									    	
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_motivoCirugia" style="cursor: pointer;" ></i>
+									    					<?php
+															//saber si tiene permiso para personalizados
+																if(in_array("1", $_SESSION['permisos_usuario'] )){
+															?>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoMotivoCirugia" style="cursor: pointer;"></i>
+									    					<?php
+																}
+															?>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="cirugia_limpiarTextareaMotivoCirugia()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloMotivoCirugia" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_cirugias[3]//Motivo de la intervención?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="cirugia_recuperarTextareaMotivoCirugia()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_motivoCirugia" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorMotivoCirugia" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="motivoCirugia" name="motivoCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_motivoCirugia" for="motivoCirugia"><?php echo $lang_cirugias[3]//Motivo de la intervención?></label>
+											       </div> 
+									    		</div>
+									    		
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_observacionesCirugia" style="cursor: pointer;" ></i>
+									    					<?php
+															//saber si tiene permiso para personalizados
+																if(in_array("1", $_SESSION['permisos_usuario'] )){
+															?>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoObservacionesCirugia" style="cursor: pointer;"></i>
+									    					<?php
+																}
+															?>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="cirugia_limpiarTextareaObservacionesCirugia()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloObservacionesCirugia" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5><?php echo $lang_consultas[23]//Observaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="cirugia_recuperarTextareaObservacionesCirugia()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_observacionesCirugia" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorObservacionesCirugia" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="observacionesCirugia" name="observacionesCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_observacionesCirugia" for="observacionesCirugia"><?php echo $lang_consultas[23]//Observaciones?></label>
+											       </div> 
+									    		</div>		
+									    		
+									    	</div><!-- Fin row-->
+									    	
+									    	<div class="row">
+									    		
+									    		<div class="col s12 m6 l6">
+									    			    <select id="tipoAnestesia" name="tipoAnestesia">
+													      <option value="" disabled selected><?php echo $lang_cirugias[4]//Tipo de anestesia?></option>
+													      <option value="General"><?php echo $lang_cirugias[5]//General?></option>
+													      <option value="Local"><?php echo $lang_cirugias[6]//Local?></option>
+													      <option value="NA">N/A</option>
+													    </select>
+													    <label><?php echo $lang_cirugias[4]//Tipo de anestesia?></label>
+									    		</div>
+									    		
+									    		<div class="col s12 m6 l6">
+								    			
+								    				<div class="input-field">
+								    					<?php
+															//saber si tiene permiso para crear diagnosticos
+																if(in_array("21", $_SESSION['permisos_usuario'] )){
+															?>
+								    					  <i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoDiagnostico" data-target="modal_nuevoDiagnostico" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_cirugias[7]//Nueva cirugía?>" style="cursor:pointer;" onclick="limpiarModalCirugiaCirugias()"></i>
+												          <?php
+												          	}
+														   ?>
+												          <input id="buscarCirugia" type="text" class="validate" onkeypress="cirugia_buscarCirugia()">
+												          <label id="label_buscarCirugia" for="buscarCirugia" data-error="<?php echo $lang_consultas[24]//El diagnóstico ya se adicionó?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_cirugias[8]//Cirugía (Escribir y seleccionar)?></label>
+								    				</div>
+								    				
+								    				<div style="display: none;">
+								    					<select id="select_cirugias" name="select_cirugias[]" multiple>
+								    					
+								    					</select>
+								    				</div>
+								    				
+													
+													<span id="removerCirugia" style="display: none;"><?php echo $lang_cirugias[9]//Remover cirugía?></span>
+													
+													<div style="overflow-y: scroll; max-height: 150px;">														
+								    				 <ul id="ul_Cirugias" class="collection">
+												      </ul>
+													</div>
+								    				
+											        
+									    		</div>
+									    		
+									    	</div><!-- Fin row-->
+									    	
+									    	
+									    	<div class="row">
+									    		
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_complicaicones" style="cursor: pointer;" ></i>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="cirugia_limpiarTextareaComplicaciones()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloComplicacionesCirugia" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_cirugias[10]//Complicaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="cirugia_recuperarTextareaComplicaciones()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_complicacionesCirugia" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorComplicacionesCirugia" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												        <textarea id="complicacionesCirugia" name="complicacionesCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												        <label id="label_complicacionesCirugia" for="complicacionesCirugia"> <?php echo $lang_cirugias[10]//Complicaciones?> </label>
+											       </div> 
+											       
+											       
+									    		</div>						    		
+									    		
+									    		
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_planCirugia" style="cursor: pointer;" ></i>
+									    					<?php
+															//saber si tiene permiso para personalizados
+																if(in_array("1", $_SESSION['permisos_usuario'] )){
+															?>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoPlanCirugia" style="cursor: pointer;"></i>
+									    					<?php
+																}
+															?>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="cirugia_limpiarTextareaPlanCirugia()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloPlanCirugia" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_cirugias[11]//Plan y recomendaciones a seguir?><i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="cirugia_recuperarTextareaPlanCirugia()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_planCirugia" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorPlanCirugia" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												        <textarea id="planCirugia" name="planCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												        <label id="label_planCirugia" for="planCirugia"><?php echo $lang_cirugias[11]//Plan y recomendaciones a seguir?></label>
+											       </div> 											       
+											       
+									    		</div>
+									    		
+									    	</div><!-- Fin row-->
+						  				
+						  				
+						  			</form>
+						  			
+							  		<div class="row">									
+										
+										<div class="col s12 m6 l6 right-align">
+											&nbsp;
+											<span id="spanErrorGuardar1" style="display: none;" class="red-text" style="margin-top: 1%;"><?php echo $lang_cirugias[12]//Debes elegir el tipo de anestesia!?></span>
+											<span id="spanErrorGuardar" style="display: none;" class="red-text" style="margin-top: 1%;"><?php echo $lang_cirugias[13]//Debes elegir una cirugía!?></span>
+										</div>   
+								       	<div class="input-field col s12 m6 l6 right-align">	
+								       		<!-- textos para mostrar alerta cancelar cirugia-->
+							       			<span id="estaSeguro" style="display: none;"><?php echo $lang_cirugias[24]//Esta seguro de cancelar la intervención??></span>
+							       			<span id="Seperderan" style="display: none;"><?php echo $lang_consultas[53]//Se perderán todos los datos?></span>
+							       			<span id="SiCancelarla" style="display: none;"><?php echo $lang_consultas[54]//Si, cancelarla?></span>				  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaCirugia()"><?php echo $lang_botones[5]//Cancelar?></a>
+						  						<!--<a class="waves-effect blue darken-1 btn" onclick="pausarCirugia()"><?php echo $lang_botones[8]//Pausar?></a>-->
+			                    				<a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaCirugia()"><?php echo $lang_botones[2]//Guardar?></a>			  									  					
+						  				</div>
+					  				
+					  				</div><!-- fin row-->	
+						  			
+						  		</div><!-- Fin hiedden para nueva cirugia-->
+						  		<?php
+						  				}//fin permiso nueva cirugia
+						  		?>
+						  		
+						  		
+						  		
+						  		
+						  	</li>
+						  	
+						</ul>
+					</div><!-- Fin col-->
+				</div><!-- Fin row-->
+
+
+
+
+
+
+
+
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+					
+						  <ul class="collapsible popout" data-collapsible="accordion">
+						  	
+						  	
+						  <?php
+						  
+						  	foreach ($listadoCirugias as $listadoCirugias1) {
+						  		//consultar los Dx
+						  		$diagnosticosCirugias	= $objetoCirugias->consultarDxsCirugia($listadoCirugias1['idCirugia']);	
+															
+								//consultar los archivos adjuntos de la cirugia
+								$adjuntosDeCirugias	= $objetoCirugias->consultarAdjuntosCirugia($listadoCirugias1['idCirugia']);
+						  		
+							?>	  	
+							
+							<li>							
+						      <div class="collapsible-header">
+						      	<i class="fa fa-file-text" aria-hidden="true"></i><?php echo $listadoCirugias1['fecha']." ".$listadoCirugias1['hora']." / ".$listadoCirugias1['nombreUsuario']." ".$listadoCirugias1['apellido']." / ".$listadoCirugias1['nombreSucursal']?>
+						       
+						       <?php
+						       	if(sizeof($adjuntosDeCirugias) >= 1){
+						       ?>
+						       		 <a href="javascript:void(0)" class="secondary-content"><i class="fa fa-paperclip" aria-hidden="true"></i></a>
+						       <?php		
+						       	}
+						       ?>
+						       
+						       
+						      </div>
+						      <div class="collapsible-body">
+						      	<br />
+						      	<div class="row valign-wrapper">
+						      		
+						      		
+						      		<div class="col s12 m2 l2 center-align valign">
+						      			<a href="http://www.nanuvet.com/impresiones/cirugia/<?php echo $listadoCirugias1['idCirugia']  ?>/" target="_blank" class="waves-effect waves-light btn"><i class="fa fa-print left" aria-hidden="true"></i><?php echo $lang_botones[9]//Imprimir?></a>
+						      		</div>
+						      		<?php
+									//saber si tiene permiso para notas aclaratorias
+										if(in_array("88", $_SESSION['permisos_usuario'] )){
+									?>
+						      		<div class="col s12 m2 l2 center-align valign">
+						      			<a class="waves-effect black btn  modal-trigger" href="#modal_notasAclaratorias" onclick="consultarNotasAclaratoriasCirugia('<?php echo $listadoCirugias1['idCirugia']?>')"><?php echo $lang_historiaClinica[9]//Aclaratorias?></a>
+						      		</div>
+						      		<?php
+										}
+									?>
+						      		<div class="col s10 m3 l3">
+						      			<form id="form_uploadFiles_<?php echo $listadoCirugias1['idCirugia']?>" name="form_uploadFiles" method="post" action="" enctype="multipart/form-data" >
+										    <div class="file-field input-field">
+										      <div class="btn black">
+										        <span><?php echo $lang_historiaClinica[14]//Adjuntar?></span>
+										        <input type="hidden" name="envioArchivosAdjuntos" value="adjuntosCirugia">
+										        <input type="hidden" name="idPropietarioAdjuntos" value="<?php echo $datosPP_idPropietario?>">
+										        <input type="hidden" name="idPacienteAdjuntos" value="<?php echo $_GET['id1']?>">
+										        <input type="hidden" name="idCirugiaAdjuntos" value="<?php echo $listadoCirugias1['idCirugia']?>" />
+										        <input  name="archivosAdjuntosCirugia_<?php echo $listadoCirugias1['idCirugia']?>[]" id="archivosAdjuntosCirugia_<?php echo $listadoCirugias1['idCirugia']?>" type="file">
+										      </div>
+										      <div class="file-path-wrapper">
+										        <input id="inputMostrarFile_<?php echo $listadoCirugias1['idCirugia']?>" class="file-path validate" type="text" placeholder="<?php echo $lang_consultas[42]//Adjuntar un archivo?>">
+										      </div>
+										    </div>
+										</form>
+						      		</div>
+						      		<div class="col s2 m1 l1">
+						      			<a class="waves-effect black btn tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_consultas[43]//Subir archivo?>" onclick="validarAdjuntosCirugia('<?php echo $listadoCirugias1['idCirugia']?>')" ><i class="fa fa-upload" aria-hidden="true"></i></a>
+						      		</div>
+						      		
+						      		<div class="col s12 m4 l4">
+						      			<div class="row">
+						      			<?php  foreach ($adjuntosDeCirugias as $adjuntosDeCirugias1) {
+						      				
+						      				$extension = explode(".", $adjuntosDeCirugias1['urlArchivo']);
+											
+											$extension[1] = strtolower($extension[1]);											
+											
+											
+											switch ($extension[1]) {
+												case 'png':
+													$icono = "fa-picture-o";
+												break;
+												
+												case 'jpg':
+													$icono = "fa-picture-o";
+												break;
+												
+												case 'jpeg':
+													$icono = "fa-picture-o";
+												break;
+													
+													case 'pdf':
+														$icono = "fa-file-pdf-o";
+													break;
+													
+												case 'doc':
+													$icono = "fa-file-word-o";
+												break;
+												
+												case 'xls':
+													$icono = "fa-file-excel-o";
+												break;
+												
+												case 'xlsx':
+													$icono = "fa-file-excel-o";
+												break;
+												
+													case 'mp4':
+														$icono = "fa-file-video-o";
+													break;
+													
+													case 'avi':
+														$icono = "fa-file-video-o";
+													break;
+													
+													case 'wmv':
+														$icono = "fa-file-video-o";
+													break;
+												
+												default:
+													$icono = "fa-file";
+													break;
+											}
+						      				
+						      				?>
+											
+											
+											
+											<div class="col s2 m1 l1 ">
+												<a target="_blank"  href="<?php echo "http://www.nanuvet.com/Public/uploads/".$_SESSION['BDC_carpeta']."/adjuntos_pacientes/".$datosPP_idPropietario."/".$_GET['id1']."/".$adjuntosDeCirugias1['urlArchivo']  ?>" style="cursor: pointer;">
+													<i class="fa <?php echo $icono ?> fa-2x tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $adjuntosDeCirugias1['fecha']." -- ".$adjuntosDeCirugias1['nombre']." ".$adjuntosDeCirugias1['apellido']." (".$adjuntosDeCirugias1['identificacion'].")" ?>" aria-hidden="true"></i>
+												</a>
+											</div>										
+											
+										  <?php } ?>
+										</div>
+						      			
+						      		</div>
+						      		
+						      	</div><!-- Fin row-->
+						      	<div id="divPreloader_<?php echo $listadoCirugias1['idCirugia'] ?>" class="row center-align" style="display: none;">
+						      		<div class="col s12 m12 l12">
+						      			  <div class="preloader-wrapper small active">
+										    <div class="spinner-layer spinner-green-only">
+										      <div class="circle-clipper left">
+										        <div class="circle"></div>
+										      </div><div class="gap-patch">
+										        <div class="circle"></div>
+										      </div><div class="circle-clipper right">
+										        <div class="circle"></div>
+										      </div>
+										    </div>
+										  </div>
+										  <span><strong><?php echo $lang_consultas[44]//Se están subiendo los archivos, por favor espere.?></strong></span>
+						      		</div>
+						      	</div>
+						      							      	
+						      	<div class="row">
+						      		
+						      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+								      	
+								      		
+								      		<h6><b><?php echo $lang_cirugias[14]//Motivo de la intervención quirúrgica?>:</b></h6>
+								      		<p  >
+ 												<?php echo $listadoCirugias1['motivo'] ?> 
+								      		</p>
+								      	
+						      		</div>
+						      		
+						      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+								      	
+								      		
+								      		<h6><b><?php echo $lang_cirugias[15]//Observaciones de la intervención quirúrgica?>:</b></h6>
+								      		<p >
+								      			<?php echo $listadoCirugias1['observaciones'] ?> 
+								      		</p>
+								      	
+						      		</div>
+						      		
+						      	</div><!-- Fin row-->
+						      	
+						      	<div class="row">
+						      		<div class="col s12 m6 l6">
+						      			<h6><b><?php echo $lang_cirugias[4]//Tipo de anestesia?>:</b></h6>
+						      			<?php
+						      				switch ($listadoCirugias1['tipoAnestesia']) {
+												  case 'General':
+													  	$tAnestesia = $lang_cirugias[5];//"General";
+													  break;
+												  case 'Local':
+													    $tAnestesia = $lang_cirugias[6];//"Local";
+													  break;
+												  case 'NA':
+													    $tAnestesia = "NA";
+													  break;
+											  }
+						      			?>
+						      			
+						      			
+						      			<span><?php echo $tAnestesia?></span>
+						      		</div>
+						      		
+						      		
+						      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+						      			
+								      		
+								      		<h6><b><?php echo $lang_cirugias[16]//Cirugías de la intervención quirúrgica?>:</b></h6>
+								      			
+								      			<table class="highlight centered">
+								      				<thead>
+								      					<tr>
+								      						<th><?php echo  $lang_consultas[46]//Código?></th>
+								      						<th><?php echo $lang_consultas[47]//Nombre?></th>
+								      					</tr>
+								      				</thead>
+								      				
+								      				<tbody>
+								      					
+								      					
+								      			<?php foreach ($diagnosticosCirugias as $diagnosticosCirugias1) {?>
+												
+								      					
+								      					<tr>
+								      						<td><?php echo $diagnosticosCirugias1['codigo'] ?></td>
+								      						<td><?php echo $diagnosticosCirugias1['nombre'] ?></td>
+								      					</tr>
+													  
+													  
+												  <?php } ?> 
+								      				</tbody>
+								      				
+								      			</table>
+								      	
+						      		</div><!-- Fin col -->
+						      		
+						      		
+						      		
+						      	</div><!-- Fin row-->
+						      	
+						   		<div class="row">
+						   			<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+						      			
+								      		
+								      		<h6><b><?php echo $lang_cirugias[17]//Complicaciones?>:</b></h6>
+								      		<p >
+								      			<?php echo $listadoCirugias1['complicaciones'] ?> 
+								      		</p>
+								      	
+						      		</div><!-- Fin col-->
+						      		
+						      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+						      			
+								      		
+								      		<h6><b><?php echo $lang_cirugias[18]//Recomendaciones y plan a seguir?>:</b></h6>
+								      		<p >
+								      			<?php echo $listadoCirugias1['planASeguir'] ?> 
+								      		</p>
+								      	
+						      		</div><!-- Fin col-->
+						   		</div><!-- Fin row-->
+						      	
+						      </div><!-- Fin collapside body-->
+						    </li>
+								  
+							<?php
+								  
+							  }//fin foreach
+						  
+						  ?>
+						  	
+						  	
+						  </ul>
+				  
+				  	</div>
+        
+					
+				</div><!-- Fin row -->
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+
+	
+</main>
+
+
+<script>
+	$(document).ready(function () {
+		//funcion para evitar que se salga del sitio y perder los cambios
+			window.onbeforeunload = function(e) {
+				  e = e || window.event,
+				  message = "Seguro que desea salir sin guardar?";
+				 
+				  // show alert if there are some unsaved form
+				  if ($('.unsavedForm').size()) {
+				    // For IE and Firefox
+				                if (e) {
+				                  e.returnValue = message;
+				                }
+				                // For Safari
+				                return message;
+				  }
+				};
+				
+				
+	});
+</script>

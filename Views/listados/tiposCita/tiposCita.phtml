@@ -1,0 +1,237 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_agenda[0]//Tipos de cita?>
+									<?php
+										//saber si tiene permiso para adicionar nuevo tipo cita
+										if(in_array("100", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_citas[0]//Nuevo tipo de cita?>" onclick="mostrarFormNuevoTipoCita()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}//fin if permiso para adicionar tipo de cita
+									?>
+						  			
+						  			
+						  		</h4>						  		
+						  		<br />
+						  		
+						  		<?php
+										//saber si tiene permiso para editar tipo cita
+									if(in_array("101", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_editarTipoCita" style="display: none ;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_citas[1]//Editar tipo de cita?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarTipoCita" name="form_editarTipoCita" action="" method="post" >
+						  					<input type="hidden" id="idEditarTipoCita" name="idEditarTipoCita" value="" />
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="input-field col s12 m6 l6">
+							  					<input type="text" id="editarNombreTipoCita" name="editarNombreTipoCita" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreTipoCita" for="editarNombreTipoCita"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_citas[2]//Nombre del tipo de cita?></label>
+							  				</div>
+							  				
+						  				</form>
+						  				<div class="input-field col s12 m12 l12 right-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionTipoCita()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionTipoCita()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		
+						  		<?php
+						  			}//fin if permiso editar tipo de cita
+										//saber si tiene permiso para adicionar nuevo tipo cita
+									if(in_array("100", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_NuevoTipoCita" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoTipoCita" name="form_nuevoTipoCita" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevoTipoCita" name="envioNuevoTipoCita"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="nombreTipoCita" name="nombreTipoCita" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreTipoCita" for="nombreTipoCita"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_citas[3]//Nombre del nuevo tipo de cita?></label> 
+						                      </div> 
+						                      
+						                  </div><!-- fin row-->
+						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoTipoCita()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoTipoCita()"><?php echo $lang_botones[2]//Guardar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo TipoCita-->
+						  		
+						  		<?php
+						  			}//fin if permiso adicionar tipo de cita
+								?>
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_citas[4]//Buscar tipo de cita (Escribe y selecciona)?>" id="buscarTipoCita" type="text" class="validate" onkeypress="buscarTipoCitaListados()" >
+						<input type="hidden" id="idTipoCitaBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaTipoCita()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_citas[5]//Activar tipo de cita?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_citas[6]//Desactivar tipo de cita?></span>
+						
+							<div id="resultadoTipoCitasAjax">
+								
+							</div><!-- Fin para el resultado de los tipos de cita ajax-->
+							
+							<div id="resultadoTipoCitas">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_agenda[0]//Tipos de cita?></th>											
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoTiposCita as $listadoTiposCita1) {
+												
+												if($listadoTiposCita1['estado'] == 'A'){																																																			//Desactivar tipo de cita
+													$btn = '<span id="spanTC_'.$listadoTiposCita1['idTipoCita'].'"> <a id="'.$listadoTiposCita1['idTipoCita'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarTipoCita(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_citas[6].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar tipo de cita
+													$btn = '<span id="spanTC_'.$listadoTiposCita1['idTipoCita'].'"> <a id="'.$listadoTiposCita1['idTipoCita'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarTipoCita(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_citas[5].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoTiposCita1['idTipoCita']."','".$listadoTiposCita1['nombre']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td  <?php if(in_array("101", $_SESSION['permisos_usuario'] )){ ?> onclick="editarTipoCita(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoTiposCita1['nombre']?></td>												
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los tipos de cita-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

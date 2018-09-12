@@ -1,0 +1,178 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>			
+			<th><?php echo $lang_reportes[30]//Motivo?></th>
+			<th><?php echo $lang_reportes[56]//Diagnósticos?></th>
+			<th><?php echo $lang_reportes[57]//Peso?></th>
+			<th><?php echo $lang_reportes[58]//Altura?></th>
+			<th><?php echo $lang_reportes[59]//Temperatura?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[60]//Edad -Consulta-?></th>
+			<th><?php echo $lang_reportes[16]//Médico?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoConsultas as $listadoConsultas1) {
+		
+		$dxConsulta = $objetoReportes->consultarDiagnosticosConsulta($listadoConsultas1['idConsulta']);
+		
+		if($listadoConsultas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoConsultas1['fecha']?></td>
+			<td><?php echo $listadoConsultas1['hora']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoConsultas1['motivo']?></td>
+			<td>
+				<?php foreach ($dxConsulta as $dxConsulta1) {
+					?>
+						<?php echo "- (".$dxConsulta1['codigo'].") ".$dxConsulta1['nombre']." <br />"?>
+					<?php	
+				} ?>
+			</td>
+			<td><?php echo $listadoConsultas1['peso']?></td>
+			<td><?php echo $listadoConsultas1['medidaCm']?></td>
+			<td><?php echo $listadoConsultas1['temperatura']?></td>			
+			<td><?php echo "(".$listadoConsultas1['identificacionPropietario'].") ".$listadoConsultas1['nombrePropietario']." ".$listadoConsultas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoConsultas1['telefono']?></td>
+			<td><?php echo $listadoConsultas1['nombreMascota']." (".$sexo.")"?></td>			
+			<td><?php echo $listadoConsultas1['edadActualMascota']?></td>
+			<td><?php echo $listadoConsultas1['nombreUsuario']." ".$listadoConsultas1['apellidoUsuario']?></td>
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>			
+			<th><?php echo $lang_reportes[30]//Motivo?></th>
+			<th><?php echo $lang_reportes[56]//Diagnósticos?></th>
+			<th><?php echo $lang_reportes[37]//Plan y recomendaciones?></th>
+			<th><?php echo $lang_reportes[38] //Observaciones?></th>
+			<th><?php echo $lang_reportes[57]//Peso?></th>
+			<th><?php echo $lang_reportes[58]//Altura?></th>
+			<th><?php echo $lang_reportes[59]//Temperatura?></th>
+			<th><?php echo $lang_reportes[61]//Observaciones Examen físico?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[60]//Edad -Consulta-?></th>
+			<th><?php echo $lang_reportes[16]//Médico?></th>
+			<th><?php echo $lang_reportes[39]//Notas aclaratorias?></th>
+			<th><?php echo $lang_reportes[40]//Sucursal?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoConsultasExportar as $listadoConsultas1) {
+		
+		$dxConsulta = $objetoReportes->consultarDiagnosticosConsulta($listadoConsultas1['idConsulta']);
+		
+		$notasAclaratoriasConsulta	= $objetoReportes->consultarNotasAclaratoriasConsulta($listadoConsultas1['idConsulta']);
+		
+		if($listadoConsultas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoConsultas1['fecha']?></td>
+			<td><?php echo $listadoConsultas1['hora']?></td>
+			<td><?php echo $listadoConsultas1['motivo']?></td>
+			<td>
+				<?php foreach ($dxConsulta as $dxConsulta1) {
+					?>
+						<?php echo "- (".$dxConsulta1['codigo'].") ".$dxConsulta1['nombre']." <br />"?>
+					<?php	
+				} ?>
+			</td>					
+			<td><?php echo $listadoConsultas1['planASeguir']?></td>
+			<td><?php echo $listadoConsultas1['observaciones']?></td>			
+			<td><?php echo $listadoConsultas1['peso']?></td>
+			<td><?php echo $listadoConsultas1['medidaCm']?></td>
+			<td><?php echo $listadoConsultas1['temperatura']?></td>	
+			<td><?php echo $listadoConsultas1['observacionesExamenFisico']?></td>	
+			<td><?php echo "(".$listadoConsultas1['identificacionPropietario'].") ".$listadoConsultas1['nombrePropietario']." ".$listadoConsultas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoConsultas1['telefono']?></td>
+			<td><?php echo $listadoConsultas1['nombreMascota']." (".$sexo.")"?></td>			
+			<td><?php echo $listadoConsultas1['edadActualMascota']?></td>
+			<td><?php echo $listadoConsultas1['nombreUsuario']." ".$listadoConsultas1['apellidoUsuario']?></td>
+			
+			<td>
+				<?php 
+					if(sizeof($notasAclaratoriasConsulta) > 0){
+				?>			
+				
+					<table>
+						<tr>
+							<th><?php echo $lang_reportes[41]//Texto?></th>
+							<th><?php echo $lang_reportes[42]//Fecha/Hora?></th>
+							<th><?php echo $lang_reportes[43]//Usuario?></th>
+						</tr>
+						
+						<?php
+							foreach ($notasAclaratoriasConsulta as $notasAclaratoriasConsulta1) {
+						?>
+							<tr>
+								<td><?php echo $notasAclaratoriasConsulta1['texto']?></td>
+								<td><?php echo $notasAclaratoriasConsulta1['fecha']." ".$notasAclaratoriasConsulta1['hora']?></td>
+								<td><?php echo "(".$notasAclaratoriasConsulta1['identificacion'].") ".$notasAclaratoriasConsulta1['nombre']." ".$notasAclaratoriasConsulta1['apellido']?></td>
+							</tr>
+						<?php		
+							}
+						?>
+					</table>
+				
+				<?php		
+					}
+				?>
+				
+			</td>
+			<td><?php echo $listadoConsultas1['nombreSucursal']?></td>
+			
+		</tr>
+<?php	
+		$contador = $contador+1;	
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

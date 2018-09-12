@@ -1,0 +1,27 @@
+<div id="modal_nuevaCiudad" class="modal" style="margin-top: 5% !important;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_ciudades[0]//nueva ciudad?></h4>
+      <p><?php echo $lang_ciudades[1] //Se adicionará una ciudad al país:?> <span id="nombrePaisSeleccionado" name="nombrePaisSeleccionado"></span></p>
+      
+      <div class="row">
+        <form class="col s12 m12 l12">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input id="nuevaCiudad" type="text" class="validate">
+              <label id="label_nuevaCiudad"  for="nuevaCiudad" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" > <?php echo $lang_ciudades[2] //nombre de la ciudad?></label>
+            </div>
+            
+            <div class="col s12 m4 l4" style="padding-top:2%;">
+              <a class="waves-effect waves-light btn valign" onclick="guardarNuevaCiudad()"><?php echo $lang_botones[2]//guardar?></a>
+            </div>
+            
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-green btn-flat"><?php echo $lang_botones[3]//cerrar?></a>
+    </div>
+  </div>

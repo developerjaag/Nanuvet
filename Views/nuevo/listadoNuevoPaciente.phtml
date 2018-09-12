@@ -1,0 +1,812 @@
+<!-- Modal para una nueva especie-->
+<?php
+//saber si tiene permiso para crear especies
+	if(in_array("30", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_nuevaEspecie" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_nuevo[0]//Nueva especie?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input id="nuevaEspecie" name="nuevaEspecie" type="text" class="validate">
+              <label id="label_nuevaEspecie"  for="nuevaEspecie" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[1]//Nombre de la nueva especie?></label>
+            </div>
+            
+            <div class="col s12 m4 l4" style="padding-top:2%;">
+              <a class="waves-effect waves-light btn valign" onclick="guardarNuevaEspecie()"><?php echo $lang_botones[2]//guardar?></a>
+            </div>
+            
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-green btn-flat"><?php echo $lang_botones[3]//cerrar?></a>
+    </div>
+</div>
+<?php
+	}
+?>
+<!-- Fin modal para una nueva especie-->
+
+
+<!-- Modal para una nueva raza-->
+<?php
+//saber si tiene permiso para crear razas
+	if(in_array("33", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_nuevaRaza" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_nuevo[2]//Nueva raza?></h4> 
+      <p><?php echo $lang_nuevo[3]//Se adicionará una nueva raza a la especie?> <span id="nombreEspecieSeleccionada" name="nombreEspecieSeleccionada"></span></p>
+      
+      <div class="row">
+        <form class="col s12 m12 l12">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input id="nuevaRaza" name="nuevaRaza" type="text" class="validate">
+              <label id="label_nuevaRaza"  for="nuevaRaza" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[4]//Nombre de la nueva raza?> </label>
+            </div>
+            
+            <div class="col s12 m4 l4" style="padding-top:2%;">
+              <a class="waves-effect waves-light btn valign" onclick="guardarNuevaRaza()"><?php echo $lang_botones[2]//guardar?></a>
+            </div>
+            
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-green btn-flat"><?php echo $lang_botones[3]//cerrar?></a>
+    </div>
+</div>
+<?php
+}//fin if permiso crear razas
+?>
+<!-- Fin modal para una nueva raza-->
+
+
+<main>
+<div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">              
+              <div class="chip tooltipped" id="chip_propietario"  style="cursor: pointer;" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_nuevo[36]//Ver la información del propietario?>"  <?php if(in_array("60", $_SESSION['permisos_usuario'] )){ ?> onclick="mostrarFormEditarPropietario()" <?php } ?>
+              	<i class="fa fa-user" aria-hidden="true"></i>
+			    <?php echo $todaInformacionPropietario['identificacion']." -- ".$todaInformacionPropietario['nombre']." ".$todaInformacionPropietario['apellido'] ?>
+			 
+			 	<?php 
+			 			if($noCoincideInformacionPropietario != ""){
+			 				?>
+			 					
+			 					<span class="badge orange-text"><?php echo $lang_nuevo[39]//Existe información que no coincide con la base de datos general?></span>
+			 					
+			 				<?php
+			 			}
+			 	  ?>
+			  </div>
+			  
+			  <?php 
+			  	if(sizeof($pacienterParaIMportarDesdeREPLICA) >= 1){
+			  ?>
+			  		<div class="row">
+			  				
+			  				<div class="col s12 m12 l12">
+			  					<p class="blue-text center-align"><?php echo $lang_nuevo[37]//Pacientes del propietario que se encuentran en la base de datos general pero no en tu base de datos. (si lo deseas puedes importarlos)?></p>
+			  				</div>
+			  				
+			  			<?php 
+			  			//var_dump($pacienterParaIMportarDesdeREPLICA[0][5]);
+			  				for ($i=0; $i < sizeof($pacienterParaIMportarDesdeREPLICA) ; $i++) {
+								$parametrosImportarPaciente = "'".$pacienterParaIMportarDesdeREPLICA[$i]['idPaciente']."','".$pacienterParaIMportarDesdeREPLICA[$i]['nombrePaciente']."','".$pacienterParaIMportarDesdeREPLICA[$i]['numeroChip']."','".
+																$pacienterParaIMportarDesdeREPLICA[$i]['sexo']."','".$pacienterParaIMportarDesdeREPLICA[$i]['esterilizado']."','".
+																$pacienterParaIMportarDesdeREPLICA[$i]['color']."','".$pacienterParaIMportarDesdeREPLICA[$i]['fechaNacimiento']."','".
+																$pacienterParaIMportarDesdeREPLICA[$i]['alimento']."','".$pacienterParaIMportarDesdeREPLICA[$i]['frecuenciaDiaria']."','".
+																$pacienterParaIMportarDesdeREPLICA[$i]['frecuenciaBanoDias']."'";		  
+						?>		
+							<div class="col s3 m2 l2">
+								<div onclick="importarPacienteReplica(<?php echo $parametrosImportarPaciente ?>)" class="chip tooltipped blue-text" style="cursor: pointer;" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_nuevo[38]//Importar datos del paciente ?>" ><?php echo $pacienterParaIMportarDesdeREPLICA[$i]['nombrePaciente']?> </div>	 
+							</div>   						
+						
+						<?php	  
+							  }
+			  			?>
+			  			
+			  		</div>
+			  <?php		
+			  	}
+			  ?>
+			  
+			  
+			 <!-- Div para ver la información del propietario-->
+			 <?php
+			 	//permiso editar propietario
+			 	if(in_array("60", $_SESSION['permisos_usuario'] )){
+			 ?>	
+			 <div id="hideFormEditarpropietario" style="display: none; " >
+						 <form id="form_nuevoPropietario" name="form_nuevoPropietario" method="post" action="" >
+			              	
+			              	  <input type="hidden" id="idPais"   name="idPais"    value="<?php echo $todaInformacionPropietario['idPais'] ?>"/>
+			                  <input type="hidden" id="idCiudad" name="idCiudad"  value="<?php echo $todaInformacionPropietario['idCiudad'] ?>"/>
+			                  <input type="hidden" id="idBarrio" name="idBarrio"  value="<?php echo $todaInformacionPropietario['idBarrio'] ?>"/>
+			                  
+			                  <input type="hidden" id="hidden_envioFormEditar" name="hidden_envioFormEditar" value="enviar"/>
+			                  <input type="hidden" id="hidden_envioForm" name="hidden_envioForm" value="enviar"/>
+			                  <input type="hidden" id="hidden_accion" name="hidden_accion" value="editar"/>
+			                  
+			                  <input type="hidden" id="idPropietarioForm" name="idPropietarioForm" value="<?php echo $_SESSION['idPropietario']?>" />
+			                  <input type="hidden" id="idPropietarioREPLICA" name="idPropietarioREPLICA" value="<?php if( sizeof($informacionPropietario_REPLICA) > 0){ echo $informacionPropietario_REPLICA['idPropietario']; }else{ echo "0"; }?>" />			              	
+             
+			              	 <div class="row">
+			              	 	
+						        <div class="input-field col s12 m4 l4">
+						          <input id="propietario_identificacion" name="propietario_identificacion" type="text" class="validate" length="30" maxlength="30" value="<?php echo $todaInformacionPropietario['identificacion'] ?>">
+						          <label id="label_propietario_identificacion" for="propietario_identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[1]//Identificación?></label>
+						        </div>
+						        
+						        <div class="input-field col s12 m4 l4">
+						          <input id="propietario_nombre" name="propietario_nombre" type="text" class="validate" length="30" maxlength="30" value="<?php echo $todaInformacionPropietario['nombre'] ?>">
+						          <label id="label_propietario_nombre" for="propietario_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[2]//Nombres?></label>
+						        </div>
+						        
+						        <div class="input-field col s12 m4 l4">
+						          <input id="propietario_apellido" name="propietario_apellido" type="text" class="validate" length="30" maxlength="30" value="<?php echo $todaInformacionPropietario['apellido'] ?>">
+						          <label id="label_propietario_apellido" for="propietario_apellido" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[3]//Apellidos?></label>
+						        </div>
+						        
+						      </div><!-- Fin row-->
+						      
+						      <div class="row">
+						      	
+						      	<div class="input-field col s12 m4 l4">
+						          <input id="propietario_telefono" name="propietario_telefono" type="text" class="validate" length="20" maxlength="20" value="<?php echo $todaInformacionPropietario['telefono'] ?>">
+						          <label id="label_propietario_telefono" for="propietario_telefono" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+						        </div>
+						        
+						        <div class="input-field col s12 m4 l4">
+						          <input id="propietario_celular" name="propietario_celular" type="text" class="validate" length="20" maxlength="20" value="<?php echo $todaInformacionPropietario['celular'] ?>">
+						          <label id="label_propietario_celular" for="propietario_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+						        </div>
+						        
+						        <div class="input-field col s12 m4 l4">
+						          <input id="propietario_direccion" name="propietario_direccion" type="text" class="validate" length="50" maxlength="50" value="<?php echo $todaInformacionPropietario['direccion'] ?>">
+						          <label id="label_propietario_direccion" for="propietario_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label>
+						        </div>
+						      	
+						      </div><!-- Fin row-->
+						      
+						      <div class="row">
+						      	<div class="input-field col s12 m12 l12">
+						      		<input id="propietario_email" name="propietario_email" type="email" class="validate" length="100" maxlength="100" value="<?php echo $todaInformacionPropietario['email'] ?>">
+						            <label id="label_propietario_email" for="propietario_email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[4] //E-mail?></label>
+						      	</div>
+						      </div><!-- Fin row-->
+						      
+						      <div class="row">
+			                          
+			                      <div class="input-field col s12 m4 l4">
+			                            <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" value="<?php echo $todaInformacionPropietario['PANombre'] ?>">
+			                            <label id="label_propietario_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+			                      </div>
+			                      
+			                      <div class="input-field col s12 m4 l4">
+			                            <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+			                            <input id="ciudad" name="ciudad" type="text" class="validate" onkeypress="buscarCiudad()" value="<?php echo $todaInformacionPropietario['CNombre'] ?>" disabled>
+			                            <label id="label_propietario_ciudad" for="ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+			                      </div>
+			                      
+			                      <div class="input-field col s12 m4 l4">
+			                            <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevoBarrio" href="#modal_nuevoBarrio" data-target="modal_nuevoBarrio" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//nuevo barrio ?>" style="cursor:pointer;  display:none;"></i>
+			                            <input id="barrio" name="barrio" type="text" class="validate"  onkeypress="buscarBarrio()" value="<?php echo $todaInformacionPropietario['BNombre'] ?>" disabled>
+			                            <label id="label_propietario_barrio" for="barrio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[7]//Barrio (Escriba y seleccione)?></label> 
+			                      </div>
+			                      
+			                  </div><!-- fin row-->
+			</form>
+			                  <div class="row">
+			                    <div class="col s12 m12 l12 right-align">
+			                    		<?php 
+			                    			if($noCoincideInformacionPropietarioMuestraForm != ''){
+			                    				?>
+			                    					<span class="orange-text"><?php echo $lang_nuevo[40]//Si estos son los datos correctos, presiona el boton editar para que la información general se actualice y todo quede sincornizado correctamente.?></span>
+			                    				<?php
+			                    			}
+			                    		 ?>	
+					  					<button class="waves-effect red darken-1 btn" onclick="ocultarFormEditarPropietario()"><?php echo $lang_botones[5]//Cancelar?></button>
+					      				<a class="waves-effect waves-light btn" onclick="ValidarDatosNuevoPropietario()"><?php echo $lang_botones[4]//Editar?></a>		
+					      						      					                      
+			                    </div>
+			                  </div>
+			
+			              	
+			              
+			 	</div>
+			 	<?php
+			 		}//fin if permiso editar propietario
+				?>
+			 <!-- Fin Div para ver la información del propietario-->
+			  
+			  
+			  
+			  
+			  <div class="row">
+			  	
+			  	<div class="col s12 m12 l12">
+	      
+
+					  <ul class="collection with-header">
+					  	
+					  	<li class="collection-header">
+					  		
+					  		<h4 id="tituloLi" class="center-align" ><?php echo $lang_nuevo[5]//Pacientes del propietario?> 
+					  			
+					  			<?php
+					  				//saber si tiene permiso para adicionar nuevo paciente
+									if(in_array("61", $_SESSION['permisos_usuario'] )){
+								?>
+					  			
+					  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_nuevo[35]//Nuevo paciente?>" onclick="mostrarFormNuevoPaciente()">
+					  				<i class="material-icons">add</i>
+					  			</a>
+					  			
+					  			<?php
+									}//fin if saber si tiene permiso para adicionar nuevo paciente
+								?>
+					  			
+					  			
+					  		</h4>
+					  		
+					  		
+					  		<!-- Formulario para editar un paciente-->
+					  		<div id="divHidden_editarPaciente" style="display: none;">
+					  			
+					  			<?php if(in_array("63", $_SESSION['permisos_usuario'] )){ ?><form name="form_editarPaciente" id="form_editarPaciente" method="post" action="" enctype="multipart/form-data" ><?php } ?>
+					  				
+										<input type="hidden" name="editarPacinete_idPropietarioPaciente" id="editarPacinete_idPropietarioPaciente" value="<?php echo $_SESSION['idPropietario']?>" />
+					  					<input type="hidden" name="editarPacinete_idEspecie" id="editarPacinete_idEspecie" value="" />
+					  					<input type="hidden" name="editarPacinete_idRaza" id="editarPacinete_idRaza" value="" />
+					  					<input type="hidden" name="editarPacinete_idPaciente" id="editarPacinete_idPaciente" value="" />
+					  					
+					  					<input type="hidden" name="envioFormEditarpaciente" id="envioFormEditarpaciente" value="envio" />
+					  			
+					  					<h5 class="center-align"> <span id="titulo_editarPaciente" style="display: none;"><?php echo $lang_nuevo[6]//Editar paciente?></span></h5>
+					  				
+											<br />
+							  							<div class="row">
+							  									
+							  									<div class="col s12 m3 l3" >
+							  										
+							  										<div class="col s6 m6 l6">
+							  											<img id="editarPacinete_fotoActual" src="../Public/img/porDefectoClientes/huella.png" alt="" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+							  										</div>
+							  										
+							  										<div class="col s6 m6 l6">
+							  											<p>
+																	      <input class="with-gap" name="editarPacinete_paciente_estado" type="radio" id="radio5" value="vivo" checked />
+																	      <label for="radio5"><?php echo $lang_nuevo[7]//Vivo?></label>
+																	    </p>
+																	    <p>
+																	        <input class="with-gap" name="editarPacinete_paciente_estado" type="radio" id="radio6" value="muerto" />
+																	        <label for="radio6"><?php echo $lang_nuevo[8]//Murió?></label>
+																	    </p>
+							  										</div>
+							  										
+							  										
+							  									</div>
+							  											  				
+												  				<div class="file-field input-field col s12 m3 l3">
+																      <div class="btn black">
+																        <span><?php echo $lang_nuevo[9]//Cambiar foto?></span>
+																        <input type="file" name="editarPacinete_fotoPaciente" id="editarPacinete_fotoPaciente">
+																      </div>
+																      <div class="file-path-wrapper">
+																        <input id="editarPacinete_filePath" class="file-path validate" type="text" placeholder="png/jpg" >
+																      </div>
+												  				</div>
+												  				
+												  				<div class="input-field col s12 m l3">
+												  					<input id="editarPacinete_paciente_nombre" name="editarPacinete_paciente_nombre" type="text" class="validate" length="50" maxlength="50">
+										          					<label id="editarPacinete_label_paciente_nombre" for="editarPacinete_paciente_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[10]//Nombre?></label>
+												  				</div>
+												  				
+												  				<div class="input-field col s12 m3 l3">
+												  					<input id="editarPacinete_paciente_chip" name="editarPacinete_paciente_chip" type="text" class="validate" length="50" maxlength="50">
+										          					<label id="editarPacinete_label_paciente_chip" for="editarPacinete_paciente_chip" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[11]//Código de chip?></label>
+												  				</div>							  				
+												  				
+												  			</div><!-- Fin row-->
+												  			
+												  			<div class="row">
+												  				
+												  				<div class="col s12 m6 l6">
+												  					
+												  					<div class="col s12 m6 l6">
+												  						<div class="input-field col s12 m12 l12">
+												  							<?php
+																			//saber si tiene permiso para crear especies
+																				if(in_array("30", $_SESSION['permisos_usuario'] )){
+																			?>
+												  							 <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaEspecie"  href="#modal_nuevaEspecie" data-target="modal_nuevaEspecie"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_nuevo[26]//Nueva especie?>" style="cursor:pointer;"></i>
+												  							<?php
+																				}
+																			?>
+												  							<input id="editarPacinete_paciente_especie" name="editarPacinete_paciente_especie" type="text" class="validate" onkeypress="editarBuscarEspecie()" >
+										          							<label id="editarPacinete_label_paciente_especie" for="editarPacinete_paciente_especie" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[12]//Especie (escribe y selecciona)?></label>
+												  						</div>
+												  					</div>
+												  					
+												  					
+												  					<div class="col s12 m6 l6">
+												  						<div class="input-field col s12 m12 l12">
+												  							<?php
+																			//saber si tiene permiso para crear razas
+																				if(in_array("33", $_SESSION['permisos_usuario'] )){
+																			?>
+												  							 <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="editarIconoNuevaRaza"  href="#modal_nuevaRaza" data-target="modal_nuevaRaza"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_nuevo[27]//Nueva Raza?>" style="cursor:pointer; display: none; "></i>
+												  							<?php
+																				}
+																			?>
+												  							<input id="editarPacinete_paciente_raza" name="editarPacinete_paciente_raza" type="text" class="validate" onkeypress="editarBuscarRaza()"  >
+										          							<label id="editarPacinete_label_paciente_raza" for="editarPacinete_paciente_raza" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[13]//Raza (escribe y selecciona) ?> </label>
+												  						</div>
+												  					</div>
+												  					
+												  					
+												  				</div><!-- Fin col m4 l4-->
+												  				
+												  				
+												  				
+												  				
+												  				<div class="col s12 m2 l2">
+												  												  						
+																		<p>
+																	      <input class="with-gap" name="editarPacinete_paciente_sexo" type="radio" id="radio7" value="M" />
+																	      <label for="radio7"><?php echo $lang_nuevo[14]//Macho ?></label>
+																	    </p>
+																	    <p>
+																	        <input class="with-gap" name="editarPacinete_paciente_sexo" type="radio" id="radio8" value="H" />
+																	        <label for="radio8"><?php echo $lang_nuevo[15]//Hembra ?></label>
+																	    </p>									    
+																	
+																	
+												  				</div>
+												  				
+												  				<div class="col s12 m4 l4">
+												  					
+												  					<div class="col s6 m4 l4">
+												  						<div class="input-field col s12 m12 l12">
+												  							<input id="editarPacinete_fechaNacimiento" name="editarPacinete_fechaNacimiento" type="text" class="datetimepicker" maxlength="10" onblur="calcularTiempoDeVida(this.value,'resultadoFechas')">
+										          					    	<label id="editarPacinete_label_fechaNacimiento" for="editarPacinete_fechaNacimiento" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[16]//Fecha de nacimiento?></label>
+												  							<input type="hidden" id="hidden_errorFecha" name="hidden_errorFecha" value="0" />
+												  						</div>
+												  					</div>
+												  					
+												  					<div class="col s6 m8 l8">
+												  						<span  id="editarPacinete_resultadoFechas" name="editarPacinete_resultadoFechas">&nbsp;</span>
+												  					</div>
+												  					
+												  					
+												  				</div>
+												  				
+					
+												  			</div><!-- Fin row-->
+												  			
+												  			
+												  			<div class="row">
+												  				
+												  				<div class="col s12 m2 l2">						  					
+												  					
+					
+																		<p>
+																	      <input class="with-gap" name="editarPacinete_paciente_esterilizado" type="radio" id="radio9" value="Si" />
+																	      <label for="radio9"><?php echo $lang_nuevo[17]//Esterilizado?></label>
+																	    </p>
+																	    <p>
+																	        <input class="with-gap" name="editarPacinete_paciente_esterilizado" type="radio" id="radio10" value="No" />
+																	        <label for="radio10"><?php echo $lang_nuevo[18]//Sin esterilizar?></label>
+																	    </p>											
+																	
+																	
+												  				</div>
+												  				
+												  				<div class="input-field col s12 m2 l2">
+												  					<input id="editarPacinete_paciente_color" name="editarPacinete_paciente_color" type="text" class="validate" length="100" maxlength="100">
+										          					<label id="editarPacinete_label_paciente_color" for="editarPacinete_paciente_color" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[19]//Color?></label>
+												  				</div>
+												  				
+												  				
+												  				<div class="col s12 m8 l8">
+												  					
+												  					<div class="col s12 m6 l6">
+												  					
+													  					<div class="input-field col s12 m12 l12">
+													  						<input id="editarPacinete_paciente_alimento" name="editarPacinete_paciente_alimento" type="text" class="validate" length="300" maxlength="300">
+											          						<label id="editarPacinete_label_paciente_alimento" for="editarPacinete_paciente_alimento" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[20]//Alimento?></label>
+													  					</div>
+												  					
+												  					</div>
+												  					
+												  					<div class="col s6 l3 m3">
+												  					
+													  					<div class="input-field  s12 m12 l12">
+																		    <select id="editarPacinete_frecuenciaAlimento" name="editarPacinete_frecuenciaAlimento" >
+																		      <option value="1">1 <?php echo $lang_nuevo[22]//Vez (al día)?></option>
+																		      <option value="2">2 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="3">3 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="4">4 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="5">5 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="6">6 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="7">7 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="8">8 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="9">9 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		      <option value="10">10 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+																		    </select>
+																		    <label><?php echo $lang_nuevo[21]//Frecuencia alimento ?></label>
+													  					</div>
+												  					
+												  					</div>
+												  					
+												  					<div class="col s6 l3 m3">
+												  					
+													  					<div class="input-field  s12 m12 l12">
+																		    <input id="editarPacinete_paciente_bano" name="editarPacinete_paciente_bano" type="text" class="validate" length="30" maxlength="30">
+											          						<label id="editarPacinete_label_paciente_bano" for="editarPacinete_paciente_bano" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[24]//Frecuencia de baño?></label>
+													  					</div>
+												  					
+												  					</div>
+												  					
+												  					
+												  				</div><!-- Fin col 8-->						  				
+					
+												  				
+												  			</div><!-- Fin row-->
+					
+										  			
+										  			<?php if(in_array("63", $_SESSION['permisos_usuario'] )){ ?></form> <?php } ?>
+										  			
+										  			<div class="row">
+										  				
+										  				<div class="input-field col s12 m12 l12 right-align">
+										  					<button class="waves-effect red darken-1 btn" onclick="cancelarEdicionPaciente()"><?php echo $lang_botones[5] //Cancelar?></button>
+										      				<?php if(in_array("63", $_SESSION['permisos_usuario'] )){ ?><button class="waves-effect waves-light btn" onclick="validarEditarPaciente()"><?php echo $lang_botones[4] //Editar?></button><?php }?>
+										      			</div>
+										  				
+										  			</div>
+
+					  			
+					  		</div>
+					  		
+					  		<!-- Fin Formulario para editar un paciente-->
+					  		
+					  		
+					  		
+					  		<?php
+					  				//saber si tiene permiso para adicionar nuevo paciente
+									if(in_array("61", $_SESSION['permisos_usuario'] )){
+							?>
+					  		<div id="hideFormPaciente" style="display: none;">
+					  			
+					  			<form name="form_nuevoPaciente" id="form_nuevoPaciente" action="" method="post" enctype="multipart/form-data"> 
+					  					
+					  					<input type="hidden" name="idPropietarioPaciente" id="idPropietarioPaciente" value="<?php echo $_SESSION['idPropietario']?>" />
+					  					<input type="hidden" name="idPropietarioPaciente_Replica" id="idPropietarioPaciente_Replica" value="<?php if( sizeof($informacionPropietario_REPLICA) > 0){ echo $informacionPropietario_REPLICA['idPropietario']; }else{ echo "0"; }?>" />
+					  					<input type="hidden" name="idEspecie" id="idEspecie" value="" />
+					  					<input type="hidden" name="idRaza" id="idRaza" value="" />
+					  					<input type="hidden" name="idReplica" id="idReplica" value="0" />
+					  					
+					  					<input type="hidden" name="envioFormNuevopaciente" id="envioFormNuevopaciente" value="envio" />
+					  			
+							  			<div class="row">
+							  											  				
+							  				<div class="file-field input-field col s12 m4 l4">
+											      <div class="btn black">
+											        <span><?php echo $lang_nuevo[25]//Foto ?></span>
+											        <input type="file" name="fotoPaciente" id="fotoPaciente">
+											      </div>
+											      <div class="file-path-wrapper">
+											        <input id="filePath" class="file-path validate" type="text" placeholder="png/jpg">
+											      </div>
+							  				</div>
+							  				
+							  				<div class="input-field col s12 m4 l4">
+							  					<input id="paciente_nombre" name="paciente_nombre" type="text" class="validate" length="50" maxlength="50">
+					          					<label id="label_paciente_nombre" for="paciente_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[10]//Nombre?></label>
+							  				</div>
+							  				
+							  				<div class="input-field col s12 m4 l4">
+							  					<input id="paciente_chip" name="paciente_chip" type="text" class="validate" length="50" maxlength="50">
+					          					<label id="label_paciente_chip" for="paciente_chip" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[11]//Código de chip?></label>
+							  				</div>							  				
+							  				
+							  			</div><!-- Fin row-->
+							  			
+							  			<div class="row">
+							  				
+							  				<div class="col s12 m6 l6">
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field col s12 m12 l12">
+							  							<?php
+														//saber si tiene permiso para crear especies
+															if(in_array("30", $_SESSION['permisos_usuario'] )){
+														?>
+							  							 <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaEspecie"  href="#modal_nuevaEspecie" data-target="modal_nuevaEspecie"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_nuevo[26]//Nueva especie?>" style="cursor:pointer;"></i>
+							  							<?php
+															}
+														?>
+							  							<input id="paciente_especie" name="paciente_especie" type="text" class="validate" onkeypress="buscarEspecie()" >
+					          							<label id="label_paciente_especie" for="paciente_especie" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[12] //Especie (escribe y selecciona)?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field col s12 m12 l12">
+							  							<?php
+															//saber si tiene permiso para crear razas
+																if(in_array("33", $_SESSION['permisos_usuario'] )){
+															?>
+							  							 <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaRaza"  href="#modal_nuevaRaza" data-target="modal_nuevaRaza"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_nuevo[27]//Nueva Raza?>" style="cursor:pointer; display: none; "></i>
+							  							<?php
+																}
+														?>
+							  							<input id="paciente_raza" name="paciente_raza" type="text" class="validate" onkeypress="buscarRaza()" disabled  >
+					          							<label id="label_paciente_raza" for="paciente_raza" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[13]//Raza (escribe y selecciona)?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					
+							  				</div><!-- Fin col m4 l4-->
+							  				
+							  				
+							  				
+							  				
+							  				<div class="col s12 m2 l2">
+							  												  						
+													<p>
+												      <input class="with-gap" name="paciente_sexo" type="radio" id="radio1" value="M" />
+												      <label for="radio1"><?php echo $lang_nuevo[14]//Macho?></label>
+												    </p>
+												    <p>
+												        <input class="with-gap" name="paciente_sexo" type="radio" id="radio2" value="H" />
+												        <label for="radio2"><?php echo $lang_nuevo[15]//Hembra?></label>
+												    </p>									    
+												
+												
+							  				</div>
+							  				
+							  				<div class="col s12 m4 l4">
+							  					
+							  					<div class="col s6 m4 l4">
+							  						<div class="input-field col s12 m12 l12">
+							  							<input id="fechaNacimiento" name="fechaNacimiento" type="text" class="datetimepicker" maxlength="10" onblur="calcularTiempoDeVida(this.value,'resultadoFechas')">
+					          					    	<label id="label_fechaNacimiento" for="fechaNacimiento" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[16]//Fecha de nacimiento?></label>
+							  							<input type="hidden" id="hidden_errorFecha" name="hidden_errorFecha" value="0" />
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="col s6 m8 l8">
+							  						<span  id="resultadoFechas" name="resultadoFechas">&nbsp;</span>
+							  					</div>
+							  					
+							  					
+							  				</div>
+							  				
+
+							  			</div><!-- Fin row-->
+							  			
+							  			
+							  			<div class="row">
+							  				
+							  				<div class="col s12 m2 l2">						  					
+							  					
+
+													<p>
+												      <input class="with-gap" name="paciente_esterilizado" type="radio" id="radio3" value="Si" />
+												      <label for="radio3"><?php echo $lang_nuevo[17]//Esterilizado?></label>
+												    </p>
+												    <p>
+												        <input class="with-gap" name="paciente_esterilizado" type="radio" id="radio4" value="No" />
+												        <label for="radio4"><?php echo $lang_nuevo[18]//Sin esterilizar?></label>
+												    </p>											
+												
+												
+							  				</div>
+							  				
+							  				<div class="input-field col s12 m2 l2">
+							  					<input id="paciente_color" name="paciente_color" type="text" class="validate" length="100" maxlength="100">
+					          					<label id="label_paciente_color" for="paciente_color" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[19]//Color?></label>
+							  				</div>
+							  				
+							  				
+							  				<div class="col s12 m8 l8">
+							  					
+							  					<div class="col s12 m6 l6">
+							  					
+								  					<div class="input-field col s12 m12 l12">
+								  						<input id="paciente_alimento" name="paciente_alimento" type="text" class="validate" length="300" maxlength="300">
+						          						<label id="label_paciente_alimento" for="paciente_alimento" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[20]//Alimento?></label>
+								  					</div>
+							  					
+							  					</div>
+							  					
+							  					<div class="col s6 l3 m3">
+							  					
+								  					<div class="input-field  s12 m12 l12">
+													    <select id="frecuenciaAlimento" name="frecuenciaAlimento" >
+													      <option value="1">1 <?php echo $lang_nuevo[22]//Vez (al día)?></option>
+													      <option value="2">2 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="3">3 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="4">4 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="5">5 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="6">6 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="7">7 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="8">8 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="9">9 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													      <option value="10">10 <?php echo $lang_nuevo[23]//Veces (al día)?></option>
+													    </select>
+													    <label><?php echo $lang_nuevo[21]//Frecuencia alimento?></label>
+								  					</div>
+							  					
+							  					</div>
+							  					
+							  					<div class="col s6 l3 m3">
+							  					
+								  					<div class="input-field  s12 m12 l12">
+													    <input id="paciente_bano" name="paciente_bano" type="text" class="validate" length="30" maxlength="30">
+						          						<label id="label_paciente_bano" for="paciente_bano" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[24]//Frecuencia de baño?></label>
+								  					</div>
+							  					
+							  					</div>
+							  					
+							  					
+							  				</div><!-- Fin col 8-->						  				
+
+							  				
+							  			</div><!-- Fin row-->
+
+					  			
+					  			</form>
+					  			
+					  			<div class="row">
+					  				
+					  				<div class="input-field col s12 m12 l12 right-align">
+					  					<span id="mensajeErrorCheck" style="display: none;" ><?php echo $lang_nuevo[28]//Debes elegir si es un macho o una hembra y además indicar si se encuentra esterilizado o no?></span>
+					  					<span id="mensajeErrorCheckMostrar" class="red-text text-darken-2" >&nbsp;</span>
+					  					<button class="waves-effect red darken-1 btn" onclick="cancelarCreacionPaciente()"><?php echo $lang_botones[5]//Cancelar?></button>
+					      				<button class="waves-effect waves-light btn" onclick="validarGuardarPaciente()"><?php echo $lang_botones[2]//Guardar?></button>
+					      			</div>
+					  				
+					  			</div>
+					  			
+					  			
+					  		</div><!-- Fin div hide para mostrar form nuevo paciente-->
+					  		
+					  		<?php
+					  			}//fin if permiso crear paciente
+							?>
+					  		
+					  	</li>
+
+<?php
+
+			//se recorre el listado de pacientes
+			foreach ($listadoPacientes as $listadoPacientes1) {
+				
+						//texto para el sexo
+						if($listadoPacientes1['sexo'] == 'M'){
+							$sexo = "Macho";
+						}else{
+							$sexo = "Hembra";
+						}//fin else
+						
+						//texto para esterilizado
+						if ($listadoPacientes1['esterilizado'] == 'Si') {
+							$esterilizado	= "Si";
+						} else {
+							$esterilizado	= "No";
+						}//fin else
+						
+						
+						
+						$tiempoDeVida	= tiempoTranscurridoFechas($listadoPacientes1['fechaNacimiento']);
+						
+						$idPropietario			= $listadoPacientes1['idPropietario'];
+						$idEspecie				= $listadoPacientes1['idEspecie'];
+						$idRaza 				= $listadoPacientes1['idRaza'];
+						$rutaFoto 				= $listadoPacientes1['urlFoto'];
+						$estado 				= $listadoPacientes1['estado'];
+						$idPaciente 			= $listadoPacientes1['idMascota'];
+						$nombre 				= $listadoPacientes1['nombre'];
+						$chip 					= $listadoPacientes1['numeroChip'];
+						$especie 				= $listadoPacientes1['EspecieNombre'];
+						$raza 					= $listadoPacientes1['RazaNombre'];
+						$sexo 					= $listadoPacientes1['sexo'];
+						$fechaNacimiento 		= $listadoPacientes1['fechaNacimiento'];
+						$esterilizado 			= $listadoPacientes1['esterilizado'];
+						$color 					= $listadoPacientes1['color'];
+						$alimento 				= $listadoPacientes1['alimento'];
+						$frecuenciaAlimento		= $listadoPacientes1['frecuenciaDiaria']; 
+						$bano					= $listadoPacientes1['frecuenciaBanoDias'];
+						
+						if($rutaFoto == ""){
+							$rutaFoto =	"http://www.nanuvet.com/Public/img/porDefectoClientes/huella.png";
+						}else{
+							$rutaFoto =	"http://www.nanuvet.com/Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$rutaFoto;
+						}
+
+						
+						$parametrosEditar = " '".$idPropietario."', '".$idEspecie."', '".$idRaza."', '".$rutaFoto."', '".$estado."', '".$idPaciente."', '".$nombre."', '".$chip."', '".$especie."', '".$raza."', '".$sexo."', '".$fechaNacimiento."', '".$esterilizado."', '".$color."', '".$alimento."' ,'".$frecuenciaAlimento."', '".$bano."'   ";
+			
+?>
+
+						
+
+
+					  	
+					    <li class="collection-item avatar <?php if($estado != 'vivo' ){?>grey lighten-1<?php } ?> ">
+					    	
+					     <?php
+					     //validar si el paciente tiene foto (de lo contrario s emuestra una por defecto)
+					     	if($listadoPacientes1['urlFoto'] != ""){
+					     	?>
+					     		<img src="<?php echo "http://www.nanuvet.com/Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$listadoPacientes1['urlFoto']  ?>" alt="<?php echo $listadoPacientes1['nombre']?>" class="responsive-img circle materialboxed" >
+					     	<?php
+					     	}
+					     ?>	
+					    	
+					      
+					      <span class="title"><?php echo $listadoPacientes1['nombre']?></span>
+					      
+					      <div class="row hoverable tooltipped" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_nuevo[29]//Ver la información de ?><?php echo $listadoPacientes1['nombre']?>" onclick="editarpaciente(<?php echo $parametrosEditar ?>)" >
+					      	
+					      	<div class="col s6 m1 l1" style="text-align: right;" ><strong><?php echo $lang_nuevo[30]//Raza:?></strong></div>
+					      	<div class="col s6 m2 l2"><?php echo $listadoPacientes1['RazaNombre'] ?></div>					      	
+					      	<div class="col s6 m1 l1" style="text-align: right;" ><strong><?php echo $lang_nuevo[31]//Sexo:?></strong></div>
+					      	<div class="col s6 m2 l1"><?php echo $sexo?></div>
+					      	<div class="col s6 m1 l1" style="text-align: right;" ><strong><?php echo $lang_nuevo[32]//Edad:?></strong></div>
+					      	<div class="col s6 m2 l2"><?php echo $tiempoDeVida ?> </div>
+					      	<div class="col s6 m1 l1" style="text-align: right;" ><strong><?php echo $lang_nuevo[33]//Esterilizado(a):?></strong></div>
+					      	<div class="col s6 m2 l2"><?php echo $esterilizado?></div>
+					      	
+					      </div><!-- Fin row-->
+					      
+					      <a href="<?php echo Config::ruta()?>historiaClinica/<?php echo $idPaciente?>/consultas/" class="secondary-content">
+					      	<i class="fa fa-info-circle fa-3x tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_nuevo[34]//Ver la historia clinica de?> <?php echo $listadoPacientes1['nombre']?>" aria-hidden="true"></i>
+					      </a>
+					      
+					    </li>
+					    
+
+<?php				
+			}//fin foreach
+
+?>					    
+					    
+					    
+					    
+					   </ul>
+					  
+					  
+				      
+				      
+			  	</div><!-- Fin col-->
+			  	
+			  </div><!-- Fin row-->
+			  
+                          
+              
+              
+              
+             </div>
+           </div>	
+		</div>		
+	</div>
+	
+</main>

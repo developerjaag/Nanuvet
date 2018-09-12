@@ -1,0 +1,112 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[110]//Esterilizado?></th>
+			<th><?php echo $lang_reportes[111]//Fecha nacimiento?></th>		
+			<th><?php echo $lang_reportes[112]//Edad?></th>
+			<th><?php echo $lang_reportes[108]//Especie?></th>
+			<th><?php echo $lang_reportes[109]//Raza?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>	
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoPacientes as $listadoPacientes1) {
+		
+		
+		if($listadoPacientes1['sexo'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoPacientes1['nombre']." (".$sexo.")"?></td>	
+			<td><?php echo $listadoPacientes1['esterilizado']?></td>
+			<td><?php echo $listadoPacientes1['fechaNacimiento']?></td>
+			<td><?php echo tiempoTranscurridoFechas($listadoPacientes1['fechaNacimiento'])?></td>			
+			<td><?php echo $listadoPacientes1['nombreEspecie']?></td>
+			<td><?php echo $listadoPacientes1['nombreRaza']?></td>					
+			<td><?php echo "(".$listadoPacientes1['identificacionPropietario'].") ".$listadoPacientes1['nombrePropietario']." ".$listadoPacientes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoPacientes1['telefono']?></td>
+					
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[54]//Sexo?></th>
+			<th><?php echo $lang_reportes[110]//Esterilizado?></th>
+			<th><?php echo $lang_reportes[111]//Fecha nacimiento?></th>		
+			<th><?php echo $lang_reportes[112]//Edad?></th>
+			<th><?php echo $lang_reportes[108]//Especie?></th>
+			<th><?php echo $lang_reportes[109]//Raza?></th>
+			<th><?php echo $lang_reportes[113]//Color?></th>
+			<th><?php echo $lang_reportes[114]//Frecuencia baño?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>	
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoPacientesExportar as $listadoPacientes1) {
+		
+		
+		if($listadoPacientes1['sexo'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoPacientes1['nombre']?></td>	
+			<td><?php echo $sexo?></td>
+			<td><?php echo $listadoPacientes1['esterilizado']?></td>
+			<td><?php echo $listadoPacientes1['fechaNacimiento']?></td>
+			<td><?php echo tiempoTranscurridoFechas($listadoPacientes1['fechaNacimiento'])?></td>		
+			<td><?php echo $listadoPacientes1['nombreEspecie']?></td>
+			<td><?php echo $listadoPacientes1['nombreRaza']?></td>	
+			<td><?php echo $listadoPacientes1['color']?></td>	
+			<td><?php echo $listadoPacientes1['frecuenciaBanoDias']?></td>					
+			<td><?php echo "(".$listadoPacientes1['identificacionPropietario'].") ".$listadoPacientes1['nombrePropietario']." ".$listadoPacientes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoPacientes1['telefono']?></td>	
+			
+		</tr>
+<?php		
+		$contador = $contador +1;
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

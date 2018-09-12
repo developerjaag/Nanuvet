@@ -1,0 +1,86 @@
+<h5 class="center-align"><?php echo $lang_sucursales[19]//Vincular/Desvincular usuarios con la sucursal: ?><?php echo $nombreSucursal?> </h5>
+ 		 		
+ 		<div class="row">
+ 			<div class="col s12 m12 l12">
+ 				
+ 				 <div class="input-field col s12 m12 l12">
+				    <select id="UsuariosVincularSucursalModal" name="UsuariosVincularSucursalModal" >
+				      <option value="" disabled selected><?php echo $lang_sucursales[20]//Elige un usuario?></option>
+				      
+				      <?php  
+				      	foreach ($usuariosQueNoEstanEnLASucursal as $usuariosQueNoEstanEnLASucursal1) {
+					  ?>
+					  
+					  		<option value="<?php echo $usuariosQueNoEstanEnLASucursal1['idUsuario'] ?>"><?php  echo $usuariosQueNoEstanEnLASucursal1['nombre']." ".$usuariosQueNoEstanEnLASucursal1['apellido'] ?></option>
+					  
+					  <?php		  
+						  }
+				      ?>
+    
+				      
+				    </select>
+				    <label><?php echo $lang_sucursales[21]//Usuario para vincular?></label>
+				  </div>
+		
+ 			</div>
+ 			<div class="col s12 m12 l12 center-align">
+ 				 <a class="waves-effect waves-light btn" onclick="vincularUsuarioSucursalModal()"><?php echo $lang_sucursales[22]//Vincular usuario con la sucursal?></a>
+ 			</div>
+ 		</div>
+ 		
+ 		
+ 		<div class="row">
+ 			<span id="spanActivarVinculo" style="display: none;"><?php echo $lang_sucursales[23]//Activar vinculo?></span>
+ 			<span id="spanDesactivarVInculo" style="display: none;"><?php echo $lang_sucursales[24]//Desactivar vinculo?></span>
+ 			<div class="col s12 m12 l12">
+ 				
+ 				<table>
+ 					
+ 					<thead>
+ 						<tr>
+ 							<th><?php echo $lang_perfil[1]//Identificación?></th>
+ 							<th><?php echo $lang_perfil[2]//Nombres?></th>
+ 							<th><?php echo $lang_perfil[3]//Apellidos?></th>
+ 							<th></th>
+ 						</tr>
+ 					</thead>
+ 					
+ 					<tbody>
+ 						<?php 
+ 							foreach ($usuariosVinculados as $usuariosVinculados1) {
+ 								
+								if($usuariosVinculados1['estado'] == 'I'){																																																//Activar vinculo
+									$btn = '<span id="spanV_'.$usuariosVinculados1['idUsuarioSucursal'].'"> <a id="'.$usuariosVinculados1['idUsuarioSucursal'].'" class="waves-effect red darken-1 btn tooltipped" data-position="right" data-delay="50" data-tooltip="'.$lang_sucursales[23].'" onclick="activarVinculo(this.id)" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a> </span>';
+								}else{																																																									//Desactivar vinculo			
+									$btn = '<span id="spanV_'.$usuariosVinculados1['idUsuarioSucursal'].'"> <a id="'.$usuariosVinculados1['idUsuarioSucursal'].'" class="waves-effect waves-light btn tooltipped" data-position="right" data-delay="50" data-tooltip="'.$lang_sucursales[24].'" onclick="desactivarVinculo(this.id)" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a> </span>';
+								}
+								
+ 						?>		
+							
+								<tr>
+									<td><?php echo $usuariosVinculados1['identificacion']?></td>
+									<td><?php echo $usuariosVinculados1['nombre']?></td>
+									<td><?php echo $usuariosVinculados1['apellido']?></td>
+									<td><?php echo $btn?></td>
+								</tr>
+							
+						<?php		 
+							 }
+ 						?>
+ 					</tbody>
+ 					
+ 				</table>
+ 				
+ 				
+ 				
+ 			</div>
+ 			
+ 		</div>
+ 		
+
+<script>
+	$(document).ready(function() {
+    	$('select').material_select();
+    	$('.tooltipped').tooltip({delay: 50});
+  	});
+</script>

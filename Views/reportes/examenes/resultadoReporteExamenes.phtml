@@ -1,0 +1,163 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>	
+			<th><?php echo $lang_reportes[5]//Exámenes?></th>
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>	
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[43]//Usuario?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoExamenes as $listadoExamenes1) {
+		
+		$detalleExamen = $objetoReportes->consultarDetalleExamen($listadoExamenes1['idExamen']);
+		
+		if($listadoExamenes1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoExamenes1['fecha']?></td>
+			<td><?php echo $listadoExamenes1['hora']?></td>
+			<td>
+				<?php foreach ($detalleExamen as $detalleExamen1) {
+					?>
+						<?php echo "- (".$detalleExamen1['codigo'].") ".$detalleExamen1['nombre']." <u>".$detalleExamen1['precio']."</u><br />"?>
+					<?php	
+				} ?>
+			</td>	
+			<td><?php echo $listadoExamenes1['observaciones']?></td>		
+			<td><?php echo "(".$listadoExamenes1['identificacionPropietario'].") ".$listadoExamenes1['nombrePropietario']." ".$listadoExamenes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoExamenes1['telefono']?></td>
+			<td><?php echo $listadoExamenes1['nombreMascota']." (".$sexo.")"?></td>	
+			<td><?php echo $listadoExamenes1['nombreUsuario']." ".$listadoExamenes1['apellidoUsuario']?></td>
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>
+			<th><?php echo $lang_reportes[5]//Exámenes?></th>
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>	
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[43]//Usuario?></th>
+			<th><?php echo $lang_reportes[40]//Sucursal?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoExamenesExportar as $listadoExamenes1) {
+		
+		$detalleExamen = $objetoReportes->consultarDetalleExamen($listadoExamenes1['idExamen']);
+		
+		if($listadoExamenes1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoExamenes1['fecha']?></td>
+			<td><?php echo $listadoExamenes1['hora']?></td>
+			<td>
+				<table>
+					<tr>
+						<th><?php echo $lang_reportes[69]//Código?></th>
+						<th><?php echo $lang_reportes[70]//Nombre?></th>
+						<th><?php echo $lang_reportes[71]//Precio?></th>
+						<th><?php echo $lang_reportes[38]//Observación?></th>
+						<th><?php echo $lang_reportes[72]//Fecha/Hora resultado?></th>
+						<th><?php echo $lang_reportes[73]//Resultado general?></th>
+						<th><?php echo $lang_reportes[74]//Observaciones resultado?></th>	
+						<th><?php echo $lang_reportes[75]//Usuario (resultado)?></th>
+						
+						<?php foreach ($detalleExamen as $detalleExamen1) {
+							
+							$resultadoDetalleExamen = $objetoReportes->consultarResultadoExamen($detalleExamen1['idExamenDetalle']);
+							
+							?>
+							
+							<tr>
+								<td><?php echo $detalleExamen1['codigo'] ?></td>
+								<td><?php echo $detalleExamen1['nombre'] ?></td>
+								<td><?php echo $detalleExamen1['precio'] ?></td>
+								<td><?php echo $detalleExamen1['observacion'] ?></td>
+								
+								<?php 
+									foreach ($resultadoDetalleExamen as $resultadoDetalleExamen1) {
+									?>
+										<td><?php echo $resultadoDetalleExamen1['fecha']." ".$resultadoDetalleExamen1['hora']?></td>
+										<td><?php echo $resultadoDetalleExamen1['general'] ?></td>
+										<td><?php echo $resultadoDetalleExamen1['observaciones'] ?></td>
+										<td><?php echo $resultadoDetalleExamen1['nombreUsuario']." ".$resultadoDetalleExamen1['apellidoUsuario']?></td>	
+									<?php	
+									}
+								?>
+								
+							</tr>
+								
+							<?php	
+						} ?>
+											
+					</tr>
+				</table>
+				
+			</td>					
+			<td><?php echo $listadoExamenes1['observaciones']?></td>		
+			<td><?php echo "(".$listadoExamenes1['identificacionPropietario'].") ".$listadoExamenes1['nombrePropietario']." ".$listadoExamenes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoExamenes1['telefono']?></td>
+			<td><?php echo $listadoExamenes1['nombreMascota']." (".$sexo.")"?></td>	
+			<td><?php echo $listadoExamenes1['nombreUsuario']." ".$listadoExamenes1['apellidoUsuario']?></td>
+			<td><?php echo $listadoExamenes1['nombreSucursal']?></td>
+			
+			
+		</tr>
+<?php		
+
+		$contador = $contador+1;
+
+	}
+	
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

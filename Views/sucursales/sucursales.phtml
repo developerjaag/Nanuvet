@@ -1,0 +1,686 @@
+<!-- Modal para consultar y adiciona rlos espacios de una sucursal-->
+
+<div id="modal_espaciosHospitalizacion" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    	<div class="modal-content">
+
+			<h4 class="center-align"><?php echo $lang_sucursales[26]//Espacios para hospitalización en ?> <span id="nombreSucursalEspaciosH"></span></h4> 
+<?php
+//saber si tiene permiso para crear espacios hospitalizacion
+	if(in_array("106", $_SESSION['permisos_usuario'] )){
+?>
+			<div id="div_crearNuevoEspacioHospitalizacion">
+				<div class="row">
+					
+					<input type="hidden" id="idSucursalEspacioH" name="idSucursalEspacioH" value="0" />
+					
+					<div class="col s12 m3 l3 input-field">
+						<input id="nombre_espacioH" name="nombre_espacioH" type="text" class="validate"  length="100" maxlength="100" >
+	  					<label id="label_nombre_espacioH" for="nombre_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[27]//Nombre?></label>
+					</div><!-- Fin col-->
+					
+					<div class="col s12 m2 l2 input-field">
+						<input id="capacidad_espacioH" name="capacidad_espacioH" type="text" class="validate"  onkeypress="return soloNumeros(event)" >
+	  					<label id="label_capacidad_espacioH" for="capacidad_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[28]//Capacidad?></label>
+					</div><!-- Fin col-->
+	
+					<div class="col s12 m3 l3 input-field">
+						<input id="observacion_espacioH" name="observacion_espacioH" type="text" class="validate" length="300" maxlength="300">
+	  					<label id="label_observacion_espacioH" for="observacion_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[29]//Observación?></label>
+					</div><!-- Fin col-->
+	
+	
+					
+					<div class="col s12 m4 l4 input-field">
+						<a class="waves-effect red btn" onclick="limpiarEspacioHospitalizacion()"><?php $lang_botones[10]//Limpiar?></a>
+						<a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoEspacioHospitalizacion()"><?php $lang_botones[2]//Guardar?></a>
+					</div><!-- Fin col-->				
+					
+				</div><!-- Fin row-->
+
+			</div><!-- Fin dov para formulario de crear un espacio-->
+<?php
+	}//fin if permiso crear espacio hospitalizaicon
+	
+	//permiso editar espacio hospitalizaicon
+	if(in_array("107", $_SESSION['permisos_usuario'] )){
+?>			
+			<!-- Para editar un espacio-->
+			<div id="div_editarEspacioHospitalizacion" style="display: none;">
+				<div class="row">
+					
+					<input type="hidden" id="idEspacioHospitalizacion" name="idEspacioHospitalizacion" value="0" />
+					
+					<div class="col s12 m2 l2 input-field">
+						<input id="editar_nombre_espacioH" name="editar_nombre_espacioH" type="text" class="validate"  length="100" maxlength="100" >
+	  					<label id="label_editar_nombre_espacioH" for="editar_nombre_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >Nombre</label>
+					</div><!-- Fin col-->
+					
+					<div class="col s12 m2 l2 input-field">
+						<input id="editar_capacidad_espacioH" name="editar_capacidad_espacioH" type="text" class="validate"  onkeypress="return soloNumeros(event)" >
+	  					<label id="label_editar_capacidad_espacioH" for="editar_capacidad_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >Capacidad</label>
+					</div><!-- Fin col-->
+					
+					<div class="col s12 m2 l2 input-field">
+						<input id="editar_ocupado_espacioH" name="editar_ocupado_espacioH" type="text" class="validate"  onkeypress="return soloNumeros(event)" >
+	  					<label id="label_editar_ocupado_espacioH" for="editar_ocupado_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >Ocupado</label>
+					</div><!-- Fin col-->
+	
+					<div class="col s12 m2 l2 input-field">
+						<input id="editar_observacion_espacioH" name="editar_observacion_espacioH" type="text" class="validate" length="300" maxlength="300">
+	  					<label id="label_editar_observacion_espacioH" for="editar_observacion_espacioH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >Observación</label>
+					</div><!-- Fin col-->
+	
+	
+					
+					<div class="col s12 m4 l4 input-field">
+						<a class="waves-effect red btn" onclick="cancelarEdicionEspacioHospitalizacion()"><?php $lang_botones[5]//Cancelar?></a>
+						<a class="waves-effect waves-light btn" onclick="validarEdicionEspacioHospitalizacion()"><?php $lang_botones[4]//Editar?></a>
+					</div><!-- Fin col-->				
+					
+				</div><!-- Fin row-->
+			</div><!-- Fin dov para editar un espacio-->
+<?php
+	}//fin if permiso editar espacio hospitalizaicon
+?>			
+			<div class="row">
+				<span id="spanActivar" style="display: none;"><?php echo $lang_general[21]//Activar?></span>
+				<span id="spanDesactivar" style="display: none;"><?php echo $lang_general[22]//Desactivar?></span>
+				<div id="resultadoEspaciosHospitalizacion">
+					
+				</div>
+			</div>
+
+
+    	</div>    
+    <div class="modal-footer">    		
+	      	<a class="modal-action modal-close waves-effect waves-red btn-flat" ><?php echo $lang_botones[3]//Cerrar?></a>  	 
+    </div>
+</div>
+
+
+<!-- Modal para consultar y adiciona rlos espacios de una sucursal-->
+
+
+
+<!-- Modal para mostrar el mapa de una ucursal-->
+  <div id="modal_mapa" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      
+      <div class="center-align" >
+
+		<div id="map" class="center-align"  ></div>
+      	
+      	
+      </div>
+      	
+      
+    </div>
+  </div>
+
+
+<!-- Modales para mostrar las imagenes de ayuda para los mapas-->
+
+  <div id="modal_latitud" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      
+      <div class="center-align" >
+      	
+      	<?php
+      		if($idiomaIndex == 'En'){
+      	?>
+      			<img src="../Public/img/ayudaMapa/mapaAyudaLatitudEn.png" class="responsive-img" style="max-width: 73% !important;"  >
+      	<?php		
+      		}else{
+      	?>
+      			<img src="../Public/img/ayudaMapa/mapaAyudaLatitudEs.png" class="responsive-img" style="max-width: 73% !important;"  >
+      	<?php		
+      		}
+      	?>
+      	
+      	
+      </div>
+      	
+      
+    </div>
+  </div>
+
+
+  <div id="modal_longitud" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+    	
+      <div class="center-align" >
+      	
+       	<?php
+      		if($idiomaIndex == 'En'){
+      	?>
+      			<img src="../Public/img/ayudaMapa/mapaAyudaLongitudEn.png" class="responsive-img" style="max-width: 73% !important;"  >
+      	<?php		
+      		}else{
+      	?>
+      			<img src="../Public/img/ayudaMapa/mapaAyudaLongitudEs.png" class="responsive-img" style="max-width: 73% !important;"  >
+      	<?php		
+      		}
+      	?>     	
+      	
+      	
+      </div>    	
+    	
+    </div>
+  </div>
+
+
+<?php
+		//saber si tiene permisos para adicionar usuarios a las  sucursales
+		if(in_array("10", $_SESSION['permisos_usuario'] )){
+?>	
+
+<!-- Modal para mostrar gestionar los vinculos de una sucursal con los usuarios-->
+  <div id="modal_vincular" class="modal" style="margin-top: 5%; height: 80% !important;">
+    <div id="contenerdorModalVincular"  class="modal-content" style="">
+
+      	
+      
+    </div>
+  </div>
+
+<?php
+		}//fin if
+?>
+
+<main>
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			<?php echo $lang_menu[16]//sucursales?>
+              		</div>
+              		<div class="col s6 right-align">                			            			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="Ver tutorial" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+              		</div>
+              	</div>
+              	
+              </span>
+
+
+              <div class="row">	
+				<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+						<h5>Video-tutorial</h5>
+					 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600" controls>
+					    
+					  		  <?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/sucursales/sucursales.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/sucursales/sucursales.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+					  </video>
+					  <h6 class="center-align">
+					  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_general[18]//Cerrar video?></a>
+					  </h6>
+				</div><!-- Fin div col video-->
+			</div>
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4  id="tituloLi" class="center-align" ><?php echo $lang_sucursales[7]//Sucursales de la cuenta?> 
+						  			
+						  			<?php
+							    		//saber si tiene permisos para adicionar sucursales
+										if(in_array("9", $_SESSION['permisos_usuario'] )){
+									?>
+						  			
+								  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_sucursales[8]//Nueva sucursal?>" onclick="mostrarFormNuevaSucursal()">
+								  				<i class="material-icons">add</i>
+								  			</a>
+						  			
+						  			<?php
+										}//fin if permisos para adicionar sucursales
+									?>
+						  			
+						  		</h4>
+						  		
+						  		<br />
+						  		
+						  		<!-- Formulario para adicionar una nueva sucursal-->
+						  		
+						  		<?php
+							    		//saber si tiene permisos para editar sucursales
+										if(in_array("9", $_SESSION['permisos_usuario'] )){
+								?>
+						  		
+						  		<div id="hideen_nuevaSucursal" style="display: none; ">
+						  			
+						  			<div class="row">
+						  				 <form class="col s12 m12 l12" id="form_nuevaSucursal" name="form_nuevaSucursal" action="" method="post" enctype="multipart/form-data">
+                      							
+                      						  <input type="hidden" id="hidden_envioFormNueva" name="hidden_envioFormNueva" value="enviar" />	
+						                      <input type="hidden" id="idPais"   name="idPais"    value="0"/>
+						                      <input type="hidden" id="idCiudad" name="idCiudad"  value="0"/>
+						                      <input type="hidden" id="idBarrio" name="idBarrio"  value="0"/>
+						                      
+						                      <div class="row">
+						                      	<div class="col s12 m12 l12">
+						                      		<h4 class="center-align"><?php echo $lang_sucursales[8]//Nueva sucursal?></h4>
+						                      	</div>
+						                      </div>
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m6 l6">
+						                              <input id="sucursal_nit"  name="sucursal_nit" type="text" class="validate" length="50" maxlength="50">
+						                              <label id="label_sucursal_nit" for="sucursal_nit" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[0]//Identificación tributaria?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m6 l6">
+						                              <input id="sucursal_nombre" name="sucursal_nombre" type="text" class="validate" length="100" maxlength="100">
+						                              <label id="label_sucursal_nombre" for="sucursal_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[1]//Nombre de la sucursal?></label>
+						                          </div>
+						                          
+						                      </div><!-- fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m6 l6">
+						                              <input id="sucursal_leyendaEncabezado" name="sucursal_leyendaEncabezado" type="text" class="validate" length="300" maxlength="300">
+						                              <label id="label_sucursal_leyendaEncabezado" for="sucursal_leyendaEncabezado"><?php echo $lang_sucursales[2] //Leyenda del encabezado?></label>
+						                          </div>
+						                        
+						                        <div class="file-field input-field col s12 m6 l6">
+						                              <div class="btn black">
+						                                <span><?php echo $lang_sucursales[3] //Logo?></span>
+						                                <input type="file" id="sucursal_logo" name="sucursal_logo">
+						                              </div>
+						                              <div class="file-path-wrapper">
+						                                <input class="file-path validate" id="path_sucursal_logo" type="text" placeholder="<?php echo $lang_sucursales[6]//logo para la sucursal?>">
+						                              </div>
+						                        </div>
+						                        
+						                      </div>
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                            <input id="sucursal_telefono1" name="sucursal_telefono1" type="text" class="validate" length="20" maxlength="20">
+						                            <label id="label_sucursal_telefono1" for="sucursal_telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4"> 
+						                                <input id="sucursal_telefono2"  name="sucursal_telefono2" type="text" class="validate" length="20" maxlength="20">
+						                                <label id="label_sucursal_telefono2" for="sucursal_telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[1]//Segundo teléfono?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <input id="sucursal_celular" name="sucursal_celular"  type="text" class="validate" length="20" maxlength="20">
+						                                <label id="label_sucursal_celular" for="sucursal_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+						                          </div>
+						                          
+						                      </div><!-- Fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                          		<i class="fa fa-question-circle prefix tooltipped modal-trigger" href="#modal_latitud" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_sucursales[9]//Ver como se hace?>" style="cursor:pointer;"></i>
+						                                <input id="sucursal_latitud" name="sucursal_latitud" type="text" class="validate" length="100" maxlength="100" onKeyPress="return soloNumerosPuntosGuiones(event)" >
+						                                <label id="label_sucursal_latitud" for="sucursal_latitud" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[11]//Latitud?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                          		<i class="fa fa-question-circle prefix tooltipped modal-trigger" href="#modal_longitud" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_sucursales[9]//Ver como se hace?>" style="cursor:pointer;"></i>
+						                                <input id="sucursal_longitud" name="sucursal_longitud" type="text" class="validate" length="100" maxlength="100" onKeyPress="return soloNumerosPuntosGuiones(event)">
+						                                <label id="label_sucursal_longitud" for="sucursal_longitud" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[10]//Longitud?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                                <input id="sucursal_direccion" name="sucursal_direccion" type="text" class="validate" length="50" maxlength="50">
+						                                <label id="label_sucursal_direccion" for="sucursal_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                                <input id="sucursal_email" name="sucursal_email"  type="email" class="validate" length="100" maxlength="100">
+						                                <label id="label_sucursal_email" for="sucursal_email" ><?php echo $lang_general[4]//E-mail?></label> 
+						                          </div>
+						                          
+						                      </div><!-- Fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" >
+						                                <label id="label_sucursal_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+						                                <input id="ciudad" name="ciudad" type="text" class="validate" onkeypress="buscarCiudad()" disabled>
+						                                <label id="label_sucursal_ciudad" for="ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevoBarrio" href="#modal_nuevoBarrio" data-target="modal_nuevoBarrio" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//nuevo barrio ?>" style="cursor:pointer;  display:none;"></i>
+						                                <input id="barrio" name="barrio" type="text" class="validate"  onkeypress="buscarBarrio()" disabled>
+						                                <label id="label_sucursal_barrio" for="barrio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[7]//Barrio (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                      </div><!-- fin row-->
+						                      
+						                      <div class="row">
+						                        <div class="input-field col s12 m12 l12 right-align">
+						                          <a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoSucursal()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                          <a class="waves-effect waves-light btn" onclick="validarGuardadoSucursal()"><?php echo $lang_botones[2]//Guardar?></a>
+						                        </div>
+						                      </div>
+						                      
+						                      
+						                      
+						                  </form>
+						  			</div><!-- Fin row-->
+						  			
+						  			
+						  		</div>
+						  								  		
+						  		<?php
+										}//fin if permisos para adiconar sucursales
+									?>
+						  		
+						  		<!-- Fin formulario para adicionar una nueva sucursal-->
+						  		
+						  		
+						  		<!-- Formulario para editar una sucursal-->
+						  		<div id="hidden_editar_Sucursal" style="display: none; ">
+						  			
+						  			<div class="row">
+						  				 <form class="col s12 m12 l12" id="form_editarSucursal" name="form_editarSucursal" action="" method="post" enctype="multipart/form-data">
+                      							
+                      						  <input type="hidden" id="hidden_envioFormEditar" name="hidden_envioFormEditar" value="editar" />	
+						                      <input type="hidden" id="editar_idPais"   name="editar_idPais"    value="0"/>
+						                      <input type="hidden" id="editar_idCiudad" name="editar_idCiudad"  value="0"/>
+						                      <input type="hidden" id="editar_idBarrio" name="editar_idBarrio"  value="0"/>
+						                      
+						                      <input type="hidden" id="editar_idSucursal" name="editar_idSucursal" value="" />
+						                      
+						                      <div class="row">
+						                      	<div class="col s12 m12 l12">
+						                      		<h4 class="center-align"><?php echo $lang_sucursales[12]//Editar sucursal?></h4>
+						                      	</div>
+						                      </div>
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="col s12 m3 l3 center-align">
+						                             
+						                             <img src="../Public/img/porDefectoClientes/bulding.png" id="editar_sucursal_logo" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+						                             
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                              <input id="editar_sucursal_nit"  name="editar_sucursal_nit" type="text" class="validate" length="50" maxlength="50">
+						                              <label id="label_editar_sucursal_nit" for="editar_sucursal_nit" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[0]//Identificación tributaria?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                              <input id="editar_sucursal_nombre" name="editar_sucursal_nombre" type="text" class="validate" length="100" maxlength="100">
+						                              <label id="label_editar_sucursal_nombre" for="editar_sucursal_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[1]//Nombre de la sucursal?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                          	
+						                          		 <div class="switch">
+														    <label>
+														      <?php echo $lang_sucursales[14]//Inactiva?>
+														      <input type="checkbox" id="editar_sucursal_estado" name="editar_sucursal_estado" >
+														      <span class="lever"></span>
+														      <?php echo $lang_sucursales[13]//Activa?>
+														    </label>
+														  </div>
+						                              
+						                          </div>
+						                          
+						                      </div><!-- fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m6 l6">
+						                              <input id="editar_sucursal_leyendaEncabezado" name="editar_sucursal_leyendaEncabezado" type="text" class="validate" length="300" maxlength="300">
+						                              <label id="label_editar_sucursal_leyendaEncabezado" for="editar_sucursal_leyendaEncabezado"><?php echo $lang_sucursales[2] //Leyenda del encabezado?></label>
+						                          </div>
+						                        
+						                        <div class="file-field input-field col s12 m6 l6">
+						                              <div class="btn black">
+						                                <span><?php echo $lang_sucursales[3] //Logo?></span>
+						                                <input type="file" id="editar_sucursal_logo" name="editar_sucursal_logo">
+						                              </div>
+						                              <div class="file-path-wrapper">
+						                                <input class="file-path validate" id="editar_path_sucursal_logo" type="text" placeholder="<?php echo $lang_sucursales[6]//logo para la sucursal?>">
+						                              </div>
+						                        </div>
+						                        
+						                      </div>
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                            <input id="editar_sucursal_telefono1" name="editar_sucursal_telefono1" type="text" class="validate" length="20" maxlength="20">
+						                            <label id="label_editar_sucursal_telefono1" for="editar_sucursal_telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4"> 
+						                                <input id="editar_sucursal_telefono2"  name="editar_sucursal_telefono2" type="text" class="validate" length="20" maxlength="20">
+						                                <label id="label_editar_sucursal_telefono2" for="editar_sucursal_telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[1]//Segundo teléfono?></label>
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <input id="editar_sucursal_celular" name="editar_sucursal_celular"  type="text" class="validate" length="20" maxlength="20">
+						                                <label id="label_editar_sucursal_celular" for="editar_sucursal_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+						                          </div>
+						                          
+						                      </div><!-- Fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                          		<i class="fa fa-question-circle prefix tooltipped modal-trigger" href="#modal_latitud" data-position="right" data-delay="50" data-tooltip="Ver como se hace" style="cursor:pointer;"></i>
+						                                <input id="editar_sucursal_latitud" name="editar_sucursal_latitud" type="text" class="validate" length="100" maxlength="100" onKeyPress="return soloNumerosPuntosGuiones(event)" >
+						                                <label id="label_editar_sucursal_latitud" for="editar_sucursal_latitud" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[11]//Latitud?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                          		<i class="fa fa-question-circle prefix tooltipped modal-trigger" href="#modal_longitud" data-position="left" data-delay="50" data-tooltip="Ver como se hace" style="cursor:pointer;"></i>
+						                                <input id="editar_sucursal_longitud" name="editar_sucursal_longitud" type="text" class="validate" length="100" maxlength="100" onKeyPress="return soloNumerosPuntosGuiones(event)">
+						                                <label id="label_editar_sucursal_longitud" for="editar_sucursal_longitud" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_sucursales[10]//Longitud?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                                <input id="editar_sucursal_direccion" name="editar_sucursal_direccion" type="text" class="validate" length="50" maxlength="50">
+						                                <label id="label_editar_sucursal_direccion" for="editar_sucursal_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m3 l3">
+						                                <input id="editar_sucursal_email" name="editar_sucursal_email"  type="email" class="validate" length="100" maxlength="100">
+						                                <label id="label_editar_sucursal_email" for="editar_sucursal_email" ><?php echo $lang_general[4]//E-mail?></label> 
+						                          </div>
+						                          
+						                      </div><!-- Fin row-->
+						                      
+						                      <div class="row">
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <input id="editar_pais" name="editar_pais"  type="text" class="validate" onkeypress="buscarPais()" >
+						                                <label id="label_editar_sucursal_pais" for="editar_pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+						                                <input id="editar_ciudad" name="editar_ciudad" type="text" class="validate" onkeypress="buscarCiudad()" disabled>
+						                                <label id="label_editar_sucursal_ciudad" for="editar_ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                          <div class="input-field col s12 m4 l4">
+						                                <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevoBarrio" href="#modal_nuevoBarrio" data-target="modal_nuevoBarrio" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//nuevo barrio ?>" style="cursor:pointer;  display:none;"></i>
+						                                <input id="editar_barrio" name="editar_barrio" type="text" class="validate"  onkeypress="buscarBarrio()" disabled>
+						                                <label id="label_editar_sucursal_barrio" for="editar_barrio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[7]//Barrio (Escriba y seleccione)?></label> 
+						                          </div>
+						                          
+						                      </div><!-- fin row-->
+						                      
+						                      <div class="row">
+						                        <div class="input-field col s12 m12 l12 right-align">
+						                        <?php
+											    		//saber si tiene permisos para adicionar usuarios a las  sucursales
+														if(in_array("10", $_SESSION['permisos_usuario'] )){
+												?>	
+						                          <a class="waves-effect blue darken-1 btn modal-trigger" data-target="modal_vincular" onclick="vincularUsuariosSucursal()"><?php echo $lang_sucursales[18]//Vincular usuarios?></a>
+						                        <?php
+														}//fin if si tiene permisos para adicionar usuarios a las  sucursales
+												?>
+						                          <a class="waves-effect red darken-1 btn" onclick="cancelarEditarSucursal()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                          <a class="waves-effect waves-light btn" onclick="validarEditarSucursal()"><?php echo $lang_botones[4]//Editar?></a>
+						                        </div>
+						                      </div>
+						                      
+						                      
+						                      
+						                  </form>
+						  			</div><!-- Fin row-->
+						  			
+						  			
+						  		</div>
+						  		<!-- Fin formulario editar sucursal-->
+						  		
+						  		
+							</li>
+					
+					<?php 
+					
+						foreach ($listadoSucursales as $listadoSucursales1) {
+							
+							$idSucursal					= $listadoSucursales1['idSucursal'];
+							$identificativoNit			= $listadoSucursales1['identificativoNit'];
+							$nombre						= $listadoSucursales1['nombre'];
+							$telefono1					= $listadoSucursales1['telefono1'];
+							$telefono2					= $listadoSucursales1['telefono2'];
+							$celular					= $listadoSucursales1['celular'];
+							$direccion					= $listadoSucursales1['direccion'];
+							$longitud					= $listadoSucursales1['longitud'];
+							$latitud					= $listadoSucursales1['latitud'];
+							$email						= $listadoSucursales1['email'];
+							$urlLogo					= $listadoSucursales1['urlLogo'];
+							$leyendaencabezado			= $listadoSucursales1['leyendaencabezado'];
+							$estado						= $listadoSucursales1['estado'];
+							$idPais						= $listadoSucursales1['idPais'];
+							$idCiudad					= $listadoSucursales1['idCiudad'];
+							$idBarrio					= $listadoSucursales1['idBarrio'];
+							$NombreCiudad				= $listadoSucursales1['NombreCiudad'];
+							$NombrePais					= $listadoSucursales1['NombrePais'];
+							$NombreBarrio				= $listadoSucursales1['NombreBarrio'];
+							
+							if($urlLogo == ""){
+								$rutaLogo =	"../Public/img/porDefectoClientes/bulding.png";
+							}else{
+								$rutaLogo =	"../Public/uploads/".$_SESSION['BDC_carpeta']."/img_sucursales/".$urlLogo;
+							}
+							
+							
+							$parametrosEditar = "'".$idSucursal."','".$identificativoNit."','".$nombre."','".$telefono1."','".$telefono2."','".$celular."','".$direccion."','".$longitud."','".$latitud."','".$email."','".$rutaLogo."','".$leyendaencabezado."','".$estado."','".$idPais."','".$idCiudad."','".$idBarrio."','".$NombreCiudad."','".$NombrePais."','".$NombreBarrio."'";
+					
+					?>
+					
+							<li class="collection-item avatar <?php if($estado != 'A' ){?>grey lighten-1<?php } ?> ">
+								
+								<?php
+							     	//validar si el paciente tiene foto (de lo contrario s emuestra una por defecto)
+							     	if($listadoSucursales1['urlLogo'] != ""){
+							     ?>
+							     		<img src="<?php echo "../Public/uploads/".$_SESSION['BDC_carpeta']."/img_sucursales/".$listadoSucursales1['urlLogo']  ?>" alt="<?php echo $listadoSucursales1['nombre']?>" class="responsive-img circle materialboxed" >
+							     <?php
+							     	}
+							     ?>	
+							     
+							     <span class="title"><?php echo $listadoSucursales1['nombre']?>
+							     	<a class="btn-floating waves-effect black lighten-2 tooltipped modal-trigger"  href="#modal_espaciosHospitalizacion" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_sucursales[25]//Espacios para hospitalización?>" onclick="mostrarEspaciosHospitalizacion('<?php echo $listadoSucursales1['idSucursal'] ?>','<?php echo $listadoSucursales1['nombre']?>')">
+						  				<i class="material-icons">local_hospital</i>
+						  			</a>
+							     </span>
+							     
+							     <div class="row hoverable tooltipped" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_nuevo[29]//Ver la información de ?><?php echo $listadoSucursales1['nombre']?>" onclick="editarSucursal(<?php echo $parametrosEditar ?>)" >
+							     	
+							     	<table>
+							     		<thead>
+							     			<tr>
+							     				<th><?php echo $lang_sucursales[15]//Identificación tributaria?></th>
+							     				<th><?php echo $lang_general[3]//Dirección?></th>
+							     				<th><?php echo $lang_sucursales[16]//ciudad?></th>
+							     				<th><?php echo $lang_general[0]//Teléfono?></th>
+							     				<th><?php echo $lang_general[2]//Celular?></th>
+							     				
+							     			</tr>
+							     		</thead>
+							     		<tbody>
+							     			<tr>
+							     				<td><?php echo $listadoSucursales1['identificativoNit'] ?></td>
+							     				<td><?php echo $listadoSucursales1['direccion'] ?></td>
+							     				<td><?php echo $listadoSucursales1['NombreCiudad'] ?></td>
+							     				<td><?php echo $listadoSucursales1['telefono1'] ?></td>
+							     				<td><?php echo $listadoSucursales1['celular'] ?></td>
+							     			</tr>
+							     		</tbody>
+							     	</table>
+							     	
+							     								     	
+							     </div><!-- Fin row -->
+							     
+							     <?php
+							     	
+							     	if($listadoSucursales1['longitud'] != '' AND $listadoSucursales1['latitud'] != '' ){
+							     		
+										$latitud  = $listadoSucursales1['latitud'];
+										$longitud = $listadoSucursales1['longitud'];
+							     ?>
+							     	<a href="javascript:void(0)" class="secondary-content">
+							      		<i class="fa fa-map-marker fa-3x tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_sucursales[17]//Ver ubicación en un mapa?>" aria-hidden="true" onclick="mostrarMapa(<?php echo "'".$latitud."','".$longitud."'"?>)" ></i>
+							      	</a>
+							     <?php		
+							     	}
+							     ?>
+							</li>	
+											
+					<?php		
+						}//fin foreach
+							
+					?>
+							
+							
+
+							
+							
+							
+						</ul>
+						
+						
+					</div><!-- Fin col-->
+					
+				</div><!-- Fin row-->
+
+            
+          </div>
+        </div>
+      </div>
+
+             
+</main>

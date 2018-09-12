@@ -1,0 +1,111 @@
+<form id="form_resultadoBusqueda" name="form_resultadoBusqueda" action="" method="post">
+	<input type="hidden" id="idPropietarioBusqueda" name="idPropietarioBusqueda" value="" />
+	<input type="hidden" id="envioFormBusqueda" name="envioFormBusqueda" value="envio" />
+</form>
+
+
+<main>
+	
+	<div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><?php echo $lang_menu[7]//Nuevo?></span>
+              <br />
+              
+              <div class="chip" id="chip_propietario" >
+              	<i class="fa fa-user" aria-hidden="true"></i>
+			    <?php echo $lang_general[11]//Propietario ?>
+			  </div>
+			  
+              <form id="form_nuevoPropietario" name="form_nuevoPropietario" method="post" action="" >
+              	
+              	  <input type="hidden" id="idPais"   name="idPais"    value="0"/>
+                  <input type="hidden" id="idCiudad" name="idCiudad"  value="0"/>
+                  <input type="hidden" id="idBarrio" name="idBarrio"  value="0"/>
+                  
+                  <input type="hidden" id="hidden_envioForm" name="hidden_envioForm" value="enviar"/>
+              	
+              	 <div class="row">
+              	 	
+			        <div class="input-field col s12 m4 l4">
+			          <input id="propietario_identificacion" name="propietario_identificacion" type="text" class="validate" length="30" maxlength="30" onkeypress="buscarPropietario(this.id)" >
+			          <label id="label_propietario_identificacion" for="propietario_identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[1]//Identificación?></label>
+			        </div>
+			        
+			        <div class="input-field col s12 m4 l4">
+			          <input id="propietario_nombre" name="propietario_nombre" type="text" class="validate" length="30" maxlength="30" onkeypress="buscarPropietario(this.id)">
+			          <label id="label_propietario_nombre" for="propietario_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[2]//Nombres?></label>
+			        </div>
+			        
+			        <div class="input-field col s12 m4 l4">
+			          <input id="propietario_apellido" name="propietario_apellido" type="text" class="validate" length="30" maxlength="30" onkeypress="buscarPropietario(this.id)">
+			          <label id="label_propietario_apellido" for="propietario_apellido" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[3]//Apellido?></label>
+			        </div>
+			        
+			      </div><!-- Fin row-->
+			      
+			      <div class="row">
+			      	
+			      	<div class="input-field col s12 m4 l4">
+			          <input id="propietario_telefono" name="propietario_telefono" type="text" class="validate" length="20" maxlength="20">
+			          <label id="label_propietario_telefono" for="propietario_telefono" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono ?></label>
+			        </div>
+			        
+			        <div class="input-field col s12 m4 l4">
+			          <input id="propietario_celular" name="propietario_celular" type="text" class="validate" length="20" maxlength="20">
+			          <label id="label_propietario_celular" for="propietario_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular ?> </label>
+			        </div>
+			        
+			        <div class="input-field col s12 m4 l4">
+			          <input id="propietario_direccion" name="propietario_direccion" type="text" class="validate" length="50" maxlength="50">
+			          <label id="label_propietario_direccion" for="propietario_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label>
+			        </div>
+			      	
+			      </div><!-- Fin row-->
+			      
+			      <div class="row">
+			      	<div class="input-field col s12 m12 l12">
+			      		<input id="propietario_email" name="propietario_email" type="email" class="validate" length="100" maxlength="100">
+			            <label id="label_propietario_email" for="propietario_email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[4] //E-mail ?> </label>
+			      	</div>
+			      </div><!-- Fin row-->
+			      
+			      <div class="row">
+                          
+                      <div class="input-field col s12 m4 l4">
+                            <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" >
+                            <label id="label_propietario_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+                      </div>
+                      
+                      <div class="input-field col s12 m4 l4">
+                            <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+                            <input id="ciudad" name="ciudad" type="text" class="validate" onkeypress="buscarCiudad()" disabled>
+                            <label id="label_propietario_ciudad" for="ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+                      </div>
+                      
+                      <div class="input-field col s12 m4 l4">
+                            <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevoBarrio" href="#modal_nuevoBarrio" data-target="modal_nuevoBarrio" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//nuevo barrio ?>" style="cursor:pointer;  display:none;"></i>
+                            <input id="barrio" name="barrio" type="text" class="validate"  onkeypress="buscarBarrio()" disabled>
+                            <label id="label_propietario_barrio" for="barrio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[7]//Barrio (Escriba y seleccione)?></label> 
+                      </div>
+                      
+                  </div><!-- fin row-->
+
+                  <div class="row">
+                    <div class="col s12 m12 l12 ">
+                      <a class="waves-effect waves-light btn right" onclick="ValidarDatosNuevoPropietario()"><?php echo $lang_botones[2]//Guardar?></a>
+                    </div>
+                  </div>
+
+              	
+              </form>
+              
+              
+              
+              
+             </div>
+           </div>	
+		</div>		
+	</div>
+</main>

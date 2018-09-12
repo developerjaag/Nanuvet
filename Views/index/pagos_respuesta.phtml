@@ -1,0 +1,88 @@
+<?php
+
+	if($idioma == 'En'){
+		
+		//variable para mostra rlos textos en ingles
+		$referenciaVenta = "Sales Reference:";
+		$respuesta		 = "Answer:";
+		$texto			 = "When the transaction is completed, it will be sent to registered mail access data and instructions to enter the system.";
+		$regresarA		 = "Return ";
+		
+		$RespuestaPO	 = $mensajeRespuestaPO;
+		
+	}else{
+		$referenciaVenta = "Referencia de venta:";
+		$respuesta		 = "Respuesta:";
+		$texto			 = "Cuando se complete la transacción, se enviará al correo registrado los datos de acceso y las instrucciones para ingresar al sistema.";
+		$regresarA		 = "Regresar a ";
+		
+		$RespuestaPO	 = $mensajeRespuestaPOE;
+	}//fin else
+
+?>
+
+
+<html>
+	<head>
+		<title>NanuVet</title>
+		
+		<link rel="shortcut icon" href="<?php echo Config::ruta()?>Public/img/logos/favicon.png">
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="Jheison Alexander Alzate">
+		
+		<!-- materialize-->
+		<link rel="stylesheet" type="text/css" href="<?php echo Config::ruta()?>Public/libs/materialize/css/materialize.css" />
+		
+	</head>
+	
+	<body>
+
+
+	<div class="container">
+		
+			
+			
+				
+			    <div class="row" style="padding: 5%;">
+			      <div class="col s12 m12 l12">
+			        <div class="card-panel hoverable" style="width: 100%;">
+			         
+				        <div class="card-image center-align">
+			              <img class="responsive-img" src="../../Public/img/logos/NanuVet.png" >		              
+			            </div>
+			            <div class="card-content" style="padding: 10%;">
+			              <h5> <?php echo $referenciaVenta //Referencia de venta:?> <span class="orange-text"><?php echo $referenceCode?></span></h5>
+			              <h5> <?php echo $respuesta //respuesta?> <span class="orange-text"><?php echo $RespuestaPO?></span></h5>
+			              	<blockquote>
+						      <?php echo $texto //Cuando se complete la transacción, se enviará al correo registrado los datos de acceso y las instrucciones para ingresar al sistema.?>
+						    </blockquote>
+			            </div>
+			            <div class="card-action">
+			              <h5 class="center-align"><a href="http://www.nanuvet.com/"><?php echo $regresarA //regresar a?>nanuvet.com</a></h5>
+			            </div>
+			         
+
+			        </div>
+			      </div>
+			    </div>
+		    
+		   
+		    
+		
+	</div>
+	
+	<!-- Js -->
+	
+	    <!-- Jquery -->
+	    <script type="text/javascript" src="<?php echo Config::ruta()?>Public/libs/jquery-2.2.0.min.js"></script>
+
+	    <!-- materialize-->
+	    <script type="text/javascript" src="<?php echo Config::ruta()?>Public/libs/materialize/js/materialize.min.js"></script>
+		
+	</body>
+	
+	
+</html>

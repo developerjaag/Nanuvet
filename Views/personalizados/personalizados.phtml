@@ -1,0 +1,80 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+				<span class="card-title">
+					
+					<div class="row">
+              		<div class="col s6">
+              			 <?php echo $lang_menu[11]//Personalizados?>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="Ver tutorial" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+				</span>
+				<div class="row">
+					<br />
+					<br />
+					<br />
+					
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/personalizados/personalizados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/personalizados/personalizados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+					
+					
+					<div class="col s12 m12 l12">
+						
+				      <div class="collection">
+				        <a href="<?php echo Config::ruta()?>personalizados/motivoConsulta/" class="collection-item"><?php echo $lang_personalizados[16]//Motivo de consulta?></a>
+				        <a href="<?php echo Config::ruta()?>personalizados/observacionesConsulta/" class="collection-item"><?php echo $lang_personalizados[17]//Observaciones de consulta?></a>
+				        <a href="<?php echo Config::ruta()?>personalizados/planConsulta/" class="collection-item"><?php echo $lang_personalizados[18]//Plan a seguir en consulta?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/observacionesExamenFisico/" class="collection-item"><?php echo $lang_personalizados[29] //Observaciones examen físico?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/motivoCirugia/" class="collection-item"><?php echo $lang_personalizados[30] //Motivo de cirugía?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/observacionesCirugia/" class="collection-item"><?php echo $lang_personalizados[31] //Observaciones de cirugía?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/planCirugia/" class="collection-item"><?php echo $lang_personalizados[32] //Plan y cuidados de cirugía?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/observacionesExamen/" class="collection-item"><?php echo $lang_personalizados[33] //Observaciones examen ?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/observacionesFormula/" class="collection-item"><?php echo $lang_personalizados[34]//Observaciones formulación?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/motivoHospitalizacion/" class="collection-item"><?php echo $lang_personalizados[35] //Motivo de Hospitalización?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/observacionesHospitalizacion/" class="collection-item"><?php echo $lang_personalizados[36] //Observaciones de Hospitalización?></a>
+				      	<a href="<?php echo Config::ruta()?>personalizados/cuidadosAlta/" class="collection-item"><?php echo $lang_personalizados[37] //Cuidados alta de hospitalización?></a>
+				      </div>
+            
+					</div>
+					
+				</div><!-- Fin row-->
+
+			 </div>
+          </div>
+        </div>
+      </div>
+	
+</main>
+

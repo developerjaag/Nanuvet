@@ -1,0 +1,152 @@
+<header>
+<!-- Menu web-->
+<div class="navbar-fixed teal" style="z-index: 999999 !important;">
+     <nav class="teal lighten-2">
+        <div class="nav-wrapper" id="nav_wrapper" >
+          <a href="<?php echo Config::ruta()?>home/" class="brand-logo" >
+            <img class="responsive-img" src="<?php echo Config::ruta()?>Public/img/logos/icon.png" style="max-width: 65%;">
+          </a>
+          
+          
+          <a href="#" data-activates="mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+          
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li id="menuWebBuscar" ><a href="javascript:void(0)" onclick="motrarBarraBusqueda()" ><i class="material-icons left">search</i><?php echo $lang_menu[9] //buscar?></a></li>
+            <li id="menuWebNuevo" ><a href="<?php echo Config::ruta()?>nuevo/"><i class="material-icons left">add_circle</i><?php echo $lang_menu[7] //nuevo?></a></li>
+          <!--  <li id="menuWebCuidados" ><a class="dropdown-button" href="#!" data-activates="dropdown_cuidados"><i class="material-icons left">favorite</i><?php echo $lang_menu[8] //cuidados?></a></li>-->
+            <li id="menuWebAgenda" ><a href="<?php echo Config::ruta()?>agenda/"><i class="material-icons left">event</i><?php echo $lang_menu[3] //agenda?></a></li>
+            <li id="menuWebinventario" ><a class="dropdown-button" href="#!" data-activates="dropdown_inventario"><i class="material-icons left">widgets</i><?php echo $lang_menu[6] //productos?></a></li>
+            <li id="menuWebFacturacion" ><a href="<?php echo Config::ruta()?>factura/" ><i class="material-icons left">attach_money</i><?php echo $lang_menu[24] //registrar?></a></li>
+            <li id="menuWebReportes" ><a href="<?php echo Config::ruta()?>reportes/"><i class="material-icons left">trending_up</i><?php echo $lang_menu[4] //reportes?></a></li>
+            <li id="menuWebListados" ><a href="<?php echo Config::ruta()?>listados/" ><i class="material-icons left">format_list_bulleted</i><?php echo $lang_menu[2] //listados?></a></li>
+            <li id="menuWebConfiguracion" ><a class="dropdown-button" href="#!" data-activates="dropdown_configuracion"><i class="material-icons left">settings</i><?php echo $lang_menu[1] //configuracion?></a></li>
+            <li id="menuWebUsuario" ><a class="dropdown-button" href="#!" data-activates="dropdown_usuario"><i class="material-icons left">account_circle</i> <?php echo $_SESSION['usuario_nombre']?><i class="material-icons right">arrow_drop_down</i></a></li>
+          </ul>
+        </div>
+      </nav>
+  </div>
+  
+  
+  
+  
+  
+<!-- Barra para la busqueda visible solo al presionar el boton-->
+<div class="navbar-fixed teal" id="barraBusqueda" name="barraBusqueda" style="display:none;">
+ <nav class="white">
+    <div class="nav-wrapper ">
+      <form>
+        <div class="input-field">
+          <input id="input_busqueda" type="search" placeholder="<?php echo $lang_menu[31] //buscar por propietario o animal?>" onblur="ocultarBarraBusqueda()" onkeypress="buscarPacientePropietario()" required >
+          <label class="active"  for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons active" onclick="ocultarBarraBusqueda()">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+</div>
+<!--Fin Barra par ala busqueda visible solo al presionar el boton-->
+
+  
+  
+<!-- Dropdown web-->
+
+<!-- Usuario -->
+<ul id="dropdown_usuario" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>perfil/"><?php echo $lang_menu[10] //perfil?></a></li>
+  <li><a href="<?php echo Config::ruta()?>personalizados/"><?php echo $lang_menu[11] //personalizados?></a></li>
+  <!-- <li><a href="#!"><?php echo $lang_menu[12] //preferencias?></a></li>-->
+ <!-- <li><a href="#!"><?php echo $lang_menu[13] //tutoriales?></a></li>-->
+  <li class="divider"></li>
+  <li><a href="<?php echo Config::ruta()?>salir/"><?php echo $lang_menu[0] //salir?></a></li>
+</ul>
+
+<!-- Configuracion-->
+<ul id="dropdown_configuracion" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>cuenta/""><?php echo $lang_menu[14] //cuenta?></a></li>
+  <li><a href="<?php echo Config::ruta()?>permisos/"><?php echo $lang_menu[15] //permisos?></a></li>
+  <li><a href="<?php echo Config::ruta()?>sucursales/"><?php echo $lang_menu[16] //sucursales?></a></li>
+  <li><a href="<?php echo Config::ruta()?>usuarios/"><?php echo $lang_menu[17] //usuarios?></a></li>
+  <li><a href="<?php echo Config::ruta()?>configuracionFacturacion/"><?php echo $lang_menu[5] //facturación?></a></li>
+</ul>
+
+
+<!-- Inventario-->
+<ul id="dropdown_inventario" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>productos/"><?php echo $lang_menu[27] //productos?></a></li>
+  <li><a href="<?php echo Config::ruta()?>proveedores/"><?php echo $lang_menu[28] //proveedores?></a></li>
+</ul>
+
+<!-- Registrar -->
+<ul id="dropdown_registrar" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>factura/"><?php echo $lang_menu[36] //Factura?></a></li>
+  <!--<li><a href="#!"><?php echo $lang_menu[37] //R. caja?></a></li>-->
+</ul>
+
+<!-- Cuidados
+<ul id="dropdown_cuidados" class="dropdown-content">
+  <li><a href="#!"><?php echo $lang_menu[29] //guarderia?></a></li>
+  <li><a href="#!"><?php echo $lang_menu[30] //peluqueria?></a></li>
+</ul>
+
+<!-- Dropdown web-->
+
+
+
+
+<!---------- menu mobile ------------------>
+<ul class="side-nav" id="mobile">
+
+	 <br />
+	 <br />
+	 <br />
+	 <li><a href="javascript:void(0)" onclick="motrarBarraBusqueda()"><i class="material-icons">search</i>Buscar</a></li>
+      <li><a href="<?php echo Config::ruta()?>nuevo/"><i class="material-icons">add_circle</i><?php echo $lang_menu[7] //nuevo?></a></li>
+     <!--  <li><a class="dropdown-button" href="#!" data-activates="mobile_dropdown_cuidados"><i class="material-icons">favorite</i><?php echo $lang_menu[8] //cuidados?></a></li>-->
+      <li><a href="<?php echo Config::ruta()?>agenda/"><i class="material-icons">event</i><?php echo $lang_menu[3] //agenda?></a></li>
+      <li><a class="dropdown-button" href="javascript:void(0)" data-activates="mobile_dropdown_inventario"><i class="material-icons">widgets</i><?php echo $lang_menu[6] //productos?></a></li>
+      <li><a class="dropdown-button" href="<?php echo Config::ruta()?>factura/"><i class="material-icons">attach_money</i><?php echo $lang_menu[24] //facturar?></a></li>
+      <li><a href="<?php echo Config::ruta()?>reportes/"><i class="material-icons">trending_up</i><?php echo $lang_menu[4] //reportes?></a></li>
+      <li><a class="dropdown-button" href="<?php echo Config::ruta()?>listados/"><i class="material-icons">format_list_bulleted</i><?php echo $lang_menu[2] //listados?></a></li>
+      <li><a class="dropdown-button" href="javascript:void(0)" data-activates="mobile_dropdown_configuracion"><i class="material-icons">settings</i><?php echo $lang_menu[1] //configuracion?></a></li>
+      <li><a class="dropdown-button" href="javascript:void(0)" data-activates="mobile_dropdown_usuario"><i class="material-icons">account_circle</i> <?php echo $_SESSION['usuario_nombre']?><i class="material-icons">arrow_drop_down</i></a></li>
+</ul>
+
+
+<!-- Dropdown mobil-->
+
+<!-- Usuario -->
+<ul id="mobile_dropdown_usuario" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>perfil/"><?php echo $lang_menu[10] //perfil?></a></li>
+  <li><a href="<?php echo Config::ruta()?>personalizados/"><?php echo $lang_menu[11] //personalizados?></a></li>
+  <!--<li><a href="#!"><?php echo $lang_menu[12] //preferencias?></a></li>-->
+  <li><a href="#!"><?php echo $lang_menu[13] //tutoriales?></a></li>
+  <li class="divider"></li>
+  <li><a href="<?php echo Config::ruta()?>salir/"><?php echo $lang_menu[0] //salir?></a></li>
+</ul>
+
+<!-- Configuracion-->
+<ul id="mobile_dropdown_configuracion" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>cuenta/""><?php echo $lang_menu[14] //cuenta?></a></li>
+  <li><a href="<?php echo Config::ruta()?>permisos/"><?php echo $lang_menu[15] //permisos?></a></li>
+  <li><a href="<?php echo Config::ruta()?>sucursales/"><?php echo $lang_menu[16] //sucursales?></a></li>
+  <li><a href="<?php echo Config::ruta()?>usuarios/"><?php echo $lang_menu[17] //usuarios?></a></li>
+  <li><a href="<?php echo Config::ruta()?>configuracionFacturacion/"><?php echo $lang_menu[5] //facturación?></a></li>
+</ul>
+
+
+
+<!-- Inventario-->
+<ul id="mobile_dropdown_inventario" class="dropdown-content">
+  <li><a href="<?php echo Config::ruta()?>productos/"><?php echo $lang_menu[27] //productos?></a></li>
+  <li><a href="<?php echo Config::ruta()?>proveedores/"><?php echo $lang_menu[28] //proveedores?></a></li>
+</ul>
+
+<!-- Cuidados
+<ul id="mobile_dropdown_cuidados" class="dropdown-content">
+  <li><a href="#!"><?php echo $lang_menu[29] //guarderia?></a></li>
+  <li><a href="#!"><?php echo $lang_menu[30] //peluqueria?></a></li>
+</ul>-->
+
+<!-- Dropdown mobil-->
+
+</header>

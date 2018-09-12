@@ -1,0 +1,81 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+              	
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			 <?php echo $lang_menu[2] //listados?>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="Ver tutorial" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              		
+              	</div>
+              	
+              </span>
+				
+				<div class="row">
+					<br />
+					<br />
+					<br />
+					
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+					
+					
+					 <div class="collection">
+				            <a class="collection-item" href="<?php echo Config::ruta()?>listados/barrios/"><?php echo $lang_menu[18] //Barrios?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/ciudades/"><?php echo $lang_menu[19]//Ciudades?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/categoriasProductos/"><?php echo $lang_menu[32]//Categorías productos?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/desparasitantes/"><?php echo $lang_desparasitantes[0]//Desparasitantes?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/diagnosticosCirugias/"><?php echo $lang_menu[33]//Diagnósticos cirugias?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/diagnosticosConsultas/"><?php echo $lang_menu[34]//Diagnósticos consultas?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/especies/"><?php echo $lang_menu[22]//Especies?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/examenes/"><?php echo $lang_menu[35]//Exámenes?></a>    
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/medicamentos/"><?php echo $lang_medicamentos[0]//Medicamentos?></a>  
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/razas/"><?php echo $lang_menu[23]//Razas?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/servicios/"><?php echo $lang_servicios[0]//Servicios?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/tiposCita/"><?php echo $lang_agenda[0] //Tipos de cita?></a>
+						    <a class="collection-item" href="<?php echo Config::ruta()?>listados/vacunas/"><?php echo $lang_vacunas[0]//Vacunas?></a>
+				      </div>
+					
+				</div><!-- Fin row-->
+
+			 </div>
+          </div>
+        </div>
+      </div>
+	
+</main>
+

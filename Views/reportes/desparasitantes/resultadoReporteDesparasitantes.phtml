@@ -1,0 +1,111 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>	
+			<th><?php echo $lang_reportes[62]//Desparasitante?></th>
+			<th><?php echo $lang_reportes[65]//Dosificación?></th>			
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+			<th><?php echo $lang_reportes[66]//Próximo desparasitante?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoDesparasitantes as $listadoDesparasitantes1) {
+		
+		
+		if($listadoDesparasitantes1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoDesparasitantes1['fecha']?></td>
+			<td><?php echo $listadoDesparasitantes1['hora']?></td>
+			<td><?php echo $listadoDesparasitantes1['nombreDesparasitante']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['dosificacion']?></td>	
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['observacion']?></td>		
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['fechaProximoDesparasitante']?></td>						
+			<td><?php echo "(".$listadoDesparasitantes1['identificacionPropietario'].") ".$listadoDesparasitantes1['nombrePropietario']." ".$listadoDesparasitantes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoDesparasitantes1['telefono']?></td>
+			<td><?php echo $listadoDesparasitantes1['nombreMascota']." (".$sexo.")"?></td>			
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>	
+			<th><?php echo $lang_reportes[62]//Desparasitante?></th>
+			<th><?php echo $lang_reportes[65]//Dosificación?></th>				
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+			<th><?php echo $lang_reportes[66]//Próximo desparasitante?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th>Sexo</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoDesparasitantesExportar as $listadoDesparasitantes1) {
+		
+		
+		if($listadoDesparasitantes1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoDesparasitantes1['fecha']?></td>
+			<td><?php echo $listadoDesparasitantes1['hora']?></td>
+			<td><?php echo $listadoDesparasitantes1['nombreDesparasitante']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['dosificacion']?></td>	
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['observacion']?></td>		
+			<td style="max-width: 150px;"><?php echo $listadoDesparasitantes1['fechaProximoDesparasitante']?></td>						
+			<td><?php echo "(".$listadoDesparasitantes1['identificacionPropietario'].") ".$listadoDesparasitantes1['nombrePropietario']." ".$listadoDesparasitantes1['apellidoPropietario']?></td>
+			<td><?php echo $listadoDesparasitantes1['telefono']?></td>
+			<td><?php echo $listadoDesparasitantes1['nombreMascota']?></td>	
+			<td><?php echo $sexo?></td>			
+			
+		</tr>
+<?php		
+		$contador = $contador +1;
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

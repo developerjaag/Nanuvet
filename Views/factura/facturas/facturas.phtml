@@ -1,0 +1,612 @@
+<!-- Modales para adicionar producto o servicio pero par auna factura iniciada-->
+
+
+
+
+
+
+
+<!-- Modales para adicionar producto o servicio pero par auna factura iniciada-->
+
+
+
+
+<!-- modal para ver una factura iniciada-->
+ <div id="modal_facturaIniciada" class="modal modal-fixed-footer  bottom-sheet" >
+    <div class="modal-content">
+      
+      
+      <div id="resultadoFacturaIniciada"></div>
+      
+      
+    </div>
+    <div class="modal-footer">
+    	
+    	
+    	<span class="left-align"><?php echo $lang_facturacion[6]//Subtotal?>: <span id="subTotalFacturaIniciada"></span> </span>
+    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[7]//Valor IVA?>: <span id="valorIVAFacturaIniciada"></span> </span>
+    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[8]//Descuento?>: <span id="descuentoFacturaIniciada"></span> </span>
+    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[9]//Total?>: <strong><span id="totalFacturaIniciada" class="grey lighten-2"></span></strong> </span>
+    	
+        <a style="margin-left: 10px;" class="modal-action modal-close waves-effect red darken-1 btn" ><?php echo $lang_botones[3]//Cerrar?></a> 
+    	<a style="margin-left: 10px;" class="waves-effect waves-light btn" onclick="guardarFacturaIniciada()" ><?php echo $lang_facturacion[10]//Guardar factura?></a>     
+    	<a style="margin-left: 10px;" class="waves-effect orange darken-1 btn" onclick="anularFacturaIniciada()" ><?php echo $lang_facturacion[11]//Anular factura?></a>	
+      
+    </div>
+  </div>
+<!-- Fin modal para ver una factura iniciada-->  
+
+
+
+<!-- Modal para adicionar un producto-->
+  <div id="modal_adicionarProducto" class="modal modal-fixed-footer" style="margin-top: 5%; width: 75% !important ;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_facturacion[46]//Adicionar producto a la factura?></h4>
+      
+      <div id="busquedaProducto" class="row">
+      	
+      	<div class="input-field col s12">
+      		<input type="hidden" id="idProductoBuscado" name="idProductoBuscado" value="0" />
+      		<input id="adicionarProducto_buscar" name="adicionarProducto_buscar" value=""  type="text" class="validate" onkeypress="buscarProductoAdicionar()">
+			<label id="label_adicionarProducto_buscar" for="adicionarProducto_buscar"><?php echo $lang_facturacion[47]//Buscar producto?></label>
+      	</div>
+      	
+      </div><!-- Fin row-->
+      
+      <div id="resultadoProducto" class="row" >
+      	<table>
+      		<tr>
+      			<td>
+      				<div class="input-field">
+      					<input disabled type="text" class="validate" id="nombreAdicionarProducto" name="nombreAdicionarProducto" value="" />
+      					<label id="label_nombreAdicionarProducto" for="nombreAdicionarProducto"><?php echo $lang_facturacion[48]//Producto?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input disabled type="text" class="validate" id="precioAdicionarProducto" name="precioAdicionarProducto" value="" />
+      					<label id="label_precioAdicionarProducto" for="precioAdicionarProducto"><?php echo $lang_facturacion[40]//Valor unitario?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input type="text" class="validate" id="cantidadAdicionarProducto" name="cantidadAdicionarProducto" value="1" />
+      					<label id="label_cantidadAdicionarProducto" for="cantidadAdicionarProducto"><?php echo $lang_facturacion[41]//Cantidad?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input type="text" class="validate" id="descuentoAdicionarProducto" name="descuentoAdicionarProducto" value="0" />
+      					<label id="label_descuentoAdicionarProducto" for="descuentoAdicionarProducto"><?php echo $lang_facturacion[25]//Descuento?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<a id="aAdicionarProducto" class="btn-floating btn-large waves-effect waves-light disabled">
+      					<i style="display: none;" id="iconAdiconarProducto" class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
+      				</a>
+      				
+      			</td>
+      			
+      		</tr>
+      	</table>
+      </div><!-- Fin div resultado producto-->
+      
+      <div class="row">
+      	<div class="col s12 center-align">
+      		<span id="errorAdicionandoProducto" style="display: none;" class="red-text text-darken-2"><?php echo $lang_facturacion[49]//Ya se adicionó este producto?></span>
+      	</div>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat "><?php echo $lang_botones[3] //Cerrar?></a>
+    </div>
+  </div>
+<!-- Modal para adicionar un producto-->
+
+
+<!-- Modal para adicionar un servicio-->
+  <div id="modal_adicionarServicio" class="modal modal-fixed-footer" style="margin-top: 5%; width: 75% !important ;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_facturacion[51]//Adicionar servicio a la factura?></h4>
+      
+      <div id="busquedaServicio" class="row">
+      	
+      	<div class="input-field col s12">
+      		<input type="hidden" id="idServicioBuscado" name="idServicioBuscado" value="0" />
+      		<input id="adicionarServicio_buscar" name="adicionarServicio_buscar" value=""  type="text" class="validate" onkeypress="buscarServicioAdicionar()">
+			<label id="label_adicionarServicio_buscar" for="adicionarServicio_buscar"><?php echo $lang_facturacion[52]//Buscar servicio?></label>
+      	</div>
+      	
+      </div><!-- Fin row-->
+      
+      <div id="resultadoServicio" class="row" >
+      	<table>
+      		<tr>
+      			<td>
+      				<div class="input-field">
+      					<input disabled type="text" class="validate" id="nombreAdicionarServicio" name="nombreAdicionarServicio" value="" />
+      					<label id="label_nombreAdicionarServicio" for="nombreAdicionarServicio"><?php echo $lang_facturacion[48]//Producto?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input disabled type="text" class="validate" id="precioAdicionarServicio" name="precioAdicionarServicio" value="" />
+      					<label id="label_precioAdicionarServicio" for="precioAdicionarServicio"><?php echo $lang_facturacion[40]//Valor unitario?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input type="text" class="validate" id="cantidadAdicionarServicio" name="cantidadAdicionarServicio" value="1" />
+      					<label id="label_cantidadAdicionarServicio" for="cantidadAdicionarServicio"><?php echo $lang_facturacion[41]//Cantidad?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<div class="input-field">
+      					<input type="text" class="validate" id="descuentoAdicionarServicio" name="descuentoAdicionarServicio" value="0" />
+      					<label id="label_descuentoAdicionarServicio" for="descuentoAdicionarServicio"><?php echo $lang_facturacion[25]//Descuento?></label>
+      				</div>
+      			</td>
+      			<td>
+      				<a id="aAdicionarServicio" class="btn-floating btn-large waves-effect waves-light disabled">
+      					<i style="display: none;" id="iconAdiconarServicio" class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
+      				</a>
+      				
+      			</td>
+      			
+      		</tr>
+      	</table>
+      </div><!-- Fin div resultado servicio-->
+      
+     <div class="row">
+      	<div class="col s12 center-align">
+      		<span id="errorAdicionandoServicio" style="display: none;" class="red-text text-darken-2"><?php echo $lang_facturacion[53]//Ya se adicionó este servicio?></span>
+      	</div>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat "><?php echo $lang_botones[3] //Cerrar?></a>
+    </div>
+  </div>
+<!-- Modal para adicionar un servicio-->
+
+
+
+<!-- Modal nuevo paciente modal_nuevoPropietario-->
+<?php
+	//saber si tiene permiso para adicionar nuevo propietario
+	if(in_array("59", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_nuevoPropietario" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 95% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 100%;">
+       <iframe id="iframe_nuevoPropietarioPaciente" src="http://www.nanuvet.com/nuevo/iframe/" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat " onclick="recargarIframePacientePropietario()"><?php echo $lang_botones[3] //Cerrar?></a>
+    </div>
+  </div>
+<?php
+	}//fin if permiso nuevo propietario
+?>
+<!-- Fin Modal nuevo paciente modal_nuevoPropietario-->
+
+
+<!-- Preloader-->
+<div id="preloader" style="display: none;">
+<div class="preloader-wrapper big active">
+    <div class="spinner-layer spinner-green-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>	
+</div>
+<!-- Fin Preloader-->
+
+
+
+<main>
+	
+	
+<?php
+	//para saber si el usuario tiene facturas iniciadas
+	if( $totalFacturasIniciadasUsuario > 0 ){
+?>	
+
+	<span id="FacturaIniciadaGuia_titulo" style="display: none;"><?php echo $lang_facturacion[28]//Tienes una factura iniciada?></span>
+	<span id="FacturaIniciadaGuia_texto" style="display: none;"></span>
+	<span id="estadoFactura" style="display: none;"><?php echo $lang_facturacion[30]//Iniciada?></span>	
+	
+	<div class="fixed-action-btn">
+	    <a class="btn-floating btn-large red modal-trigger2" href="#modal_facturaIniciada" onclick="consultarFacturaIniciada()">
+	      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+	    </a>
+  	</div>
+		
+<?php
+	}else{
+?>
+	<span id="estadoFactura" style="display: none;"><?php echo $lang_facturacion[31]//Activa?></span>	
+<?php		
+	}
+?>	
+	
+	
+	
+	
+	 <div class="row">
+ 	
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+            	<span class="card-title">
+              	
+	              	<div class="row">
+	              		
+	              		<div class="col s6">
+						  <?php echo $lang_menu[5] //Facturación?>					  
+              			</div>
+	              		
+	              		<div class="col s6 right-align">	              			
+	              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+	              		</div>
+	              	</div>
+              	
+                </span>
+
+               <div class="row">	
+					<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+							<h5>Video-tutorial</h5>
+						 <video id="videoTutorial_personalizados" class="responsive-video" controls>
+						    <source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/facturacion/facturacion.mp4" type="video/mp4">
+						  </video>
+						  <h6 class="center-align">
+						  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar video?></a>
+						  </h6>
+					</div><!-- Fin div col video-->
+				</div>  
+            	
+            	<div class="row">
+						
+						<div class="col s12 m12 l12 ">
+													
+							<ul class="tabs" style="overflow-x: auto !important;">
+								
+						        <li class="tab col s1 m1 l1 grey lighten-2"><a href="javascript:void(0)" onclick="redireccionEnFac('http://www.nanuvet.com/factura/')" class="black-text active" ><?php echo $lang_facturacion[0]//Facturas?></a></li>
+						        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnFac('http://www.nanuvet.com/factura/consultas/')" class="black-text" ><?php echo $lang_facturacion[1]//Consultas?><span class="Bootstrapbadge red lighten-2"><?php echo $menuTotalFacConsultas?></span></a></li>
+						        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnFac('http://www.nanuvet.com/factura/cirugias/')" class="black-text" ><?php echo $lang_facturacion[2]//Cirugías?><span class="Bootstrapbadge red lighten-2"><?php echo $menuTotalFacCirugias?></span></a></li>
+						        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnFac('http://www.nanuvet.com/factura/examenes/')" class="black-text" ><?php echo $lang_facturacion[3]//Exámenes?><span class="Bootstrapbadge red lighten-2"><?php echo $menuTotalFacExamenes?></span></a></li>
+						        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnFac('http://www.nanuvet.com/factura/hospitalizaciones/')" class="black-text" ><?php echo $lang_facturacion[4] //Hospitalizaciones?><span class="Bootstrapbadge red lighten-2"><?php echo $menuTotalFacHospitalizaciones?></span></a></li>
+						        
+						        
+							</ul>
+							
+						</div>
+						
+				</div><!-- Fin row-->
+            	
+            	
+            	<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								<?php
+									//para saber si el usuario tiene facturas iniciadas
+									if( $totalFacturasIniciadasUsuario > 0 ){
+								?>
+									
+									<div class="row">
+										  
+										<div class="input-field col s6 m6 l6 center-align">
+						  					<button class="modal-trigger waves-effect  black btn" href="#modal_adicionarProducto" onclick="limpiarAdicionarProducto()"><i class="material-icons right">add</i><?php echo $lang_facturacion[48]//Producto?></button>
+						  				</div>
+						  				
+						  				<div class="input-field col s6 m6 l6 center-align">
+						  					<button class="modal-trigger waves-effect black btn" href="#modal_adicionarServicio" onclick="limpiarAdicionarServicio()" ><i class="material-icons right">add</i><?php echo $lang_facturacion[54]//Servicio?></button>
+						  				</div>
+						  				
+						  				
+						  			</div><!-- Fin row-->
+						  			
+								<?php
+									}else{
+								?>
+									<h4 id="tituloLi" class="center-align" ><?php echo $lang_facturacion[0] //Facturas?> 
+							  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_facturacion[55]//Nueva factura?>" onclick="mostrarFormNuevaFactura()">
+							  				<i class="material-icons">add</i>
+							  			</a>
+							  		</h4>	
+								<?php		
+									}
+								?>	
+													  		
+						  		<br />
+						  		
+						  		<div id="div_nuevaFactura" style="display: none;" >
+						  			
+						  			<h4 class="center-align" ><?php echo $lang_facturacion[55]//Nueva factura?></h4>
+						  			
+						  			<form id="form_nuevaFactura" name="form_nuevaFactura" action="" method="post" >
+						  			
+						  			<div class="row">
+						  				
+						  				       		
+							       		<input type="hidden" id="factura_idFacturador" name="factura_idFacturador" value="0" />
+							       		<input type="hidden" id="factura_idResolucion" name="factura_idResolucion" value="0" />
+       							  				
+						  				
+						  				<div id="div_factura_resolucionfacturador" class="input-field col s12 m6 l6">
+										    <select id="factura_resolucionfacturador" name="factura_resolucionfacturador" onchange="cambiarCampoIva(); habilitarBotonesProductosServicios();">
+										      <option value="" disabled selected><?php echo $lang_facturacion[14]//Elige una opción?></option>
+										      
+										      <?php
+										      	foreach ($listadoFacturadoresResoluciones as $listadoFacturadoresResoluciones1) {
+										      		?>
+													   <option value="<?php echo $listadoFacturadoresResoluciones1['idFacturadoresResolucionDian']?>" data-option-value="[<?php echo $listadoFacturadoresResoluciones1['porcentajeIva']?>, <?php echo $listadoFacturadoresResoluciones1['idFacturador']?>, <?php echo $listadoFacturadoresResoluciones1['idResolucionDian']?> ]" >
+													   	<?php echo $listadoFacturadoresResoluciones1['nombre']." ".$listadoFacturadoresResoluciones1['apellido']." / ".$listadoFacturadoresResoluciones1['numeroResolucion']." (IVA: ".$listadoFacturadoresResoluciones1['porcentajeIva'].")"?></option>
+													<?php
+												  }
+										      ?>
+										      
+										    </select>
+										    <label><?php echo $lang_facturacion[15]//Facturador/Resolución?></label>
+										</div>
+										  
+										 <div class="input-field col s12 m3 l3">
+										  	<input disabled id="factura_iva" name="factura_iva" value="0"  type="text" class="validate">
+							          		<label for="factura_iva">% IVA</label>
+										  </div>
+										  
+										  <div id="div_factura_metodoPago" class="input-field col s12 m3 l3">
+										  	<select id="factura_metodoPago" name="factura_metodoPago" onchange="habilitarBotonesProductosServicios()">
+										  		
+											      <option value="" disabled selected><?php echo $lang_facturacion[14]//Elige una opción?></option>
+											      <option value="bono" ><?php echo $lang_facturacion[16]//Bono?></option>
+											      <option value="cheque" ><?php echo $lang_facturacion[17]//Cheque?></option>
+											      <option value="efectivo" ><?php echo $lang_facturacion[18]//Efectivo?></option>
+											      <option value="tdebito" ><?php echo $lang_facturacion[19]//Tarjeta débito?></option>
+											      <option value="tcredito" ><?php echo $lang_facturacion[20]//Tarjeta crédito?></option>
+										      
+										      		      
+										    </select>
+										    <label><?php echo $lang_facturacion[21]//Método de pago?></label>
+										  </div>  
+										  
+										  <br />
+										  
+									</div><!-- Fin row-->
+									
+									
+									<div class="row">
+						  				
+						  				<input type="hidden" id="idPropietario" name="idPropietario" value="0" />
+						  				
+						  				<div class="input-field col s12">
+						  					<?php
+						    				//saber si tiene permiso para adicionar nuevo propietario
+						    					if(in_array("59", $_SESSION['permisos_usuario'] )){
+						    				?>
+						  					<i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoPropietario" data-target="modal_nuevoPropietario" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_facturacion[56]//Nuevo propietario?>" style="cursor:pointer;"></i>
+							  				<?php
+												}
+											?>
+							  				<input id="factura_propietario" name="factura_propietario" value=""  type="text" class="validate" onkeypress="buscarPropietarioFactura()">
+							          		<label id="label_factura_propietario" for="factura_propietario" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_facturacion[57]//Buscar propietario o persona?></label>
+							  			</div>
+  			
+						  				
+						  			</div><!-- Fin row-->
+									
+						  			
+						  			<div class="row">
+						  				<div class="input-field col s12 m12 l12">
+							  				<textarea id="factura_observaciones" name="factura_observaciones" class="materialize-textarea" length="300" maxlength="300" ></textarea>
+							          		<label for="factura_observaciones"><?php echo $lang_reportes[38] //Observaciones?></label>
+							  			</div>
+						  			</div><!-- Fin row-->
+						  			
+									
+									<div class="row">
+										  
+										<div class="input-field col s6 m6 l6 center-align">
+						  					<button disabled class="modal-trigger waves-effect  black btn disabled" href="#modal_adicionarProducto" onclick="limpiarAdicionarProducto()"><i class="material-icons right">add</i><?php echo $lang_facturacion[48]//Producto?></button>
+						  				</div>
+						  				
+						  				<div class="input-field col s6 m6 l6 center-align">
+						  					<button disabled class="modal-trigger waves-effect black btn disabled" href="#modal_adicionarServicio" onclick="limpiarAdicionarServicio()" ><i class="material-icons right">add</i><?php echo $lang_facturacion[54]//Servicio?></button>
+						  				</div>
+						  				
+						  				
+						  			</div><!-- Fin row-->
+						  			
+						  			<br />
+						  			<br />
+						  			<h5 class="center-align"><?php echo $lang_facturacion[22]//Detalle?></h5>
+						  			<br />
+						  			
+						  			
+						  			
+						  			<table class="bordered " id="tabla_nuevaFacturaDetalle">
+						  				
+						  				
+						  				
+						  			</table>
+						  			
+						  			<br />
+						  			<br />
+						  			<br />
+						  			
+						  			
+						  			<div class="row">			
+						  				<div class="col s6">
+						  					<span class="left-align"><?php echo $lang_facturacion[6]//Subtotal?>: <span id="subTotalFactura"></span> </span>
+								    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[7]//Valor IVA?>: <span id="valorIVAFactura"></span> </span>
+								    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[8]//Descuento?>: <span id="descuentoFactura"></span> </span>
+								    	<span style="margin-left: 30px;" class="left-align"><?php echo $lang_facturacion[9]//Total?>: <strong><span id="totalFactura" class="grey lighten-2"></span></strong> </span>
+						  				</div>			  				
+								    	
+						  			
+						  			</form>
+						  			
+						  			
+						  				<div class="col s6 right-align">
+						  					<a class="waves-effect blue btn" onclick="guardarFacturaFactura('Iniciada')" ><?php echo $lang_facturacion[27]//Seguir adicionando items?></a>
+    										<a style="margin-left: 10px;" class="waves-effect waves-light btn" onclick="guardarFacturaFactura('Activa')" ><?php echo $lang_facturacion[10]//Guardar factura?></a>
+    										<a style="margin-left: 10px;" class="waves-effect red darken-1 btn" onclick="cerrarFormNuevaFactura()" ><?php echo $lang_botones[3]//Cerrar?></a>
+    										    											
+						  				</div>
+						  			
+						  			
+						  			</div><!-- Fin row-->
+						  			
+						  			
+						  			
+						  			
+						  		</div><!-- Fin div nueva factura hiddden-->
+						  		
+						  		
+						  </li>
+						  
+						  <div id="listadoFacturas">
+						  	
+						  </div><!-- Fin listadoFacturas-->
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+            	
+
+
+
+				<div class="row">
+				
+					
+					<div id="resultadoFacturas">
+						<table class="bordered highlight centered responsive-table">
+							
+							<thead>
+								
+								<th><?php echo $lang_facturacion[58]//Resolución?></th>
+								<th><?php echo $lang_facturacion[59]//# factura?></th>
+								<th><?php echo $lang_facturacion[38]//Fecha/hora?></th>
+								<th><?php echo $lang_general[11]//Propietario?></th>
+								<th><?php echo $lang_facturacion[23]//SubTotal?></th>
+								<th>IVA</th>
+								<th><?php echo $lang_facturacion[25]//Descuento?></th>
+								<th><?php echo $lang_facturacion[26]//Total?></th>
+								<th></th>
+							</thead>
+							
+							
+							<tbody>
+								
+								<?php
+									foreach ($listadoFacturas as $listadoFacturas1) {
+										
+										if ($listadoFacturas1['estado'] == "Anulada") {
+											$colorAnulada = "class='grey lighten-2'";
+											$textoAnulada = "<span class='orange-text'>".$lang_facturacion[60]."</span>";
+										} else {
+											$colorAnulada = "";
+											$textoAnulada = "";
+										}
+										
+										
+								?>
+										
+										<tr <?php echo $colorAnulada ?>>
+											<td>
+												<?php echo $listadoFacturas1['numeroResolucion']?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['numeroFactura']." ".$textoAnulada?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['fechaFin']." ".$listadoFacturas1['horaFin']?>
+											</td>
+											<td>
+												<?php echo "(".$listadoFacturas1['identifiacacionPropietario'].") ".$listadoFacturas1['nombrePropietario']." ".$listadoFacturas1['apellidoPropietario']?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['subtotal']?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['valorIva']?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['descuento']?>
+											</td>
+											<td>
+												<?php echo $listadoFacturas1['total']?>
+											</td>
+											<td>
+												<a href="http://www.nanuvet.com/impresiones/facturas/<?php echo $listadoFacturas1['idFactura']  ?>/" target="_blank"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+											</td>
+										</tr>
+										
+								<?php		
+									}
+								?>
+								
+							</tbody>
+							
+						</table>	
+					</div><!-- Fin div resultadoFacturas-->
+					
+				</div><!-- Fin row para los resultados-->
+            	
+            	
+ 			</div>
+          </div>
+        </div>
+      </div>            	
+            	
+ 
+ 	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+ 
+            	
+</main>
+
+
+<script>
+	$(document).ready(function () {
+		//funcion para evitar que se salga del sitio y perder los cambios
+			window.onbeforeunload = function(e) {
+				  e = e || window.event,
+				  message = "Seguro que desea salir sin guardar?";
+				 
+				  // show alert if there are some unsaved form
+				  if ($('.unsavedForm').size()) {
+				    // For IE and Firefox
+				                if (e) {
+				                  e.returnValue = message;
+				                }
+				                // For Safari
+				                return message;
+				  }
+				};
+				
+				
+	});
+</script>

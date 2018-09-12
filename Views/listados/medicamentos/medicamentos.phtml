@@ -1,0 +1,273 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div> 
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_medicamentos[0]//Medicamentos?>
+									<?php
+									//saber si tiene permiso para crear medicamentos
+										if(in_array("67", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_medicamentos[1]//Nuevo medicamento?>" onclick="mostrarFormNuevoMedicamento()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+									//saber si tiene permiso para editar medicamentos
+										if(in_array("68", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarMedicamento" style="display:  none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_medicamentos[2]//Editar medicamento?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarMedicamento" name="form_editarMedicamento" action="" method="post" >
+						  					<input type="hidden" id="idEditarMedicamento" name="idEditarMedicamento" value="" />
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="editarNombreMedicamento" name="editarNombreMedicamento" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_editarNombreMedicamento" for="editarNombreMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[3]//Nombre Medicamento?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="editarCodigoMedicamento" name="editarCodigoMedicamento" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_editarCodigoMedicamento" for="editarCodigoMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[4]//Código?></label> 
+						                      </div> 
+						                      
+						                   </div><!-- fin row -->
+						                  
+						                  <div class="row">
+						                  	    
+						                      <div class="input-field col s12 m8 l8">						                            
+						                           <input id="editarObservacionMedicamento" name="editarObservacionMedicamento" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_editarObservacionMedicamento" for="editarObservacionMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[5]//Observación?></label>
+						                      </div> 	
+							  				
+						  				</form>
+							  				<div class="input-field col s12 m4 l4 right-align">					  					
+							  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionMedicamento()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+							  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionMedicamento()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+							  				</div>
+							  			</div><!-- fin row -->
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  			
+						  			}//fin if editar medicamentos
+								
+									//saber si tiene permiso para crear medicamentos
+										if(in_array("67", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevoMedicamento" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoMedicamento" name="form_nuevoMedicamento" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevoMedicamento" name="envioNuevoMedicamento"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="nombreMedicamento" name="nombreMedicamento" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreMedicamento" for="nombreMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[6]//Nombre del nuevo medicamento?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="codigoMedicamento" name="codigoMedicamento" type="text" class="validate" length="20" maxlength="20">
+						                            <label id="label_codigoMedicamento" for="codigoMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[4]//Código?></label> 
+						                      </div> 
+						                      
+						                      
+						                   </div><!-- fin row -->
+						                  
+						                  <div class="row">
+						                  	    
+						                      <div class="input-field col s12 m8 l8">						                            
+						                           <input id="observacionMedicamento" name="observacionMedicamento" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_observacionMedicamento" for="observacionMedicamento"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_medicamentos[5]//Observación?></label>
+						                      </div> 					                      
+						                  
+						                  
+							                  <div class="input-field col s12 m4 l4 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoMedicamento()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoMedicamento()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>
+						                  
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo medicamento-->
+						  		<?php
+						  			}//fin if permiso crear medicamentos
+						  		?>
+						  		
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_medicamentos[7]//Buscar medicamento (Escribe y selecciona)?>" id="buscarMedicamento" type="text" class="validate" onkeypress="buscarMedicamentoListados()" >
+						<input type="hidden" id="idMedicamentoBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaMedicamento()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_medicamentos[8]//Activar medicamento?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_medicamentos[9]//Desactivar medicamento?></span>
+						
+							<div id="resultadoMedicamentosAjax">
+								
+							</div><!-- Fin para el resultado de los Medicamentos ajax-->
+							
+							<div id="resultadoMedicamentos">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_medicamentos[10]//Medicamento?></th>
+											<th><?php echo $lang_medicamentos[4]//Código?></th>
+											<th><?php echo $lang_medicamentos[5]//Observación?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoMedicamentos as $listadoMedicamentos1) {
+												
+												if($listadoMedicamentos1['estado'] == 'A'){																																																			//Desactivar medicamento
+													$btn = '<span id="spanB_'.$listadoMedicamentos1['idMedicamento'].'"> <a id="'.$listadoMedicamentos1['idMedicamento'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarMedicamento(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_medicamentos[9].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar medicamento
+													$btn = '<span id="spanB_'.$listadoMedicamentos1['idMedicamento'].'"> <a id="'.$listadoMedicamentos1['idMedicamento'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarMedicamento(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_medicamentos[8].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoMedicamentos1['idMedicamento']."','".$listadoMedicamentos1['nombre']."','".$listadoMedicamentos1['codigo']."','".$listadoMedicamentos1['observacion']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("68", $_SESSION['permisos_usuario'] )){ ?> onclick="editarMedicamento(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoMedicamentos1['nombre']?></td>
+												<td <?php if(in_array("68", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarMedicamento(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoMedicamentos1['codigo']?></td>
+												<td <?php if(in_array("68", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarMedicamento(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoMedicamentos1['observacion']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los medicamentos-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

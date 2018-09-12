@@ -1,0 +1,534 @@
+
+<!-- Modal para confirmar el cambio de los datos-->
+
+	 <div id="modalConfirmarCambios" class="modal" style="margin-top: 5% !important;">
+	    <div class="modal-content">
+	      <h4 class="center-align"><?php echo $lang_perfil[10]//Confirmar que deseas modificar tu información?></h4>
+	      
+	      <div class="row">
+	      	
+	      	<div class="row">
+	      			<div class="col s12 m12 l12 center-align">
+	      				<input type="hidden" id="mensajeErrorPassActual" name="mensajeErrorPassActual" value="<?php echo $lang_perfil[12]//Contraseña actual erronea?>" />
+	      				<span id="paraMostrarMensajeModalInformacion" class="red-text text-darken-2">&nbsp;</span>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      	
+	      	<div class="col s12 m12 l12">
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12">
+			            <input id="passActualInformacion" name="passActualInformacion" type="password" class="validate">
+          				<label for="passActualInformacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;" ><?php echo $lang_perfil[6]//Contraseña actual?></label>
+			        </div>
+	      		</div><!-- Fin row-->
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12 center-align">
+	      				<button class="waves-effect waves-light btn" onclick="validarPassActualCambioInformacion()"><?php echo $lang_perfil[11]//Modificar?></button>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      		
+	      		
+	      	</div>
+	      	
+	      </div><!-- Fin row-->
+	      
+	      
+	    </div>
+	  </div>
+
+<!-- Fin Modal para confirmar el cambio de los datos-->
+
+
+
+
+<!-- Modal para adicionar licencia a un usuario-->
+<?php
+	//saber si tiene permisos para adicionar licencias a usuarios o desvincularlas de los mismos
+	if(in_array("5", $_SESSION['permisos_usuario'] )){
+?>
+	 <div id="modalAdicionarLicenciaUsuario" class="modal" style="margin-top: 5% !important;">
+	    <div class="modal-content">
+	      <h4 class="center-align"><?php echo $lang_cuenta[0]//Vincular licencia con un usuario?></h4>
+	      
+	      <div class="row">
+      			<div class="col s12 m12 l12 center-align">
+      				<span class="black-text text-darken-2"><?php echo $lang_cuenta[1]//Licencia valida hasta: ?><span id="InformacionLicencia">&nbsp;</span> </span>
+      			</div>
+      		</div><!-- Fin row -->
+      		
+      	 <div class="row">
+      	 	<div class="col s12 m12 l12 center-align">
+      				<span id="textoErrorVincularLicencia" style="display: none;" ><?php echo $lang_cuenta[2]//Debe elegir un usuario?></span>
+      				<span id="errorVincularLicencia" class="red-text text-darken-2">&nbsp;</span>
+      	 	</div>
+      	 </div>
+	      
+	      <form id="form_adicionarLicenciaUsuario" name="form_adicionarLicenciaUsuario" action="" method="post" >
+	      	
+      		  <input type="hidden" id="idLicenciaVincular" name="idLicenciaVincular" value="" />
+		      <div class="row">
+		      	
+		      	<div class="col s12 m12 l12">
+		      		<div class="row">
+		      			  <div class="input-field col s12 m12 l12">
+						    <select id="idUsuarioVincular" name="idUsuarioVincular">
+						   		<option value="" disabled selected><?php echo $lang_cuenta[3]//Seleccione uno?></option>
+						   <?php
+						   
+						   		foreach ($usuariosSinLicencia as $usuariosSinLicencia1) {
+							
+							?>
+									<option value="<?php echo $usuariosSinLicencia1['idUsuario']?>"><?php echo  $usuariosSinLicencia1['nombre']." ".$usuariosSinLicencia1['apellido']." (".$usuariosSinLicencia1['identificacion'].")"?></option>
+							<?php		   
+								   }
+						   ?> 	
+						      
+						    </select>
+						    <label><?php echo $lang_cuenta[4]//Usuarios sin licencia?></label>
+						  </div>
+		      		</div><!-- Fin row-->
+		 
+	      
+	      </form>	
+		      		<div class="row">
+		      			<div class="input-field col s12 m12 l12 center-align">
+		      				<a class="waves-effect waves-light btn" onclick="validarAdicionLicenciaUsuario()"><?php echo $lang_botones[6]//Vincular?></a>
+		      			</div>
+		      		</div><!-- Fin row -->
+		      		
+		      		
+		      	</div>
+		      	
+		      </div><!-- Fin row-->
+	      
+	      
+	    </div>
+	  </div>
+<?php } ?>
+<!-- Fin Modal para adicionar licencia a un usuario-->
+
+
+
+
+
+<main>
+
+
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">  
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			<?php echo $lang_menu[14]//cuenta?>	
+              		</div>
+              		<div class="col s6 right-align">              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="Ver tutorial" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+              		</div>
+              	</div>
+              	                          
+              </span>
+              
+              <div class="row">	
+				<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+						<h5>Video-tutorial</h5>
+					 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600" controls>
+					    
+					   			<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/cuenta/cuenta.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/cuenta/cuenta.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+					  
+					  
+					  </video>
+					  <h6 class="center-align">
+					  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28]//Cerrar video?></a>
+					  </h6>
+				</div><!-- Fin div col video-->
+			</div>
+
+
+				  <div class="row">
+				  	
+				    <div class="col s12">
+				      <ul class="tabs">
+				      	<li class="tab col s6 m6 l6"><a class="black-text active"  href="#tab_licencias"><?php echo $lang_cuenta[5]//Licencias?></a></li>
+				        <li class="tab col s6 m6 l6"><a class="black-text" href="#tab_informacion"><?php echo $lang_cuenta[6]//Información de la cuenta?></a></li>
+				        
+				      </ul>
+				    </div>
+				    
+
+				    <div id="tab_licencias" class="col s12 m12 l12">
+				    	
+				    	<?php
+				    		//saber si tiene permisos para ver las licencias
+							if(!in_array("3", $_SESSION['permisos_usuario'] )){
+								?>
+								    <h4 class="center-align">
+						        		<i class="fa fa-ban" aria-hidden="true"></i>
+						        		<?php echo $lang_general[16] //No tienes permiso para acceder aquí.?>
+						        	</h4>
+								<?php
+							}else{
+								?>
+							
+						
+						
+						
+				    	
+				    	<br />
+				    	<br />
+				    	
+				    	
+				    	 <ul class="collection with-header">
+					        <li class="collection-header">
+					        	<h4 class="center-align"><?php echo $lang_cuenta[7]//Licencias de la cuenta ?>(<?php echo $totalLicencias ?>)
+					        		
+					        		<?php
+							    		//saber si tiene permisos para adicionar licencias
+										if(in_array("4", $_SESSION['permisos_usuario'] )){
+									?>
+									
+							        		<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_cuenta[10]//Nueva licencia?>" onclick="mostrarAdicionarLicencia()">
+							  					<i class="material-icons">add</i>
+							  				</a>
+					  				
+					  				<?php
+										}//fin if para permiso de adicionar licencias
+									?>
+					  					
+					        	</h4>
+					        	
+					        	
+					        	<?php
+							    		//saber si tiene permisos para adicionar licencias
+										if(in_array("4", $_SESSION['permisos_usuario'] )){
+											
+											
+								?>
+					        	<div id="hiddenFormNuevalicencia" style="display: none;">
+					        		
+					        		<?php
+					        				//SABER SI ES UNA CUENTA DEMO
+											if($esDemo == 'Si'){
+									?>
+												
+												<h4 class="center-align">Esto es una cuenta Demo, no se pueden adicionar licencias</h4>
+												
+									<?php			
+											}else{
+									?>
+									
+					        		
+								        		<br />
+								        		
+								        		
+								        		<form id="form_envioPasarela" name="form_envioPasarela" action="https://gateway.payulatam.com/ppp-web-gateway" method="post">
+							            	         
+							            	         
+							            	        <input type="hidden" id="amount" name="amount" value="" />
+					            	               	<input type="hidden" id="merchantId" name="merchantId" value="" />
+					            	               	<input type="hidden" id="referenceCode" name="referenceCode" value="" />
+					            	               	<input type="hidden" id="accountId" name="accountId" value="" />
+					            	               	<input type="hidden" id="description" name="description" value="" />
+					            	               	<input type="hidden" id="tax" name="tax" value="0" />
+					            	               	<input type="hidden" id="taxReturnBase" name="taxReturnBase" value="0" />
+					            	               	<input type="hidden" id="signature" name="signature" value="" />
+					            	               	<input type="hidden" id="currency" name="currency" value="" />
+					            	               	<input type="hidden" id="test" name="test" value="0" />
+					            	               	<input type="hidden" id="buyerEmail" name="buyerEmail" value="" />
+					            	               <!--	<input type="hidden" id="lng" name="lng" value="" /> <!-- lenguaje en el que se muestra la pasarela -->
+					            	               	<input type="hidden" id="responseUrl" name="responseUrl" value="" />
+					            	               	<input type="hidden" id="confirmationUrl" name="confirmationUrl" value="" />
+					            	               	<input type="hidden" id="mobilePhone" name="mobilePhone" value="" />
+					            	               	<input type="hidden" id="billingAddress" name="billingAddress" value="" />
+					            	               	<input type="hidden" id="telephone" name="telephone" value="" />
+					            	               	<input type="hidden" id="algorithmSignature" name="algorithmSignature" value="" />
+					            	               	<input type="hidden" id="payerEmail" name="payerEmail" value="" />
+					            	               	<input type="hidden" id="payerPhone" name="payerPhone" value="" />
+					            	               	<input type="hidden" id="payerMobilePhone" name="payerMobilePhone" value="" />
+							            	         
+							            	      
+							                    </form>  
+							                              
+							            	         <div class="row">
+							            	             
+							            	             <div class="col l6 m6 s6">
+							            	                 <p>
+							                                  <input class="with-gap" name="group1" type="radio" id="test1" checked/>
+							                                  <label for="test1">COP ($)</label>
+							                                </p>
+							            	             </div>
+							            	             <div class="col l6 m6 s6">
+							            	                 <p>
+							                                  <input class="with-gap" name="group1" type="radio" id="test2" disabled="disabled" />
+							                                  <label for="test1">USD ($)</label>
+							                                </p>
+							            	             </div>
+							            	         </div>     
+							            	            
+							                          <div class="row">
+							                              
+							                           <div class="input-field col s12 l9 m9">
+							                             
+							                                <select id="select_precio" name="select_precio">
+							                                  
+							                                  <?php
+							                                    $selected = "selected";
+							                                    $tamano = sizeof($precios["precios"]);
+							                                    
+							                                    for($i=0; $i < $tamano; $i++){
+							                                      
+							                                  ?>
+							                                      
+							                                      <option id="option_<?php echo $i ?>"  data-cantidad="<?php echo $precios['precios'][$i]['id']?>" data-valor="<?php echo $precios['precios'][$i]['precio']?>"  value="<?php echo $precios['precios'][$i]['id']?>" <?php echo $selected?>><?php echo $precios["precios"][$i]["display"] ?></option>
+							                                      
+							                                      
+							                                  <?php  
+							                                      $selected = "";
+							                                    }//fin for
+							                                  
+							                                  ?>
+							                                  
+							                                  
+							                                  
+							                                  
+							                                </select>
+							                                <label><?php echo $lang_cuenta[8]//Cantidad de licencias ?><strong>(<?php echo $lang_cuenta[9]//Precio anual?>)</strong></label>
+							                                
+							                            </div>
+							                            
+							                            <div class="input-field col s12 l3 m3">
+							                                <a class="waves-effect waves-light btn" onclick="continuarCompraNuevaLicencia()"><?php echo $lang_botones[7]//Continuar?></a>
+							                                <a class="waves-effect red darken-1 btn" onclick="cancelarCompraNuevaLicencia()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                            </div>
+							                            
+							                          </div>
+				                          
+				                          <?php			
+											}//finelse si no es una cuenta demo
+					        			?>
+				                          
+					        		
+					        	</div><!-- Fin div para adicionar nueva licencia-->
+					        	
+					        	<?php
+										}//fin if para permiso de adicionar licencias
+								?>
+					        	
+					        </li>
+					        
+					      <?php
+					      
+						  	foreach ($ListadoLicencias as $ListadoLicencias1) {
+						  		
+								$idLicencia =	$ListadoLicencias1['idLicencia']; 
+						
+								//validar el estado de la licencia
+								if($ListadoLicencias1['estado'] == 'EnUso'){
+									
+									//consultar la información del usuario que tiene la licencia en uso
+									$informacionUsuarioUso	= $objetoCuenta->consultarInformaiconUsuario($idLicencia);
+									
+									$idUsuario		=	$informacionUsuarioUso['idUsuario'];
+									$identificacion	=	$informacionUsuarioUso['identificacion'];
+									$nombre			=	$informacionUsuarioUso['nombre'];
+									$apellido		=	$informacionUsuarioUso['apellido'];
+									$estado			=	$informacionUsuarioUso['estado'];
+									
+									if ($estado != 'A') {																						//El usuario se encuentra inactivo! //Si, por el usuario: 
+										$utilizada		= '<span class="red tooltipped" data-position="bottom" data-delay="50" data-tooltip="'.$lang_cuenta[11].'" > '.$lang_cuenta[12].' '.$nombre.' '.$apellido.'('.$identificacion.') <span>';
+									} else {				//
+										$utilizada		= $lang_cuenta[12].' '.$nombre.' '.$apellido.'('.$identificacion.')';
+									}
+									
+									$idLicenciaProcesar = $ListadoLicencias1['idLicencia'];
+									
+									//saber si tiene permisos para adicionar licencias a usuarios o desvincularlas de los mismos
+									if(in_array("5", $_SESSION['permisos_usuario'] )){
+										$botonVincularDesvincular = '<i id="'.$idLicenciaProcesar.'" class="fa fa-sign-out fa-2x" aria-hidden="true" onclick="desvincularLicencia(this.id)" ></i>';
+									}else{
+										$botonVincularDesvincular = "";
+									}
+									
+									$claseEstado	= '';
+								}else{
+									$claseEstado		= 'active';
+									$utilizada			= 'No';
+									$segundoParametro	= "'".$ListadoLicencias1['fechaFin']."'";
+									$idLicenciaProcesar = $ListadoLicencias1['idLicencia'];
+									
+									//saber si tiene permisos para adicionar licencias a usuarios o desvincularlas de los mismos
+									if(in_array("5", $_SESSION['permisos_usuario'] )){
+										$botonVincularDesvincular = '<i id="'.$idLicenciaProcesar.'" class="fa fa-sign-in fa-2x" aria-hidden="true" onclick="vincularLicencia(this.id,'.$segundoParametro.')" ></i>';
+									}else{
+										$botonVincularDesvincular = "";
+									}	
+									
+									
+								}//fin else
+						
+						?>
+						
+								<li class="collection-item <?php echo $claseEstado?>">
+									<div>
+										
+										<div class="row">
+											<div class="col s6 m2 l2"><strong><?php echo $lang_cuenta[13]//Fecha inicio:?></strong></div>
+											<div class="col s6 m2 l2"><?php echo $ListadoLicencias1['fechaInicio']?></div>
+											<div class="col s6 m2 l2"><strong><?php echo $lang_cuenta[14]//Fecha fin:?></strong></div>
+											<div class="col s6 m2 l2"><?php echo $ListadoLicencias1['fechaFin']?></div>
+											<div class="col s6 m2 l2"><strong><?php echo $lang_cuenta[15]//Utilizada:?></strong></div>
+											<div class="col s6 m2 l2"><?php echo $utilizada?></div>
+											
+										<a href="javascript:void(0)" class="secondary-content"><?php echo $botonVincularDesvincular ?></a>
+										</div>
+									</div>
+								</li>
+						
+						
+						<?php		  
+							  }//fin foreach
+						  ?>  
+					        
+					      </ul>
+				    	
+				    		
+						<?php
+							}//fin if del permiso de ver las licencias
+						?>
+				    	
+				    </div><!-- Fin tab licencias-->
+				    
+				    
+				    <div id="tab_informacion" class="col s12 m12 l12">
+				    	<br />
+				    	<br />
+				    	
+				    	
+				    	 <div class="row">
+				              <form class="col s12 m12 l12"  name="form_informacionCuenta" id="form_informacionCuenta" action="" method="post" enctype="multipart/form-data">
+				              	
+				              	<input type="hidden" name="hidden_envioForm" id="hidden_envioForm" value="enviar" />
+				              	<div class="row">
+				              		
+				              		<div class="col s12 m3 l3 center-align">
+				              			
+				              			<?php
+				              				
+				              				if($informacionCuenta['urlLogo'] != ""){
+				              					
+												?>
+													<img src="../Public/uploads/<?php echo $_SESSION['BDC_carpeta'].'/logoClinica/'.$informacionCuenta['urlLogo']?>" alt="" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+												<?php
+												
+				              				}else{
+												
+												?>
+													<img src="../Public/img/porDefectoClientes/bulding.png" alt="" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+												<?php	
+												
+				              				}
+				              				
+				              			 ?>
+				              			
+				              			
+				              			
+				              		</div>
+				              		
+				              		<div class="col s12 m4 l4">
+				              			<div class="file-field input-field">
+									      <div class="btn">
+									        <span><?php echo $lang_perfil[0]//Cabiar imagen?></span>
+									        <input type="file" id="fotoCuenta" name="fotoCuenta">
+									      </div>
+									      <div class="file-path-wrapper">
+									        <input class="file-path validate" type="text">
+									      </div>
+									    </div>
+				              		</div>
+				              		
+				              		<div class="input-field col s12 m5 l5">
+							          <input id="identificacion" name="identificacion" type="text" class="validate" length="50" maxlength="50" value="<?php echo $informacionCuenta['identificativoNit']?>" >
+							          <label id="label_identificacion" for="identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[1]//Identificación?></label>
+							        </div>
+				              		
+				              		
+				              	</div><!-- Fin row-->
+				              	
+				              	<div class="row">
+				              		
+				              		
+							        
+							        <div class="input-field col s12 m3 l3">
+							          <input id="nombre" name="nombre" type="text" class="validate" length="100" maxlength="100" value="<?php echo $informacionCuenta['nombre']?>" >
+							          <label id="label_nombre" for="nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_nuevo[10]//Nombre?></label>
+							        </div>
+				              		
+				              		
+				              		<div class="input-field col s12 m3 l3">
+							          <input id="telefono1" name="telefono1" type="text" class="validate" length="20" maxlength="20" value="<?php echo $informacionCuenta['telefono1']?>" >
+							          <label id="label_telefono1" for="telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_cuenta[16]//Teléfono 1?></label>
+							        </div>
+							        
+							        <div class="input-field col s12 m3 l3">
+							          <input id="telefono2" name="telefono2" type="text" class="validate" length="20" maxlength="20" value="<?php echo $informacionCuenta['telefono2']?>" >
+							          <label id="label_telefono2" for="telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_cuenta[17]//Teléfono 2?></label>
+							        </div>
+							        
+							        <div class="input-field col s12 m3 l3">
+							          <input id="celular" name="celular" type="text" class="validate" length="20" maxlength="20" value="<?php echo $informacionCuenta['celular']?>" >
+							          <label id="label_celular" for="celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_general[2]//Celular?></label>
+							        </div>
+							        
+				              	</div><!-- Fin row-->
+				              	
+				              	<div class="row">
+				              		
+				              		<div class="input-field col s12 m6 l6">
+							          <input id="direccion" name="direccion" type="text" class="validate" length="50" maxlength="50" value="<?php echo $informacionCuenta['direccion']?>" >
+							          <label id="label_direccion" for="direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_general[3]//Dirección?></label>
+							        </div>
+							        
+							        <div class="input-field col s12 m6 l6">
+							          <input id="email" name="email" type="email" class="validate" length="100" maxlength="100" value="<?php echo $informacionCuenta['email']?>" >
+							          <label id="label_email" for="email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  >E-mail</label>
+							        </div>
+				              		
+				              	</div><!-- Fin row-->
+				    	
+				    		</form>
+				    	</div><!-- Fin row principal-->
+				    	
+				    	<div class="card-action right-align">
+			              <button class="waves-effect waves-light btn  black-text" onclick="validarCambioInformacion()"><?php echo $lang_botones[4]//Editar?></button>
+			            </div>
+				    	
+				    </div><!-- Fin contenido tab información-->
+				    
+				  </div><!-- Fin row para tabs-->
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+	
+</main>
+

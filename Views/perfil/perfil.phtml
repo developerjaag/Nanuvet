@@ -1,0 +1,281 @@
+
+<!-- modal para cambio de contraseña -->
+
+	 <div id="modalCambiarPass" class="modal" style="margin-top: 5% !important;">
+	    <div class="modal-content">
+	      <h4 class="center-align"><?php echo $lang_perfil[5]//Cambiar contraseña?></h4>
+	      
+	      <div class="row">
+	      	
+	      	<div class="col s12 m12 l12">
+	      		
+	      		<div class="row">
+	      			<div class="col s12 m12 l12 center-align">
+	      				<!-- mesnajes de error -->
+	      				<input type="hidden" id="mensajeErrorPassActual" name="mensajeErrorPassActual" value="<?php echo $lang_perfil[12]//Contraseña actual erronea?>" />
+	      				<input type="hidden" id="mensajeErrorPassNuevaConfirmar" name="mensajeErrorPassNuevaConfirmar" value="<?php echo $lang_perfil[13]//No coinciden la confirmación de la nueva contraseña?>" />
+	      				<input type="hidden" id="mensajeErrorActualizarPass" name="mensajeErrorActualizarPass" value="<?php echo $lang_general[8]//Ups!..Algo salió mal?>" />
+	      				
+	      				<!-- mensajes ok-->
+	      				<input type="hidden" id="mensajeOkCambioPass" name="mensajeOkCambioPass" value="<?php echo $lang_perfil[14]//Contraseña actualizada correctamente!?>" />
+	      				
+	      				<span id="paraMostrarMensaje" class="red-text text-darken-2">&nbsp;</span>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12">
+			            <input id="passActual" name="passActual" type="password" class="validate">
+          				<label id="label_passActual" for="passActual" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[6]//Contraseña actual?></label>
+			        </div>
+	      		</div><!-- Fin row-->
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m6 l6">
+			            <input id="passNueva" name="passNueva" type="password" class="validate">
+          				<label id="label_passNueva" for="passNueva" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[7]//Nueva contraseña?></label>
+			        </div>
+			        
+			        <div class="input-field col s12 m6 l6">
+			            <input id="passNuevaRepetida" name="passNuevaRepetida" type="password" class="validate">
+          				<label id="label_passNuevaRepetida" for="passNuevaRepetida" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[8]//Repite la nueva contraseña?></label>
+			        </div>
+	      		</div><!-- Fin row-->
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12 center-align">
+	      				<button class="waves-effect waves-light btn" onclick="validarCambioPass()"><?php echo $lang_perfil[9]//Cambiar?></button>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      		
+	      		
+	      	</div>
+	      	
+	      </div><!-- Fin row-->
+	      
+	      
+	    </div>
+	  </div>
+
+<!-- Fin modal para cambio de contraseña -->
+
+<!-- Modal para confirmar el cambio de los datos-->
+
+	 <div id="modalConfirmarCambios" class="modal" style="margin-top: 5% !important;">
+	    <div class="modal-content">
+	      <h4 class="center-align"><?php echo $lang_perfil[10]//Confirmar que deseas modificar tu información?></h4>
+	      
+	      <div class="row">
+	      	
+	      	<div class="row">
+	      			<div class="col s12 m12 l12 center-align">
+	      				<span id="paraMostrarMensajeModalInformacion" class="red-text text-darken-2">&nbsp;</span>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      	
+	      	<div class="col s12 m12 l12">
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12">
+			            <input id="passActualInformacion" name="passActualInformacion" type="password" class="validate">
+          				<label for="passActualInformacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;" ><?php echo $lang_perfil[6]//Contraseña actual?></label>
+			        </div>
+	      		</div><!-- Fin row-->
+	      		
+	      		<div class="row">
+	      			<div class="input-field col s12 m12 l12 center-align">
+	      				<button class="waves-effect waves-light btn" onclick="validarPassActualCambioInformacion()"><?php echo $lang_perfil[11]//Modificar?></button>
+	      			</div>
+	      		</div><!-- Fin row -->
+	      		
+	      		
+	      	</div>
+	      	
+	      </div><!-- Fin row-->
+	      
+	      
+	    </div>
+	  </div>
+
+<!-- Fin Modal para confirmar el cambio de los datos-->
+
+
+
+
+
+
+<main>
+
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+              <span class="card-title">
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			<?php echo $lang_menu[10]//perfil?>
+              		</div>
+              		<div class="col s6 right-align">
+              			<i style="cursor: pointer;" data-position="left" data-delay="50" data-tooltip="Activar ayudas" class="fa fa-life-ring tooltipped" aria-hidden="true" onclick="mostrarAyudas()"></i>
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="Ver tutorial" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+              		</div>
+              	</div>
+              	              	
+              </span>
+              
+              <div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5>Video-tutorial</h5>
+							 <video id="videoTutorial_perfil" class="responsive-video" height="600" width="600" controls>
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/perfil/perfil.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/perfil/perfil.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> Cerrar video</a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+              
+              <div class="row">
+	              <form class="col s12 m12 l12"  name="form_perfil" id="form_perfil" action="" method="post" enctype="multipart/form-data">
+	              	
+	              	
+	              	<div class="row">
+	              		
+	              		<div class="col s12 m3 l3 center-align" data-hint="Aqui se muestra tu foto" data-hintPosition="top-middle">
+	              			
+	              			<?php
+	              				
+	              				if($datosUsuario['urlFoto'] != ""){
+	              					
+									?>
+										<img src="../Public/uploads/<?php echo $_SESSION['BDC_carpeta'].'/img_usuarios/'.$datosUsuario['urlFoto']?>" alt="" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+									<?php
+									
+	              				}else{
+									
+									?>
+										<img src="../Public/img/porDefectoClientes/user.png" alt="" class="circle responsive-img" style="max-height: 80px; max-width: 80px;"  >
+									<?php	
+									
+	              				}
+	              				
+	              			 ?>
+	              			
+	              			
+	              			
+	              		</div>
+	              		
+	              		<div class="col s12 m4 l4">
+	              			<div class="file-field input-field" data-hint="Carga tu foto" data-hintPosition="top-middle">
+						      <div class="btn black" >
+						        <span><?php echo $lang_perfil[0]//Cabiar imagen?></span>
+						        <input type="file" id="fotoUsuario" name="fotoUsuario">
+						      </div>
+						      <div class="file-path-wrapper">
+						        <input class="file-path validate" type="text" placeholder="png/jpg">
+						      </div>
+						    </div>
+	              		</div>
+	              		
+	              		
+	              	</div><!-- Fin row-->
+	              	
+	              	<div class="row">
+	              		
+	              		<form id="form_perfil" name="form_perfil" method="post" action="" enctype="multipart/form-data">
+	              		
+	              		<div class="input-field col s12 m4 l4">
+				          <input id="identificacion" name="identificacion" type="text" class="validate" length="30" maxlength="30" value="<?php echo $datosUsuario['identificacion']?>" >
+				          <label id="label_identificacion" for="identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[1]//Identificación?></label>
+				        </div>
+				        
+				        <div class="input-field col s12 m4 l4">
+				          <input id="nombres" name="nombres" type="text" class="validate" length="100" maxlength="100" value="<?php echo $datosUsuario['nombre']?>"  >
+				          <label id="label_nombres" for="nombres" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_perfil[2]//Nombres?></label>
+				        </div>
+				        
+				        <div class="input-field col s12 m4 l4">
+				          <input id="apellidos" name="apellidos" type="text" class="validate" length="100" maxlength="100" value="<?php echo $datosUsuario['apellido']?>" >
+				          <label id="label_apellidos" for="apellidos"><?php echo $lang_perfil[3]//Apellidos?></label>
+				        </div>
+				        
+	              	</div><!-- Fin row-->
+	              	
+	              	<div class="row">
+	              		
+	              		<div class="input-field col s12 m4 l4">
+				          <input id="telefono" name="telefono" type="text" class="validate" length="20" maxlength="20" value="<?php echo $datosUsuario['telefono']?>" >
+				          <label id="label_telefono" for="telefono"><?php echo $lang_general[0]//teléfono?></label>
+				        </div>
+				        
+				        <div class="input-field col s12 m4 l4">
+				          <input id="celular" name="celular" type="text" class="validate" length="20" maxlength="20" value="<?php echo $datosUsuario['celular']?>" >
+				          <label id="label_celular" for="celular"><?php echo $lang_general[2]//celular?></label>
+				        </div>
+				        
+				        <div class="input-field col s12 m4 l4">
+				          <input id="direccion" name="direccion" type="text" class="validate" length="50" maxlength="50" value="<?php echo $datosUsuario['direccion']?>" >
+				          <label id="label_direccion" for="direccion"><?php echo $lang_general[3]//Dirección?></label>
+				        </div>
+				        
+	              	</div><!-- Fin row-->
+	              	
+	              	<div class="row">
+	              		
+	              		<div class="input-field col s12 m4 l4">
+				          <input id="email" name="email" type="text" class="validate" length="100" maxlength="100" value="<?php echo $datosUsuario['email']?>" >
+				          <label id="label_email" for="email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>"  style="width:100%; text-align: left;"  ><?php echo $lang_general[4]//E-mail?></label>
+				        </div>
+				        
+				         <div data-hint="Determina el idioma de tu cuenta" data-hintPosition="top-middle" class="input-field col s12 m4 l4">
+				          	<select id="idioma" name="idioma">
+						      <option value="1" <?php if($datosUsuario['idIdioma']=='1'){?> selected="selected" <?php } ?> >Español</option>
+						      <option value="2" <?php if($datosUsuario['idIdioma']=='2'){?> selected="selected" <?php } ?> >English</option>
+						    </select>
+						    <label><?php echo $lang_perfil[4]//Idioma?></label>
+				        </div>
+				    
+				    	<input type="hidden" id="hidden_envioForm" name="hidden_envioForm" value="enviar" />
+				    </form>
+				    
+				    
+				        <div class="input-field col s12 m4 l4 center-align">
+				        	<button data-hint="Cambia tu contraseña; Por seguridad hazlo periodicamente." data-hintPosition="top-middle" class="waves-effect teal lighten-3 btn  black-text modal-trigger" href="#modalCambiarPass"><?php echo $lang_perfil[5]//Cambiar contraseña?></button>
+				        </div>       
+				       				        
+	              	</div><!-- Fin row-->
+	              	
+              </div>
+              
+   
+              
+            </div>
+            <div class="card-action right-align">
+              <button data-hint="Guarda los cambios" data-hintPosition="top-middle" class="waves-effect waves-light btn  black-text" onclick="validarCambioInformacion()"><?php echo $lang_botones[2]//Guardar?></button>
+            </div>
+          </div>
+        </div>
+      </div>
+            
+
+
+
+
+</main>
+
+

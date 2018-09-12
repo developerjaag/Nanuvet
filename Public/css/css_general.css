@@ -1,0 +1,116 @@
+
+/*para navegadores como chrome y safari*/
+@media screen and (-webkit-min-device-pixel-ratio:0)
+ {
+   #input_busqueda { padding-top: 2%;  }
+ }
+
+
+/*Para que el footer siempre este abajo*/
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+.centrarImagen{
+  display: block; 
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+
+.ui-autocomplete {z-index:999999 !important;} 
+
+.Bootstrapbadge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #777777;
+  border-radius: 10px;
+}
+.Bootstrapbadge:empty {
+  display: none;
+}
+.btn .Bootstrapbadge {
+  position: relative;
+  top: -1px;
+}
+.btn-xs .Bootstrapbadge,
+.btn-group-xs > .btn .Bootstrapbadge {
+  top: 0;
+  padding: 1px 5px;
+}
+a.Bootstrapbadge:hover,
+a.Bootstrapbadge:focus {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+/*web*/
+	.section{
+		text-align:center;
+		overflow: hidden;
+	}
+
+	#myVideo{
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		top:0;
+		right:0;
+		width: 100%;
+		height: 100%;
+		background-size: 100% 100%;
+ 		background-color: black; /* in case the video doesn't fit the whole page*/
+		background-image: /* our video */;
+		background-position: center center;
+		background-size: contain;
+ 		object-fit: cover; /*cover video background */
+ 		z-index:3;
+ 		
+ 		filter:alpha(opacity=50);
+		-moz-opacity: 0.5;
+		opacity: 0.5;
+	}
+
+
+
+	/* Layer with position absolute in order to have it over the video
+	* --------------------------------------- */
+	#section0 .layer{
+		position: absolute;
+		z-index: 4;
+		width: 100%;
+		left: 0;
+		top: 43%;
+	}
+
+	/*solves problem with overflowing video in Mac with Chrome */
+	#section0{
+		overflow: hidden;
+	}
+	
+
+.cita{
+	cursor:pointer;
+}
+	
+/*Fin web*/
+
+
+

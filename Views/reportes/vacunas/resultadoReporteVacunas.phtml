@@ -1,0 +1,107 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>
+			<th><?php echo $lang_reportes[116]//Vacuna?></th>		
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+			<th><?php echo $lang_reportes[119]//Próxima vacuna?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoVacunas as $listadoVacunas1) {
+		
+		
+		if($listadoVacunas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoVacunas1['fecha']?></td>
+			<td><?php echo $listadoVacunas1['hora']?></td>
+			<td><?php echo $listadoVacunas1['nombreVacuna']?></td>	
+			<td style="max-width: 150px;"><?php echo $listadoVacunas1['observaciones']?></td>		
+			<td style="max-width: 150px;"><?php echo $listadoVacunas1['fechaProximaVacuna']?></td>						
+			<td><?php echo "(".$listadoVacunas1['identificacionPropietario'].") ".$listadoVacunas1['nombrePropietario']." ".$listadoVacunas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoVacunas1['telefono']?></td>
+			<td><?php echo $listadoVacunas1['nombreMascota']." (".$sexo.")"?></td>			
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>
+			<th><?php echo $lang_reportes[116]//Vacuna?></th>		
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+			<th><?php echo $lang_reportes[119]//Próxima vacuna?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>			
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[54]//Sexo?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoVacunasExportar as $listadoVacunas1) {
+		
+		
+		if($listadoVacunas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = "H";
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoVacunas1['fecha']?></td>
+			<td><?php echo $listadoVacunas1['hora']?></td>
+			<td><?php echo $listadoVacunas1['nombreVacuna']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoVacunas1['observaciones']?></td>		
+			<td style="max-width: 150px;"><?php echo $listadoVacunas1['fechaProximaVacuna']?></td>						
+			<td><?php echo "(".$listadoVacunas1['identificacionPropietario'].") ".$listadoVacunas1['nombrePropietario']." ".$listadoVacunas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoVacunas1['telefono']?></td>
+			<td><?php echo $listadoVacunas1['nombreMascota']?></td>	
+			<td><?php echo $sexo?></td>			
+			
+		</tr>
+<?php		
+		$contador = $contador +1;
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

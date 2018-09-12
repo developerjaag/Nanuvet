@@ -1,0 +1,323 @@
+								
+					<h3 style="text-align: center;"><?php echo $lang_reportes[84]//Reporte gerencial?></h3>
+					
+					<?php
+						if(isset($fechaInicio) and isset($fechaFin)){
+							?>
+								<h6 style="text-align: center;">del <?php echo $fechaInicio?> al <?php echo $fechaFin?></h6>
+							<?php
+						}
+					?>
+					
+					<div class="row z-depth-1">
+						<table>
+							<thead>
+								<tr>
+									<th colspan="2">
+										<h5><?php echo $lang_reportes[1]//Citas?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[85]//Total citas?></th>
+									<th><?php echo $lang_reportes[86]//Citas canceladas?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalCitas?>
+										</td>
+										<td>
+											<?php echo $totalCitasCanceladas?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+					</div>
+					
+					
+					
+					<div class="row z-depth-1">
+						<table>
+							<thead>
+								<tr>
+									<th colspan="6">
+										<h5><?php echo $lang_reportes[87]//Historia clínica?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[88]//Consultas?></th>
+									<th><?php echo $lang_reportes[89]//Cirugías?></th>
+									<th><?php echo $lang_reportes[90]//Aplicación desparasitantes?></th>
+									<th><?php echo $lang_reportes[91]//Exámenes?></th>
+									<th><?php echo $lang_reportes[96]//Hospitalizaciones?></th>
+									<th><?php echo $lang_reportes[92]//Aplicación vacunas?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalConsultas?>
+										</td>
+										<td>
+											<?php echo $totalCirugias?>
+										</td>
+										<td>
+											<?php echo $totalDesparasitantes?>
+										</td>
+										<td>
+											<?php echo $totalExamenes?>
+										</td>
+										<td>
+											<?php echo $totalHospitalizaciones?>
+										</td>
+										<td>
+											<?php echo $totalVacunas?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+					</div>
+					
+					
+					<div class="row z-depth-1">
+						<table>
+							<thead>
+								<tr>
+									<th colspan="2">
+										<h5><?php echo $lang_reportes[93]//Facturas/Inventario?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[94]//Facturas?></th>
+									<th><?php echo $lang_reportes[95]//Valor inventario (Actualmente)?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalFacturas?>
+										</td>
+										<td>
+											<?php echo  str_replace(',', '.',number_format($valorInventario)) ?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+					</div>
+					
+					
+					<div style="display: none;" id="exportarHCalculo">
+						
+						<table>
+							<thead>
+								<tr>
+									<th colspan="2">
+										<h5><?php echo $lang_reportes[1]//Citas?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[85]//Total citas?></th>
+									<th><?php echo $lang_reportes[86]//Citas canceladas?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalCitas?>
+										</td>
+										<td>
+											<?php echo $totalCitasCanceladas?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+						
+						
+						<table>
+							<thead>
+								<tr>
+									<th colspan="6">
+										<h5><?php echo $lang_reportes[87]//Historia clínica?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[88]//Consultas?></th>
+									<th><?php echo $lang_reportes[89]//Cirugías?></th>
+									<th><?php echo $lang_reportes[90]//Aplicación desparasitantes?></th>
+									<th><?php echo $lang_reportes[91]//Exámenes?></th>
+									<th><?php echo $lang_reportes[96]//Hospitalizaciones?></th>
+									<th><?php echo $lang_reportes[92]//Aplicación vacunas?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalConsultas?>
+										</td>
+										<td>
+											<?php echo $totalCirugias?>
+										</td>
+										<td>
+											<?php echo $totalDesparasitantes?>
+										</td>
+										<td>
+											<?php echo $totalExamenes?>
+										</td>
+										<td>
+											<?php echo $totalHospitalizaciones?>
+										</td>
+										<td>
+											<?php echo $totalVacunas?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+						
+						<table>
+							<thead>
+								<tr>
+									<th colspan="2">
+										<h5><?php echo $lang_reportes[93]//Facturas/Inventario?></h5>
+									</th>
+								</tr>
+								<tr>
+									<th><?php echo $lang_reportes[94]//Facturas?></th>
+									<th><?php echo $lang_reportes[95]//Valor inventario (Actualmente)?></th>
+								</tr>
+								
+							</thead>
+								<tbody>
+									<tr>
+										<td>
+											<?php echo $totalFacturas?>
+										</td>
+										<td>
+											<?php echo  str_replace(',', '.',number_format($valorInventario)) ?>
+										</td>
+									</tr>
+								</tbody>
+						</table>
+						
+					</div><!--Fin  exportarHCalculo-->
+
+<!---------------pdf ------------------------>
+					<div style="display: none;" id="reportePdf">
+						
+						<br />
+						<br />
+						<h2 style="text-align: center;"><?php echo $lang_reportes[84]//Reporte gerencial?></h2>
+						
+					<?php
+						if(isset($fechaInicio) and isset($fechaFin)){
+							?>
+								<h5 style="text-align: center;">del <?php echo $fechaInicio?> al <?php echo $fechaFin?></h5>
+							<?php
+						}
+					?>
+						<br />
+						<br />
+						<br />
+						
+						<div>
+							
+							<h5><?php echo $lang_reportes[1]//Citas?></h5>
+							
+							<table>
+								<thead>
+									<tr>
+										<th><?php echo $lang_reportes[85]//Total citas?></th>
+										<th><?php echo $lang_reportes[86]//Citas canceladas?></th>
+									</tr>
+									
+								</thead>
+									<tbody>
+										<tr>
+											<td>
+												<?php echo $totalCitas?>
+											</td>
+											<td>
+												<?php echo $totalCitasCanceladas?>
+											</td>
+										</tr>
+									</tbody>
+							</table>
+						</div>
+						
+						<br />
+						
+						<div>
+							
+							<h3><?php echo $lang_reportes[87]//Historia clínica?></h3>
+							
+								<table>
+										<tr>
+											<th><b><?php echo $lang_reportes[88]//Consultas?></b></th>
+											<th><b><?php echo $lang_reportes[89]//Cirugías?></b></th>
+											<th><b><?php echo $lang_reportes[90]//Aplicación desparasitantes?></b></th>
+										</tr>
+										
+											<tr>
+												<td>
+													<?php echo $totalConsultas?>
+												</td>
+												<td>
+													<?php echo $totalCirugias?>
+												</td>
+												<td>
+													<?php echo $totalDesparasitantes?>
+												</td>
+											</tr>
+										<tr>
+											<th><b><?php echo $lang_reportes[91]//Exámenes?></b></th>
+											<th><b><?php echo $lang_reportes[96]//Hospitalizaciones?></b></th>
+											<th><b><?php echo $lang_reportes[92]//Aplicación vacunas?></b></th>
+										</tr>
+										<tr>										
+												<td>
+													<?php echo $totalExamenes?>
+												</td>
+												<td>
+													<?php echo $totalHospitalizaciones?>
+												</td>
+												<td>
+													<?php echo $totalVacunas?>
+												</td>
+										</tr>
+								</table>
+						
+						</div>
+						
+						<br />
+						
+						<div>
+							
+							<h3><?php echo $lang_reportes[93]//Facturas/Inventario?></h3>
+							
+								<table>
+									<thead>
+										<tr>
+											<th><?php echo $lang_reportes[94]//Facturas?></th>
+											<th><?php echo $lang_reportes[95]//Valor inventario (Actualmente)?></th>
+										</tr>
+										
+									</thead>
+										<tbody>
+											<tr>
+												<td>
+													<?php echo $totalFacturas?>
+												</td>
+												<td>
+													<?php echo  str_replace(',', '.',number_format($valorInventario)) ?>
+												</td>
+											</tr>
+										</tbody>
+								</table>
+						</div>
+					</div><!--Fin  reportePdf-->
+					

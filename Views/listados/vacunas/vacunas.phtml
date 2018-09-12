@@ -1,0 +1,246 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_vacunas[0]//Vacunas?>
+									<?php
+									//saber si tiene permiso para crear vacunas
+										if(in_array("77", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_vacunas[1]//Nueva vacuna?>" onclick="mostrarFormNuevaVacuna()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+									//saber si tiene permiso para editar vacunas
+										if(in_array("78", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarVacuna" style="display: none ;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_vacunas[2]//Editar vacuna?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarVacuna" name="form_editarVacuna" action="" method="post" >
+						  					<input type="hidden" id="idEditarVacuna" name="idEditarVacuna" value="" />
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="input-field col s12 m4 l4">
+							  					<input type="text" id="editarNombreVacuna" name="editarNombreVacuna" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreVacuna" for="editarNombreVacuna"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_vacunas[3]//Nombre vacuna?></label>
+							  				</div>
+							  				
+							  				<div class="input-field col s12 m8 l8">
+							  					<input type="text" id="editarDescripcionVacuna" name="editarDescripcionVacuna" value="" length="200" maxlength="200"/>
+							  					<label id="label_editarDescripcionVacuna" for="editarDescripcionVacuna"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_vacunas[4]//Descripción?></label>
+							  				</div>
+							  				
+						  				</form>
+						  				<div class="input-field col s12 m12 l12 right-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionVacuna()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionVacuna()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar vacuna
+								
+									//saber si tiene permiso para crear vacunas
+										if(in_array("77", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevaVacuna" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevaVacuna" name="form_nuevaVacuna" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevaVacuna" name="envioNuevaVacuna"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="nombreVacuna" name="nombreVacuna" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreVacuna" for="nombreVacuna"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_vacunas[5]//Nombre de la nueva vacuna?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m8 l8">						                            
+						                           <input id="descripcionVacuna" name="descripcionVacuna" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_descripcionVacuna" for="descripcionVacuna"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_vacunas[4]//Descripción?></label>
+						                      </div> 
+						                      
+						                  </div><!-- fin row-->
+						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaVacuna()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaVacuna()"><?php echo $lang_botones[2]//Guardar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nueva vacuna-->
+						  		<?php
+						  			}//fin permiso crear vacuna
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_vacunas[7]//Buscar vacuna (Escribe y selecciona)?>" id="buscarVacuna" type="text" class="validate" onkeypress="buscarVacunaListados()" >
+						<input type="hidden" id="idVacunaBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaVacuna()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_vacunas[8]//Activar vacuna?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_vacunas[9]//Desactivar vacuna?></span>
+						
+							<div id="resultadoVacunasAjax">
+								
+							</div><!-- Fin para el resultado de las vacunas ajax-->
+							
+							<div id="resultadoVacunas">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_vacunas[10]//Vacunas?></th>
+											<th><?php echo $lang_vacunas[4]//Descripción?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoVacunas as $listadoVacunas1) {
+												
+												if($listadoVacunas1['estado'] == 'A'){																																																			//Desactivar vacuna
+													$btn = '<span id="spanB_'.$listadoVacunas1['idVacuna'].'"> <a id="'.$listadoVacunas1['idVacuna'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarVacuna(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_vacunas[9].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar vacuna
+													$btn = '<span id="spanB_'.$listadoVacunas1['idVacuna'].'"> <a id="'.$listadoVacunas1['idVacuna'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarVacuna(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_vacunas[9].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoVacunas1['idVacuna']."','".$listadoVacunas1['nombre']."','".$listadoVacunas1['descripcion']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("78", $_SESSION['permisos_usuario'] )){ ?> onclick="editarVacuna(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoVacunas1['nombre']?></td>
+												<td <?php if(in_array("78", $_SESSION['permisos_usuario'] )){ ?> onclick="editarVacuna(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoVacunas1['descripcion']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de las vacunas-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

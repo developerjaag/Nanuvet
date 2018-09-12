@@ -1,0 +1,114 @@
+<div class="container center-align">
+
+<div class="row">
+    
+    <div class="col s12 m12 l12" >
+    
+           <div class="card">
+            <div class="card-content">
+            	
+            	<h5><?php echo $lang_index[6]//Iniciar sesión?></h5>
+            	
+            	
+                        <span class="red-text text-darken-2"><?php echo $errorIniciarSesion?></span>
+                  
+                
+                <div class="row"><!-- row para el formulario-->
+                
+                    <form class="col s12" name="form_login" id="form_login" method="POST" action="">
+                        <input type="hidden" name="hidden_login" id="hidden_login" value="login" />
+                        
+                        <div class="row">
+                
+                            <div class="input-field col s12 m12 l12">
+                                <input id="login_identificacionTitular" name="login_identificacionTitular" type="text"  class="validate" onkeypress="searchKeyPress(event);">
+                                <label id="label_login_identificacionTitular" for="login_identificacionTitular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;"><?php echo $lang_login[0] //Identificación del titular ?></label>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <div class="input-field col s12 m12 l12">
+                                <input id="login_identificacion" name="login_identificacion" type="text" class="validate" onkeypress="searchKeyPress(event);">
+                                <label id="label_login_identificacion" for="login_identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;"><?php echo $lang_login[1] //Su identificación ?></label>
+                            </div>
+                            
+                            <br />
+                            
+                            <div class="input-field col s12 m12 l12">
+                                <input id="login_pass" name="login_pass" type="password" class="validate" onkeypress="searchKeyPress(event);">
+                                <label id="label_login_pass" for="login_pass" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;"><?php echo $lang_login[2] //Contraseña ?></label>
+                            </div>
+        
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <a class="waves-effect waves-light btn" id="btn_validarLogin" name="btn_validarLogin" onclick="validarLogin()" ><?php echo $lang_botones[0] //Ingresar ?></a>
+                            </div>
+                        </div>
+                        
+                    </form>
+                    
+                </div><!-- Fin row para el formulario -->
+                
+            </div>
+            
+            <div class="card-action">
+                      <a href="javascript:void(0)" class="activator" ><?php echo $lang_login[3] //Olvido sus datos? ?></a>
+            </div>
+            
+            <!-- Lo que se oculta al respaldo de la card-->
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4"><?php echo $lang_login[4] //Recuperar acceso? ?><i class="material-icons right">close</i></span>
+              <p><?php echo $lang_login[5] //Enviaremos un enlace a tu correo eléctronico ?></p>
+              
+              <div class="row">
+                  
+                      <input type="hidden" name="hidden_recuperarDatos" id="hidden_recuperarDatos" value="recuperarDatos" />
+                      
+                      <div class="row">
+                           <div class="input-field col s12 m12 l12">
+                              <input id="recuperar_identificacionTitular" name="recuperar_identificacionTitular" type="text" class="validate">
+                              <label id="label_recuperar_identificacionTitular" for="recuperar_identificacionTitular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:98%; text-align: left;"><?php echo $lang_login[0] //Identificación del titular ?></label>
+                           </div>
+                           <div class="input-field col s12 m12 l12">
+                              <input id="recuperar_identificacion" name="recuperar_identificacion" type="text" class="validate">
+                              <label id="lebel_recuperar_identificacion" for="recuperar_identificacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:98%; text-align: left;"><?php echo $lang_login[1] //Su identificación ?></label>
+                           </div>
+                           <div class="input-field col s12 m12 l12">
+                              <input id="recuperar_email" name="recuperar_email" type="text" class="validate">
+                              <label id="lebel_recuperar_email" for="recuperar_email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:98%; text-align: left;"><?php echo $lang_login[6] //Correo eléctronico ?></label>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col s12 m12 l12">
+                                <a class="waves-effect waves-light btn" onclick="validarRecuperarDatos()"><?php echo $lang_botones[1] //Enviar ?></a>
+                            </div>
+                       </div>
+                       
+                       <div class="row">
+                       		<div class="col s12">
+                       			<div id="preloaderRestablecer" style="display: none;">
+								  <div class="progress">
+								      <div class="indeterminate"></div>
+								  </div>
+                       			</div>
+                       			
+                       			<h6 id="errorEnviandoRecuperacion" class="center-align red-text text-darken-2" style="display: none;">Ocurrio un error. intentalo de nuevo o contacta al administrador</h6>
+                       			<h6 id="okEnviandoRecuperacion" class="center-align teal-text text-lighten-2" style="display: none;">Ok!.Se ha enviado un enlace a tu correo.</h6>
+                       			<h6 id="errorEmailNoCoincide" class="center-align red-text text-darken-2" style="display: none;">Error!. El E-mail no coincide con el registrado.</h6>
+                       		</div>
+                       </div><!-- Fin orw-->
+                  
+              </div><!-- Fin row-->
+              
+            </div><!-- Fin card reveal-->
+            
+          </div><!-- Fin card-->
+              
+        </div><!-- Fin col-->
+
+    </div><!-- Fin row-->
+      
+</div><!-- Fin conteiner -->

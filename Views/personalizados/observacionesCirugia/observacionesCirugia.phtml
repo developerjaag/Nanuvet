@@ -1,0 +1,310 @@
+<!-- Modal para texto observaciones cirugia -->
+
+<div id="modal_observacionesCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observacionesCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtObservacionesCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<div id="modal_editarObservacionesCirugia" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_editarObservacionesCirugia" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtEditarObservacionesCirugia()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+<!--Fin  Modal para observaciones de consulta -->
+
+<main>
+	
+	<div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">		
+		
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-hint="Muestra el menu de los personalizados" data-hintPosition="top-middle" data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_menu[11]//Personalizados?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			<i style="cursor: pointer;" data-position="left" data-delay="50" data-tooltip="<?php echo $lang_personalizados[43]//Activar ayudas?>" class="fa fa-life-ring tooltipped" aria-hidden="true" onclick="mostrarAyudas()"></i>
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>		
+              	
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27]//Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video"  height="600" width="600" controls>
+							    	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/personalizados/personalizados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/personalizados/personalizados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i><?php echo $lang_personalizados[28]// Cerrar video?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+					
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_personalizados[23]//Personalizados observaciones de cirugía?>
+						  			<a data-hint="<?php echo $lang_personalizados[54]//Abre el formulario para crear un nuevo personalizado observaciones de cirugia?>" data-hintPosition="top-middle" class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_personalizados[1]//Nuevo personalizado?>" onclick="mostrarFormNuevoPersonalizadoOCI()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  		</h4>						  		
+						  		<br />  
+						  		
+						  	
+						  	
+						  	 <div id="hidden_NuevoPersonalizadoOCI" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_NuevoPersonalizadoOCI" name="form_NuevoPersonalizadoOCI" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevoOCI" name="envioNuevoOCI"  value="envio"/>
+						                    
+						                    <div class="row">                         
+						                      
+						                      <div class="input-field col s12 m12 l12">						                            
+						                            <input id="tituloPersonalizadoOCI" name="tituloPersonalizadoOCI" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_tituloPersonalizadoOCI" for="tituloPersonalizadoOCI"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_personalizados[2]//Titulo personalizado?></label> 
+						                      </div> 
+						                      
+						                   </div><!-- fin row-->
+						                    	<div class="input-field col s12 m12 l12">	
+						                    		
+						                    		   <span class="prefix">
+									    					<i data-hint="<?php echo $lang_personalizados[46]//Abre el editor, para que el texto no sea tan plano?>" class="fa fa-pencil-square-o modal-trigger tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[3]//Abrir editor de texto?>" aria-hidden="true" href="#modal_observacionesCirugia" style="cursor: pointer;" ></i>
+									    					<i data-hint="<?php echo $lang_personalizados[47]//Se encarga de limpiar el campo de texto?>" class="fa fa-trash tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[4]//Borrar texto?>" aria-hidden="true" style="cursor: pointer;" onclick="limpiarTextareaNuevoObservacionesCirugia()"></i>
+									    				</span>
+									    				
+									    			<div id="tituloObservacionesCirugia" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_personalizados[5]//Texto?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="recuperarTextareaObservacionesCirugia()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    			<span id="contenidoTextoTexarea_observacionesCirugia" style="display: none;"></span>
+						                    		
+						                    		<div id="contenidoEditorObservacionesCirugia" style="display: none; margin-left: 5%; max-height: 300px; overflow-y: scroll;">
+									    					
+									    			</div>
+									    			
+									    			<textarea id="observacionesCirugia" name="observacionesCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												    <label id="label_observacionesCirugia" for="observacionesCirugia"><?php echo $lang_personalizados[5]//Texto?></label>
+						                    		
+						                    		
+						                    	</div>
+						                   <div>
+						                   	
+						                   </div><!-- fin row-->  
+						                     						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<span id="errorTexto" class="red-text" style="display: none;" ><?php echo $lang_personalizados[6]//Debes ingresar texto para el personalizado?></span>
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoPersonalizadoOCI()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoPersonalizadoOCI()"><?php echo $lang_botones[2]//Guardar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo personalizado-->
+						  		
+						  		
+						  		<div id="hidden_EditarPersonalizadoOCI" style="display: none ;">
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_personalizados[24]//Editar personalizado observaciones de cirugía?></h4>
+				                      	</div>
+				                      </div>
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_EditarPersonalizadoOCI" name="form_EditarPersonalizadoOCI" action="" method="post">
+						  					
+						                    <input type="hidden" id="idPersonalizadoOCI" name="idPersonalizadoOCI"  value=""/>
+						                    
+						                    <div class="row">                         
+						                      
+						                      <div class="input-field col s12 m12 l12">						                            
+						                            <input id="editarTituloPersonalizadoOCI" name="editarTituloPersonalizadoOCI" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_editarTituloPersonalizadoOCI" for="editarTituloPersonalizadoOCI"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_personalizados[2]//Titulo personalizado?></label> 
+						                      </div> 
+						                      
+						                   </div><!-- fin row-->
+						                    	<div class="input-field col s12 m12 l12">	
+						                    		
+						                    		   <span class="prefix">
+									    					<i data-hint="<?php echo $lang_personalizados[46] //Abre el editor, para que el texto no sea tan plano?>" class="fa fa-pencil-square-o modal-trigger tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[3]//Abrir editor de texto?>" aria-hidden="true" href="#modal_editarObservacionesCirugia" style="cursor: pointer;" ></i>
+									    					<i data-hint="<?php echo $lang_personalizados[47] //Se encarga de limpiar el campo de texto?>" class="fa fa-trash tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[4]//Borrar texto?>" aria-hidden="true" style="cursor: pointer;" onclick="limpiarTextareaEditarObservacionesCirugia()"></i>
+									    				</span>
+									    				
+									    			<div id="editarTituloObservacionesCirugia" style="display: none;">
+									    				
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_personalizados[5]//Texto?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="editarRecuperarTextareaObservacionesCirugia()"></i> </h5> </span>
+									    					</div>
+									    					
+									    			</div>
+									    				
+									    			<span id="editarContenidoTextoTexarea_observacionesCirugia" style="display: none;"></span>
+						                    		
+						                    		<div id="editarContenidoEditorObservacionesCirugia" style="display: none; margin-left: 5%; max-height: 300px; overflow-y: scroll;">
+									    					
+									    			</div>
+									    			
+									    			<textarea id="editarObservacionesCirugia" name="editarObservacionesCirugia" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												    <label id="label_editarObservacionesCirugia" for="editarObservacionesCirugia"><?php echo $lang_personalizados[5]//Texto?></label>
+						                    		
+						                    		
+						                    	</div>
+						                   <div>
+						                   	
+						                   </div><!-- fin row-->  
+						                     						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<span id="editarErrorTexto" class="red-text" style="display: none;" ><?php echo $lang_personalizados[6]//Debes ingresar texto para el personalizado?></span>
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionPersonalizadoOCI()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarEdicionPersonalizadoOCI()"><?php echo $lang_botones[4]//Editar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  			
+						  			
+						  		</div><!-- Fin div oculto para editar un personalizado-->
+						  		
+						  		
+						  		
+						  		
+						  	</li>            
+
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_personalizados[8]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizado" type="text" class="validate" onkeypress="buscarPersonalizadoObservacionesCirugiaListados()" >
+						<input type="hidden" id="idPersonalizadoBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaPersonalizado()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_personalizados[9]//Activar personalizado?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_personalizados[10]//Desactivar personalizado?></span>
+						
+							<div id="resultadoPersonalizadosAjax">
+								
+							</div><!-- Fin para el resultado de los personalizados ajax-->
+							
+							<div id="resultadoPersonalizados">
+								
+									
+									<ul class="collapsible" data-collapsible="accordion">
+										
+										<?php									
+											foreach ($listadoPersonalizados as $listadoPersonalizados1) {
+												
+												if($listadoPersonalizados1['estado'] == 'A'){																																																			
+													$btn = '<span id="spanOCI_'.$listadoPersonalizados1['idPersonalizadoObservacionCirugia'].'"> <a id="'.$listadoPersonalizados1['idPersonalizadoObservacionCirugia'].'" class="waves-effect waves-light btn secondary-content" onclick="desactivarPersonalizadoOCI(this.id)"   ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											
+													$btn = '<span id="spanOCI_'.$listadoPersonalizados1['idPersonalizadoObservacionCirugia'].'"> <a id="'.$listadoPersonalizados1['idPersonalizadoObservacionCirugia'].'" class="waves-effect red darken-1 btn secondary-content" onclick="activarPersonalizadoOCI(this.id)" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoPersonalizados1['idPersonalizadoObservacionCirugia']."'";
+										?>
+										
+											<li style="cursor: pointer;">
+												
+												<div class="collapsible-header"><?php echo $listadoPersonalizados1['titulo']?><?php echo $btn ?> </div>
+      											<div class="collapsible-body" style="max-height: 300px; overflow-y: scroll;">
+      												<div>
+      													<a class="waves-effect black btn tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_personalizados[15]//Editar personalizado?>" onclick="editarPersonalizadoOCI(<?php echo $parametros?>)"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
+      												</div>
+      												<?php echo $listadoPersonalizados1['texto']?>
+      											</div>
+      											
+												
+											</li>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+									</ul>	
+								
+							</div><!-- Fin div para los resultados de los personalizados-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+
+		
+			 </div>
+          </div>
+        </div>
+      </div>
+	
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+
+	
+</main>

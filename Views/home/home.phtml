@@ -1,0 +1,365 @@
+<!-- Modal para adicionar un mensaje para todos los usuarios--->
+<div id="modal_mensajeTodosUsuarios" class="modal modal-fixed-footer" style="margin-top: 3% !important;">
+    <div class="modal-content">
+      <h4 class="center-align" ><?php echo $lang_home[0]//Nuevo mensaje para todos los usuarios?></h4>
+      
+      <div class="row">
+      	
+      	<div class="input-field  col s12">
+          <input class="fecha validate" id="fechaVencimientoMensaje" name="fechaVencimientoMensaje" type="text" maxlength="10">
+          <label id="label_fechaVencimientoMensaje" for="fechaVencimientoMensaje" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_home[1]//Fecha hasta la que aparecerá el mensaje?></label>
+      	</div>
+      	
+      	<div class="input-field  col s12">
+      		 <textarea id="textoMensaje" class="materialize-textarea" length="300" maxlength="300" ></textarea>
+          <label id="label_textoMensaje" for="textoMensaje" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_home[2]//Mensaje?></label>
+      	</div>
+      	
+      	<div class="col s12 center-align">      		
+			<a class="waves-effect waves-light btn" onclick="guardarMensajeTodosUsuarios()"><?php echo $lang_botones[2]//Guardar?></a>
+      	</div>
+      	
+      </div><!-- Fin row-->
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat "><?php echo $lang_botones[3] //Cerrar?></a>
+    </div>
+  </div>
+
+<!-- Fin  Modal para adicionar un mensaje para todos los usuarios--->
+
+
+
+
+<main>
+	
+	<br />
+	
+<?php
+		if( sizeof($sucursalesDelUsuario) > 1 ){
+?>
+
+	
+			<div class="card">
+				<div class="card-content ">
+	
+					<div class="row">		
+						
+						 <form id="form_cambiarSucursal" name="form_cambiarSucursal" action="" method="post">
+						 		
+						 	<input type="hidden" name="cambiarSucursal" id="cambiarSucursal" value="enviaCambioSucursal" />
+						
+							 <div class="input-field col s12 m8 l8">
+							 		
+							    <select id="sucursalActual" name="sucursalActual">
+							      <option value="0" disabled selected><?php echo $lang_home[3]//Elige la sucursal en la cual estás trabajando?></option>
+							      <?php
+							      	$porDefectoActivo = 'No';
+									$swPorDefecto = 0;
+									$swMarcarOption = 0;
+									//para averiguar si existe una sucursal por defecto
+										foreach ($sucursalesDelUsuario as $sucursalesDelUsuario0) {
+											if($sucursalesDelUsuario0['porDefecto'] == 'Si'){
+												$swPorDefecto = 1;
+											}
+										}
+									
+							      		foreach ($sucursalesDelUsuario as $sucursalesDelUsuario1) {
+							      			
+											//sino existe sucursal por defecto y no se ha marcado la primera opcion como selected
+											if(($swPorDefecto == 0) and ($swMarcarOption == 0)){
+												
+												$_SESSION['sucursalActual_idSucursal'] 		= $sucursalesDelUsuario1['idSucursal'];
+												$_SESSION['sucursalActual_nombreSucursal']	= $sucursalesDelUsuario1['nombre'];
+												
+												?>
+														<option value="<?php echo $sucursalesDelUsuario1['idSucursal']?>" selected ><?php echo $sucursalesDelUsuario1['nombre']." (".$sucursalesDelUsuario1['identificativoNit'].")"?></option>
+												<?php
+													$swMarcarOption = 1;
+											}else{//si ya se marco una opcion como selected
+												
+													//si se realizo un cambio en la sucursal
+													if(isset($_SESSION['sucursalActual_cambioSucursal']) AND $_SESSION['sucursalActual_cambioSucursal'] == 'Si'){
+														
+														
+																//consultar si la sucursal por la cual se cambio es la que se tiene por defecto
+																															
+																$sucursalCambioPorDefecto = $objetoHome->sucursalCambioPorDefecto($_SESSION['usuario_idUsuario'],$_SESSION['sucursalActual_idSucursal']);
+														
+																if($sucursalCambioPorDefecto == 'Si'){
+																	$porDefectoActivo = 'Si';
+																}
+														
+														//se valida se la option a seguir es igual al id de sucursal por la cual se cambio
+														if($sucursalesDelUsuario1['idSucursal'] == $_SESSION['sucursalActual_idSucursal']){														
+																																	
+															?>
+																<option value="<?php echo $sucursalesDelUsuario1['idSucursal']?>"  selected ><?php echo $sucursalesDelUsuario1['nombre']." (".$sucursalesDelUsuario1['identificativoNit'].")"?></option>
+															<?php	
+														}else{
+															?>
+																<option value="<?php echo $sucursalesDelUsuario1['idSucursal']?>"  ><?php echo $sucursalesDelUsuario1['nombre']." (".$sucursalesDelUsuario1['identificativoNit'].")"?></option>
+															<?php	
+														}//fin else si no coincide al option con la sucursal por la cual se cambio
+														
+														
+													}else{//fin if si se ralizo cambio en la sucursal
+														?>
+																<option value="<?php echo $sucursalesDelUsuario1['idSucursal']?>"  <?php if($sucursalesDelUsuario1['porDefecto'] == 'Si'){ $porDefectoActivo = 'Si'; $_SESSION['sucursalActual_idSucursal']  = $sucursalesDelUsuario1['idSucursal'];  $_SESSION['sucursalActual_nombreSucursal'] = $sucursalesDelUsuario1['nombre']; ?>selected<?php } ?> ><?php echo $sucursalesDelUsuario1['nombre']." (".$sucursalesDelUsuario1['identificativoNit'].")"?></option>
+														<?php
+													}//fin else
+												
+												
+												
+												
+											}//fin else
+											
+										}//fin foreach
+							      ?>
+							      
+							    </select>
+							    
+							    <label><?php echo $lang_home[4] //Elegir sucursal actual?></label>
+							  </div>
+						  
+						
+						
+							 <div class="col s2 m2 l2 ">
+							 	    <p>
+								      <input type="checkbox" class="filled-in" id="checkDefecto" name="checkDefecto" <?php if($porDefectoActivo=='Si'){ ?> checked="checked" <?php }?> />
+								      <label for="checkDefecto"><?php echo $lang_home[5] //Por defecto?></label>
+								    </p>
+							 </div>
+						 
+						 </form>
+						
+						  <div class="input-field col s10 m2 l2 center-align">					  					
+								<a class="waves-effect waves-light btn" onclick="enviarCambioSucursal()" ><?php echo $lang_home[6]//Cambiar sucursal?></a>					  									  					
+						  </div>
+					<?php
+						if(($swPorDefecto == 0) and (!isset($_SESSION['sucursalActual_cambioSucursal']) or $_SESSION['sucursalActual_cambioSucursal'] != 'Si' )){							
+					?>	
+						<div class="col s12 m12 l12 center-align">			
+								<h6 class="red-text"><i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i> <?php echo $lang_home[7]//Se ha elegido?> <strong>"<?php echo $_SESSION['sucursalActual_nombreSucursal']?>"</strong> <?php echo $lang_home[8] //como la sucursal actual, puedes cambiarla y marcar una por defecto.?></h6>							
+						</div>
+					<?php						
+						}
+					?>
+						
+					</div><!-- Fin row-->
+					
+					
+				</div>
+			</div>					
+
+<?php			
+		}else{
+			$_SESSION['sucursalActual_idSucursal'] 		= $sucursalesDelUsuario[0]['idSucursal'];
+			$_SESSION['sucursalActual_nombreSucursal']	= $sucursalesDelUsuario[0]['nombre'];
+		}
+
+?>
+
+	
+    
+		<div class="row">
+		   
+
+					              <!-- Card para noticias se actualiza cuando se necesite comunicar a los usuarios-->
+					             <!-- <div class="row">
+					              	<div class="col s12 m12 l12">
+					              		
+					              		<div class="card hoverable">
+								            <div class="card-content ">
+								              <span class="card-title">
+								              	<div id="chipNoticias" class="chip">
+												    Noticias <span class="orange-text">4</span>
+												 </div>
+								              </span>
+								              
+								              <div class="row">
+								              	<div class="col s12 m12 l12">
+								              		Noticias
+								              	</div>
+								              </div>								              
+								              
+								            </div>
+								          </div>				              		
+
+						              </div>
+						             </div>  <!-- Fin row->
+					             
+					              <!-- Card para citas-->
+					              <div class="row">
+					              	<div class="col s12 m12 l12">
+					              		
+					              		<div class="card hoverable">
+								            <div class="card-content ">
+								              <span class="card-title">
+								              	<div id="chipCitas" class="chip">
+												    <?php echo $lang_home[9]//Citas?> <span class="orange-text"><?php echo sizeof($citasHoy) ?></span>
+												 </div>
+								              </span>
+								              
+								              <div class="row">
+								              	<div class="col s12 m12 l12">
+								              		
+								              		<table class="highlight bordered">
+								              			
+								              			<thead>
+								              				<tr>
+								              					<th><?php echo $lang_home[10]//Hora?></th>
+								              					<th><?php echo $lang_home[11] //Duración?></th>
+								              					<th><?php echo $lang_home[12] //Paciente?></th>
+								              					<th><?php echo $lang_home[13]//Especie?></th>
+								              					<th><?php echo $lang_home[14] //Raza?></th>
+								              					<th><?php echo $lang_home[15] //Propietario?></th>
+								              					<th><?php echo $lang_home[16] //Tipo cita?></th>
+								              				</tr>
+								              			</thead>
+								              			
+								              			<tbody>
+								              				
+								              				<?php  foreach ($citasHoy as $citasHoy1) { ?>
+																  
+																  <td><?php echo $citasHoy1['horaInicio']?></td>
+																  <td><?php echo $citasHoy1['duracionHoras'].":".$citasHoy1['duracionMinutos']?></td>
+																  <td><?php echo $citasHoy1['nombrePacientes']." (".$citasHoy1['sexo'].")"?></td>
+																  <td><?php echo $citasHoy1['nombreEspecie']?></td>
+																  <td><?php echo $citasHoy1['nombreRaza']?></td>
+																  <td><?php echo $citasHoy1['nombrePropietario']." ".$citasHoy1['apellidoPropietario']?></td>
+																  <td><?php echo $citasHoy1['nombreTipoCita']?></td>
+																 
+																  
+															  <?php } ?>
+								              				
+								              			</tbody>
+								              			
+								              			
+								              		</table>
+								              		
+								              		
+								              	</div>
+								              </div>								              
+								              
+								            </div>
+								          </div>				              		
+
+						              </div><!-- Fin col-->
+						             </div><!-- Fin row-> 
+					              
+					              <!-- Card para Recordatorios-->
+					              <div class="row">
+					              	<div class="col s12 m12 l12">
+					              		
+					              		<div class="card hoverable">
+								            <div class="card-content ">
+								              <span class="card-title">
+								              	<div id="chipRecordatorios" class="chip">
+												    <?php echo $lang_home[17] //Notas para todos los usuarios?>
+												    <a class="btn-floating waves-effect waves-light modal-trigger" href="#modal_mensajeTodosUsuarios"><i class="fa fa-plus" aria-hidden="true"></i></a>
+												 </div>
+								              </span>
+								              
+								              <div class="row">
+								              	<div class="col s12 m12 l12">
+								              		
+								              		<table>
+								              			<thead>
+								              				<tr>
+								              					<th><?php echo $lang_home[18] //Fecha/Hora creación?></th>
+								              					<th><?php echo $lang_home[19] //Mensaje?></th>
+								              					<th><?php echo $lang_home[20] //Se muestra hasta?></th>
+								              					<th><?php echo $lang_home[21]//Usuario?></th>
+								              					<th></th>
+								              				</tr>
+								              			</thead>
+								              			
+								              			<tbody>
+								              				
+								              			<?php foreach ($mensajesUsuarios as $mensajesUsuarios1) { ?>
+																<tr id="tr_mensaje_<?php echo $mensajesUsuarios1['idMensajeUsuarios'] ?>">
+									              					<td><?php echo $mensajesUsuarios1['fechaCreacion']." ".$mensajesUsuarios1['horaCreacion']?></td>
+									              					<td><?php echo $mensajesUsuarios1['texto']?></td>
+									              					<td><?php echo $mensajesUsuarios1['fechaVencimiento']?></td>
+									              					<td><?php echo $mensajesUsuarios1['nombre']." ".$mensajesUsuarios1['apellido']?></td>
+									              					 
+																  <?php 
+																  
+								              						if($mensajesUsuarios1['idUsuario'] == $_SESSION['usuario_idUsuario']){
+								              					?>
+								              						<td>
+								              							<i style="cursor: pointer;" class="fa fa-trash fa-2x" aria-hidden="true" onclick="quitarmensaje('<?php echo $mensajesUsuarios1['idMensajeUsuarios'] ?>')"></i>
+								              						</td>
+								              					<?php		
+								              						}else{
+								              							?>
+								              							<td></td>
+								              							<?php
+								              						}
+								              					?>
+									              				</tr>  
+														<?php  } ?>
+								              				
+								              			</tbody>
+								              			
+								              		</table>
+								              		
+								              	</div>
+								              </div>								              
+								              
+								            </div>
+								          </div>				              		
+
+						            </div><!-- Fin col-->
+						        </div><!-- Fin row-->
+
+		</div><!-- fin row -->
+        
+    
+  
+    
+</main>
+
+<?php
+	//saber si se muestra el tutorial interactivo del home
+	if(!in_array("1", $_SESSION['tutoriales_usuario'])){
+		
+		$btn1	= $lang_intro[0];//Siguiente
+		$btn2	= $lang_intro[1];//Atrás
+		$btn3	= $lang_intro[2];//Hecho
+		$btn4	= $lang_intro[3];//Omitir
+		
+		$t1 = $lang_intro[4];//Hola!, bienvenido a NanuVet. te indicaremos algunas cosas inicialmente... 
+		$t2 = $lang_intro[5];//En todos los módulos puedes encontrar un videoTutorial para conocer sus funcionalidades
+		$t3 = $lang_intro[6];//"Desde esta sección, puedes enviar comunicados a los demás usuarios";
+		$t4 = $lang_intro[7];//Podrás ver las citas que tienes para hoy				
+		$t7 = $lang_intro[10];//Aquí puedes editar tu información personal y tus preferencias. Támbien salir de una forma segura.
+		$t8 = $lang_intro[11];//Configura la información mas relevante de la cuenta, como permisos y gestión de usuarios
+		$t9 = $lang_intro[12];//Consulta y gestiona las listas maestras de la cuenta
+		$t10 = $lang_intro[13];//Observa la información al detalle
+		$t11 = $lang_intro[14];//Factura tus productos y/o servicios
+		$t12 = $lang_intro[15];//Gestiona tus productos y tus proveedores
+		$t13 = $lang_intro[16];//Administra las agenda de los usuarios.<br/> Sus horarios y citas
+		$t15 = $lang_intro[18];//Crea un nuevo propietario o paciente
+		$t16 = $lang_intro[19];//Busca rápidamente un propietario
+		
+		$parametros = " '".$btn1."' , '".$btn2."' , '".$btn3."' , '".$btn4."' , '".$t1."' , '".$t2."' , '".$t3."' , '".$t4."' , '".$t7."' , '".$t8."' , '".$t9."' , '".$t10."' , '".$t11."' , '".$t12."' , '".$t13."' , '".$t15."' , '".$t16."' ";
+		
+		?>
+		<script>
+		
+			$(document).ready(function () {
+			
+				startIntroHome(<?php echo $parametros ?>);
+			});
+		
+			//javascript:introJs().setOption('showProgress', true).start();
+		</script>
+		<?php
+	}
+
+?>
+

@@ -1,0 +1,943 @@
+<main>
+	<div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			<?php echo $lang_menu[15]//Permisos?>
+              		</div>
+              		<div class="col s6 right-align">          
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_general[19]//Ver tutorial?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+              		</div>
+              	</div>
+              	                     	
+              </span>
+              
+              	<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5>Video-tutorial</h5>
+							 <video id="videoTutorial_permisos" class="responsive-video" height="600" width="600"  controls>
+							    
+							  
+							  	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/permisos/permisos.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/permisos/permisos.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							  
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_general[18]//Cerrar video?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+					              
+              <div class="row">
+              	  <div class="input-field col s12 m12 l12">
+              	  	<?php
+              	  		 if(!in_array("7", $_SESSION['permisos_usuario'] )){
+              	  		 	$permiso = 0;
+						 }else{
+						 	$permiso = 1;
+						 } 
+						 
+					?>
+				    <select id="SelectUsuarios" name="SelectUsuarios" onchange="consultarPermisosUsuario(this.id, '<?php echo $permiso?>')">
+				      <option value="" disabled selected><?php echo $lang_permisos[0] //Elegir Usuario ?></option>
+				      
+				      <?php
+				      		foreach ($informacionUsuarios as $informacionUsuarios1 ) {
+								  
+								  if($informacionUsuarios1['estado'] == 'A'){
+								  	$estado	= $lang_general[9]/*Activo*/;
+								  }else{
+								  	$estado	= $lang_general[10]/*Inactivo*/;
+								  }
+							  
+					  ?>
+				      
+				      			<option value="<?php echo $informacionUsuarios1['idUsuario']?>"><?php echo $informacionUsuarios1['nombre']." ".$informacionUsuarios1['apellido']."(".$estado.")" ?></option>
+				      
+				      <?php
+				      		}//fin foreach
+				      ?>
+				      
+				    </select>
+				    <label><?php echo $lang_permisos[0] //Elegir Usuario ?></label>
+				  </div>
+              </div><!-- Fin row-->
+              
+              
+              <div class="row">
+              	
+			    <div class="col s12">
+			      <ul class="tabs">
+			        <li class="tab col s3"><a class="active black-text" href="#tabOtros"><?php echo $lang_permisos[1] //Otros?></a></li>
+			        <li class="tab col s3"><a class="black-text" href="#tabhistoriaClinica"><?php echo $lang_permisos[2] //Historia clinica?></a></li>
+			        <li class="tab col s3"><a class="black-text" href="#tabListados"><?php echo $lang_permisos[3] //Listados?></a></li>
+			        <li class="tab col s3"><a class="black-text" href="#tabinventarioFacturacion"><?php echo $lang_permisos[4] //Inventario y Facturación?></a></li>
+			        
+			      </ul>
+			    </div>
+			    
+			    <div id="tabOtros" class="col s12">
+			    		
+			    	<br />
+			    		
+		              <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[5] //Gestionar personalizados (solo los del usuario?>)" >
+						      <input type="checkbox" id="cx_1" disabled="disabled" <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_1"><?php echo $lang_permisos[6] //Personalizados?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[7] //Acceder a la información de la cuenta?>" >
+						      <input type="checkbox" id="cx_2" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_2"><?php echo $lang_permisos[8] //Cuenta?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[9] //Solo ver la información de las licencias?>" >
+						      <input type="checkbox" id="cx_3" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_3"><?php echo $lang_permisos[10] //Licencias ver?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[11] //Comprar nuevas licencias para la cuenta?>" >
+						      <input type="checkbox" id="cx_4" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_4"><?php echo $lang_permisos[12] //Licencias adicionar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[13] //Asignar o modificar las licencias de los usuarios?>" >
+						      <input type="checkbox" id="cx_5" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_5"><?php echo $lang_permisos[14] //Licencias usuarios?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[15] //Consultar los reportes?>" >
+						      <input type="checkbox" id="cx_35" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_35"><?php echo $lang_permisos[16] //Reportes?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+			    	
+
+
+
+		              <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[17] //Consultar qué permisos tienen los usuarios?>" >
+						      <input type="checkbox" id="cx_6" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_6"><?php echo $lang_permisos[18] //Permisos ver?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[19] //Modificar los permisos de los usuarios?>" >
+						      <input type="checkbox" id="cx_7" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_7"><?php echo $lang_permisos[20] //Permisos editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[21] //Observar la información de las sucursales?>" >
+						      <input type="checkbox" id="cx_8" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_8"><?php echo $lang_permisos[22] //Sucursales ver?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[23] //Generar nuevas sucursales?>" >
+						      <input type="checkbox" id="cx_9" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_9"><?php echo $lang_permisos[24] //Sucursales adicionar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[25] //Vincular usuarios con las sucursales?>" >
+						      <input type="checkbox" id="cx_10" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_10"><?php echo $lang_permisos[26] //Sucursales usuarios?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<!--<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[27] //Ver los logs del sistema?>" >
+						      <input type="checkbox" id="cx_108" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_108"><?php echo $lang_permisos[28] //Logs?></label>
+						    </p>-->
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+
+
+
+					 <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[29] //Crear usuarios?>" >
+						      <input type="checkbox" id="cx_11" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_11"><?php echo $lang_permisos[30] //Usuarios crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[31] //Consultar la información de los usuarios?>" >
+						      <input type="checkbox" id="cx_12" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_12"><?php echo $lang_permisos[32] //usuarios ver?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[33] //Desactivar usuarios para impedir el acceso al sistema?>" >
+						      <input type="checkbox" id="cx_13" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_13"><?php echo $lang_permisos[34] //Usuarios desactivar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<!--<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[35] //Generar nuevos registros para la peluquería?>" >
+						      <input type="checkbox" id="cx_55" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_55"><?php echo $lang_permisos[36] //Peluquería?></label>
+						    </p>-->
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<!--<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[37] //Generar ítems para un registro de la peluquería?>" >
+						      <input type="checkbox" id="cx_56" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_56"><?php echo $lang_permisos[38] //Peluquería crear ítem?></label>
+						    </p>-->
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<!--<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[39] //Modificar ítems de un registro de la peluquería?>" >
+						      <input type="checkbox" id="cx_57" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_57"><?php echo $lang_permisos[202] //Peluquería modificar ítem?></label>
+						    </p>-->
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+
+
+
+
+					 <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[40] //Permitir ver la agenda de otros usuarios?>" >
+						      <input type="checkbox" id="cx_96" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_96"><?php echo $lang_permisos[41] //Agenda otros usuarios?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[42] //Ingresar y modificar los horarios (del usuario)?>" >
+						      <input type="checkbox" id="cx_97" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_97"><?php echo $lang_permisos[43] //Agenda horarios?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[44] //Ingresar y modificar los horarios de otros usuarios?>" >
+						      <input type="checkbox" id="cx_98" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_98"><?php echo $lang_permisos[45] //Agenda horarios usuarios?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <!--<div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[46] //Consultar los tipos de cita existentes?>" >
+						      <input type="checkbox" id="cx_99" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_99"><?php echo $lang_permisos[47] //Tipos cita ver?></label>
+						    </p>
+		              	 </div>-->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[48] //Generar nuevos tipos de cita?>" >
+						      <input type="checkbox" id="cx_100" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_100"><?php echo $lang_permisos[49] //Tipos cita crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[50] //Modificar la información de los tipos de cita?>" >
+						      <input type="checkbox" id="cx_101" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_101"><?php echo $lang_permisos[51] //Tipos cita editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+
+
+					<div class="row">
+	 					<!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[52] //Consultar la información de los propietarios?>" >
+						      <input type="checkbox" id="cx_58" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_58"><?php echo $lang_permisos[53] //Propietario ver?></label>
+						    </p>
+		              	 </div>
+		              	-->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[54] //Generar un nuevo propietario?>" >
+						      <input type="checkbox" id="cx_59" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_59"><?php echo $lang_permisos[55] //Propietario Adicionar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[56] //Modificar la información de un propietario?>" >
+						      <input type="checkbox" id="cx_60" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_60"><?php echo $lang_permisos[57] //Propietario editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[58] //Registrar nuevos pacientes?>" >
+						      <input type="checkbox" id="cx_61" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_61"><?php echo $lang_permisos[59] //Paciente crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[60] //Consultar la información de los pacientes?>" >
+						      <input type="checkbox" id="cx_62" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_62"><?php echo $lang_permisos[61] //Paciente ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[62] //Modificar la información de los pacientes?>" >
+						      <input type="checkbox" id="cx_63" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_63"><?php echo $lang_permisos[63] //Paciente editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+			    	
+			    	
+			    </div><!-- Fin contenido Tab otros-->
+			    
+			    <div id="tabhistoriaClinica" class="col s12">
+			    	
+			    	<br />
+			    	
+			    	 <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[64] //Registrar nuevas consultas para los pacientes?>" >
+						      <input type="checkbox" id="cx_86" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_86"><?php echo $lang_permisos[65] //Consultas crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[66] //Acceder a la información de las consultas?>" >
+						      <input type="checkbox" id="cx_87" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_87"><?php echo $lang_permisos[67] //Consultas ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[72] //Crear nuevos registros para las cirugias?>" >
+						      <input type="checkbox" id="cx_91" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_91"><?php echo $lang_permisos[73] //Cirugías crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[68] //Generar notas aclaratorias para las consultas y cirugias?>" >
+						      <input type="checkbox" id="cx_88" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_88"><?php echo $lang_permisos[69] //Notas aclaratorias crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[70] //Observar las notas aclaratorias de las consultas y cirugias?>" >
+						      <input type="checkbox" id="cx_89" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_89"><?php echo $lang_permisos[71] //Notas aclaratorias ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[74] //Solo consultar la información de las cirugías?>" >
+						      <input type="checkbox" id="cx_92" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_92"><?php echo $lang_permisos[75] //Cirugías ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              </div><!-- Fin row-->
+		              
+		              
+		              
+		              <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[76] //Adicionar nuevas fórmulas para un paciente?>" >
+						      <input type="checkbox" id="cx_64" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_64"><?php echo $lang_permisos[77] //Fórmulas crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[78] //Solo consultar la información de las formulas de los pacientes?>" >
+						      <input type="checkbox" id="cx_65" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_65"><?php echo $lang_permisos[79] //Fórmulas ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[80] //Generar registros de examenes para los pacientes?>" >
+						      <input type="checkbox" id="cx_69" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_69"><?php echo $lang_permisos[81] //Examenes crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[82] //Solo consultar la información de los examenes realizados a los pacientes?>" >
+						      <input type="checkbox" id="cx_70" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_70"><?php echo $lang_permisos[83] //Examenes ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[84] //Ingresar resultados para los items de los examenes?>" >
+						      <input type="checkbox" id="cx_75" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_75"><?php echo $lang_permisos[85] //Resultado examen crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[86] //Consultar la información de los resultados de examenes?>" >
+						      <input type="checkbox" id="cx_74" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_74"><?php echo $lang_permisos[87] //Resultado examen ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              </div><!-- Fin row-->
+		              
+		              
+
+		              <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[88] //Registrar la aplicación de vacunas a los pacientes?>" >
+						      <input type="checkbox" id="cx_79" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_79"><?php echo $lang_permisos[89] //Vacunación crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[90] //Consultar la información de vacunas aplicadas a los pacientes?>" >
+						      <input type="checkbox" id="cx_80" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_80"><?php echo $lang_permisos[91] //Vacunación ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[92] //Registrar la aplicación de desparasitantes a los pacientes?>" >
+						      <input type="checkbox" id="cx_85" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_85"><?php echo $lang_permisos[93] //Desparasitación crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[94] //Solo consultar la información de los desparasitantes aplicados a los pacientes?>" >
+						      <input type="checkbox" id="cx_84" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_84"><?php echo $lang_permisos[95] //Desparasitación ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[96] //Registrar un paciente como hospitalizado?>" >
+						      <input type="checkbox" id="cx_93" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_93"><?php echo $lang_permisos[97] //Hospitalizar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[98] //Dar de alta a un paciente hospitalizado?>" >
+						      <input type="checkbox" id="cx_94" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_94"><?php echo $lang_permisos[99] //Hospitalización alta?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+		              
+		              
+		              
+			    	
+			    </div><!-- Fin contenido Tab otros-->
+			    
+			    <div id="tabListados" class="col s12">
+			    	
+			    	<br />
+			    	
+			    	<div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[100] //Generar nuevos registros de ciudades?>" >
+						      <input type="checkbox" id="cx_18" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_18"><?php echo $lang_permisos[101] //Ciudades crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[102] //Consultar la información de las ciudades?>" >
+						      <input type="checkbox" id="cx_17" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_17"><?php echo $lang_permisos[103] //Ciudades ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[104] //Editar la información de las ciudades?>" >
+						      <input type="checkbox" id="cx_19" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_19"><?php echo $lang_permisos[105] //Ciudades editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[106] //Generar nuevos registros de barrios para las ciudades?>" >
+						      <input type="checkbox" id="cx_15" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_15"><?php echo $lang_permisos[107] //Barrios crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[108] //Consultar la información de los barrios creados?>" >
+						      <input type="checkbox" id="cx_14" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_14"><?php echo $lang_permisos[109] //Barrios ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[110] //Editar la información de los barrios?>" >
+						      <input type="checkbox" id="cx_16" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_16"><?php echo $lang_permisos[111] //Barrios editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 
+		              </div><!-- Fin row-->
+			    	
+			    	
+			    	 <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[112] //Crear nuevos diagnósticos?>" >
+						      <input type="checkbox" id="cx_21" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_21"><?php echo $lang_permisos[113] //Diagnósticos crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[114] //Consultar los diagnósticos creados?>" >
+						      <input type="checkbox" id="cx_20" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_20"><?php echo $lang_permisos[115] //Diagnósticos ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[116] //Editar la información de los diagnósticos?>" >
+						      <input type="checkbox" id="cx_22" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_22"><?php echo $lang_permisos[117] //Diagnósticos editar?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[118] //Generar nuevos registros para las especialidades de los usuarios?>" >
+						      <input type="checkbox" id="cx_25" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_25"><?php echo $lang_permisos[119] //Especialidades crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[120] //Observar la información de las especialidades?>" >
+						      <input type="checkbox" id="cx_23" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_23"><?php echo $lang_permisos[121] //Especialidades ver?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[122] //Editar la información de las especialidades?>" >
+						      <input type="checkbox" id="cx_24" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_24"><?php echo $lang_permisos[123] //Especialidades editar?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              </div><!-- Fin row-->
+			    	
+
+ 					  <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[124] //Crear nuevos registros de especies?>" >
+						      <input type="checkbox" id="cx_30" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_30"><?php echo $lang_permisos[125] //Especies crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[126] //Observar las especies creadas?>" >
+						      <input type="checkbox" id="cx_29" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_29"><?php echo $lang_permisos[127] //Especies ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[128] //Editar la información de las especies?>" >
+						      <input type="checkbox" id="cx_31" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_31"><?php echo $lang_permisos[129] //Especies editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[130] //Crear nuevos registros de razas?>" >
+						      <input type="checkbox" id="cx_33" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_33"><?php echo $lang_permisos[131] //Razas crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[132] //Consultar la información de las razas registradas?>" >
+						      <input type="checkbox" id="cx_32" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_32"><?php echo $lang_permisos[133] //Razas ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[134] //Editar la información de las razas?>" >
+						      <input type="checkbox" id="cx_34" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_34"><?php echo $lang_permisos[135] //Razas editar?></label>
+						    </p>
+		              	 </div>		              	 
+		              	 
+		              </div><!-- Fin row-->
+
+			    	
+			    	
+			    	<div class="row">
+	 					<!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[136] //Crear nuevos espacios para la guardería?>" >
+						      <input type="checkbox" id="cx_49" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_49"><?php echo $lang_permisos[137] //Espacios guardería crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[138] //Modificar la información de los espacios para la guardería?>" >
+						      <input type="checkbox" id="cx_50" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_50"><?php echo $lang_permisos[139] //Espacios guardería editar?></label>
+						    </p>
+		              	 </div>
+		              	-->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[140] //Crear una tarea para una mascota que se encuentra en la guardería?>" >
+						      <input type="checkbox" id="cx_106" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_106"><?php echo $lang_permisos[141] //Espacios hospitalizar crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[142] //Observar la información de los espacios de hospitalización?>" >
+						      <input type="checkbox" id="cx_105" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_105"><?php echo $lang_permisos[143] //Espacios hospitalizar ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[144] //Editar la información de los espacios para hospitalización?>" >
+						      <input type="checkbox" id="cx_107" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_107"><?php echo $lang_permisos[145] //Espacios hospitalizar editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[146] //Registrar nuevos medicamentos en la aplicación?>" >
+						      <input type="checkbox" id="cx_67" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_67"><?php echo $lang_permisos[147] //Medicamentos crear?></label>
+						    </p>
+		              	 </div>		   
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[150] //Modificar la información de los medicamentos?>" >
+						      <input type="checkbox" id="cx_68" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_68"><?php echo $lang_permisos[151] //Medicamentos editar?></label>
+						    </p>
+		              	 </div>           	 
+		              	 
+		              </div><!-- Fin row-->	
+
+
+
+
+			    	 <div class="row">
+	 					<!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[148] //Consultar el listado de medicamentos?>" >
+						      <input type="checkbox" id="cx_66" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_66"><?php echo $lang_permisos[149] //Medicamentos ver?></label>
+						    </p>
+		              	 </div>
+		              	-->
+		              	 
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[152] //Crear items para ser utilizados en los examenes?>" >
+						      <input type="checkbox" id="cx_71" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_71"><?php echo $lang_permisos[153] //Ítems exámenes crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[154] //Consultar los ítems para los exámenes?>" >
+						      <input type="checkbox" id="cx_72" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_72"><?php echo $lang_permisos[155] //Ítems exámenes ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[156] //Editar la información de los ítems para los exámenes?>" >
+						      <input type="checkbox" id="cx_73" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_73"><?php echo $lang_permisos[157] //Ítems exámenes editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[158] //Crear vacunas para ser utilizadas en el sistema?>" >
+						      <input type="checkbox" id="cx_77" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_77"><?php echo $lang_permisos[159] //Vacunas crear?></label>
+						    </p>
+		              	 </div>	
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[162] //Modificar la información de las vacunas creadas?>" >
+						      <input type="checkbox" id="cx_78" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_78"><?php echo $lang_permisos[163] //Vacunas editar?></label>
+						    </p>
+		              	 </div>	              	 
+		              	 
+		              </div><!-- Fin row-->	
+		              
+		              
+		              <div class="row">
+	 					<!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[160] //Consultar las vacunas creadas?>" >
+						      <input type="checkbox" id="cx_76" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_76"><?php echo $lang_permisos[161] //Vacunas ver?></label>
+						    </p>
+		              	 </div>
+		              	-->
+		              	 
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[164] //Generar resgistros para los desparasitantes?>" >
+						      <input type="checkbox" id="cx_82" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_82"><?php echo $lang_permisos[165] //Desparasitantes crear?></label>
+						    </p>
+		              	 </div>
+		              	 <!--
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[166] //Ver la información de los desparasitantes creados?>" >
+						      <input type="checkbox" id="cx_81" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_81"><?php echo $lang_permisos[167] //Desparasitantes ver?></label>
+						    </p>
+		              	 </div>
+		              	 -->
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[168] //Editar la información de los desparasitantes?>" >
+						      <input type="checkbox" id="cx_83" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_83"><?php echo $lang_permisos[169] //Desparasitantes editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	<!-- <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[170] //Gestionar los ítems del examen físico?>" >
+						      <input type="checkbox" id="cx_90" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_90"><?php echo $lang_permisos[171] //Ítems examen físico?></label>
+						    </p>
+		              	 </div>-->		              	 
+		              	 
+		              </div><!-- Fin row-->	
+			    	
+			    	
+			    </div><!-- Fin contenido Tab listados-->
+			    
+			    <div id="tabinventarioFacturacion" class="col s12">
+			    	
+			    	 <br />	
+			    		
+			    	  <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[172] //Generar facturas de productos y servicios?>" >
+						      <input type="checkbox" id="cx_36" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_36"><?php echo $lang_permisos[173] //Facturar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[174] //Registrar nuevos facturadores?>" >
+						      <input type="checkbox" id="cx_39" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_39"><?php echo $lang_permisos[175] //Facturadores crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[176] //Modificar la información de los facturadores?>" >
+						      <input type="checkbox" id="cx_38" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_38"><?php echo $lang_permisos[177] //Facturadores editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[178] //Crear resoluciones para la facturación?>" >
+						      <input type="checkbox" id="cx_42" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_42"><?php echo $lang_permisos[179] //Resoluciones crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	<!-- <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[180] //Consultar la información de las resoluciones?>" >
+						      <input type="checkbox" id="cx_40" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_40"><?php echo $lang_permisos[181] //Resoluciones ver?></label>
+						    </p>
+		              	</div>-->
+		              	 
+		              	<!-- <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[182] //Editar los datos de una resolución?>" >
+						      <input type="checkbox" id="cx_41" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_41"><?php echo $lang_permisos[183] //Resoluciones editar?></label>
+						    </p>
+		              	 </div>	-->	              	 
+		              	 
+		              </div><!-- Fin row-->	
+		              
+		              
+		              <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[184] //Registrar nuevos productos?>" >
+						      <input type="checkbox" id="cx_44" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_44"><?php echo $lang_permisos[185] //Productos crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	<!-- <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[186] //Solo consultar la información de los productos?>" >
+						      <input type="checkbox" id="cx_43" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_43"><?php echo $lang_permisos[187] //Productos ver?></label>
+						    </p>
+		              	</div>-->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[188] //Modificar la información de los productos?>" >
+						      <input type="checkbox" id="cx_45" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_45"><?php echo $lang_permisos[189] //Productos editar?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[190] //?>Registrar un proveedor en el sistema" >
+						      <input type="checkbox" id="cx_48" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_48"><?php echo $lang_permisos[191] //Proveedores crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <!--<div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[192] //Observar la inforamción de los proveedores?>" >
+						      <input type="checkbox" id="cx_46" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_46"><?php echo $lang_permisos[193] //Proveedores ver?></label>
+						    </p>
+		              	 </div>-->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[194] //Realizar cambios en la información de los proveedores?>" >
+						      <input type="checkbox" id="cx_47" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_47"><?php echo $lang_permisos[195] //Proveedores editar?></label>
+						    </p>
+		              	 </div>		              	 
+		              	 
+		              </div><!-- Fin row-->	
+		              
+		              
+		               <div class="row">
+	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[196] //Registrar categorías para los productos?>" >
+						      <input type="checkbox" id="cx_104" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_104"><?php echo $lang_permisos[197] //Categorías crear?></label>
+						    </p>
+		              	 </div>
+		              	 
+		              	 <!--<div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[198] //Solo consultar la información de las categorías?>" >
+						      <input type="checkbox" id="cx_102" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_102"><?php echo $lang_permisos[199] //Categorías ver?></label>
+						    </p>
+		              	 </div>-->
+		              	 
+		              	 <div class="col s12 m2 l2">
+		              	 	<p class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_permisos[200] //Modificar la información de las categorías?>" >
+						      <input type="checkbox" id="cx_103" disabled="disabled"  <?php if(in_array("7", $_SESSION['permisos_usuario'] )){ ?> onclick="cambiarPermiso(this.id)" <?php } ?> />
+						      <label for="cx_103"><?php echo $lang_permisos[201] //Categorías editar?></label>
+						    </p>
+		              	 </div>	              	 
+		              	 
+		              </div><!-- Fin row-->	
+			    
+			    </div><!-- Fin contenido Tab tabinventarioFacturacion-->
+			    
+			  </div>
+              
+              
+
+              
+              
+              
+            </div><!-- Fin card-content-->
+          </div><!-- Fin card-->
+        </div><!-- Fin col-->
+ 	</div><!-- Fin row-->
+</main>

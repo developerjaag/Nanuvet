@@ -1,0 +1,845 @@
+<!-- Modal para decidir la forma de impresion -->
+
+<div id="modal_impresionHC" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_historiaClinica[10]//Imprimir historia clínica?></h4>
+      <br />
+      <div class="row">
+      	<div class="col s12 center-align">      		
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCFechas/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[11]//Por fechas?></a>
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCElementos/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[12]//Agrupando elementos?></a>
+      	</div>
+      </div>
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-red btn-flat"><?php echo $lang_botones[5]//Cancelar?></a>
+    </div>
+  </div>
+
+
+<!-- Fin  Modal para decidir la forma de impresion -->
+
+<!-- Modal para texto  el motivo de hospitalizacion -->
+
+<div id="modal_motivoHospitalizacion" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_motivoHospitalizacion" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="hospitalizacion_ObtenerTxtMotivoHospitalizacion()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el motivo de Hospitalizacion -->
+
+<!-- Modal para personalizado de motivo de Hospitalizacion-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoMotivoHospitalizacion" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_hospitalizaciones[0]//Personalizados motivo de hospitalización?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoMH" type="text" class="validate" onkeypress="hospitalizacion_buscarPersonalizadoMotivoHospitalizacion()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizadoMH" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[1]//Motivo hospitalización?></label>
+            	<input type="hidden" id="idPersonalizadoMotivoHospitalizacionBuscado" name="idPersonalizadoMotivoHospitalizacionBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoMotivoHospitalizacion">
+
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoMotivoHospitalizacion()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizados
+?>
+<!-- Modal para personalizado de motivo de Hospitalizacion-->
+
+<!-- Modal para texto observaciones de Hospitalizacion -->
+
+<div id="modal_observacionesHospitalizacion" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observacionesHospitalizacion" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="hospitalizacion_ObtenerTxtObservacionesHospitalizacion()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el observaciones de Hospitalizacion -->
+
+<!-- Modal para personalizado de observaciones de Hospitalizacion-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoObservacionesHospitalizacion" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_hospitalizaciones[2]//Personalizados observaciones de hospitalización?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoOH" type="text" class="validate" onkeypress="hospitalizacion_buscarPersonalizadoObservacionesHospitalizacion()" >
+              <label id="label_buscarPersonalizadoOH"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[3]//Observaciones de hospitalización?></label>
+            	<input type="hidden" id="idPersonalizadoObservacionesHospitalizacionBuscado" name="idPersonalizadoObservacionesHospitalizacionBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoObservacionesHospitalizacion">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoObservacionesHospitalizacion()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+<!-- Modal para personalizado de observaciones de Hospitalizacion-->
+
+
+<!-- Modal para texto observaciones de alta -->
+
+<div id="modal_observacionesAlta" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observacionesAlta" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="hospitalizacion_ObtenerTxtObservacionesAlta()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el observaciones de alta -->
+
+<!-- Modal para texto cuidados de alta -->
+
+<div id="modal_cuidadosAlta" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_cuidadosAlta" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="hospitalizacion_ObtenerTxtCuidadosAlta()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el cuidados de alta -->
+
+
+<!-- Modal para personalizado de cuidados alta-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoCuidadosAlta" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_hospitalizaciones[4]//Personalizados cuidados y recomendaciones?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoCA" type="text" class="validate" onkeypress="hospitalizacion_buscarPersonalizadoCuidadosAlta()" >
+              <label id="label_buscarPersonalizadoCA"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[5]///Cuidados y recomendaciones?></label>
+            	<input type="hidden" id="idPersonalizadoCuidadosAltaBuscado" name="idPersonalizadoCuidadosAltaBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoCuidadosAlta">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoCuidadosAlta()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}//fin permiso personalizado
+?>
+
+<!-- Modal para personalizado de cuidados alta-->
+
+
+
+
+<main>
+		
+	 <div class="row">
+ 	
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+					<div class="row">
+						<div class="col s12 l12 m12">
+					 			
+					 		<a href="http://www.nanuvet.com/nuevo/<?php echo $datosPP_idPropietario?>">
+							  <div class="chip" style="cursor: pointer;" >
+							    <?php echo $lang_consultas[9]//Propietario:?> <?php echo "(".$datosPP_identificacionPropietario.") ".$datosPP_nombrePropietario." ".$datosPP_apellidoPropietario." -- ".$datosPP_celularPropietario?>
+							  </div>
+							</a>	
+							  
+							  <div class="chip">
+							  	
+							  	<?php
+							  		if($datosPP_urlFotoPaciente != ""){
+							  	?>
+							  			<img  src="<?php echo "../../../Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$datosPP_urlFotoPaciente ?>" alt="foto">
+							  	<?php
+							  		}
+									
+									if($datosPP_sexoPaciente == 'M'){
+										$sexoP	= $lang_consultas[10]/*Macho*/;
+									}else{
+										$sexoP	= $lang_consultas[11]/*Hembra*/;
+									}
+									
+									if($datosPP_esterilizadoPaciente == "Si"){
+										$esterilizadoP = $lang_consultas[12]/*Si*/;
+									}else{
+										$esterilizadoP = $lang_consultas[13]/*No*/;
+									}
+									
+							  	?>							  								  
+							    					<!-- -Nombre: -->												<!-- -Sexo:-->								<!-- -Edad:-->															<!-- -Esterilizado:-->								<!-- -Raza: -->
+							    <?php echo "<u>/".$lang_consultas[14]."</u> ".$datosPP_nombrePaciente."   <u>/".$lang_consultas[15]."</u> ".$sexoP."   <u>/".$lang_consultas[16]."</u> ".$datosPP_edadPacientePaciente."   <u>/".$lang_consultas[17]."</u> ".$esterilizadoP."   <u>/".$lang_consultas[18]."</u> ".$datosPP_nombreRazaPaciente ?>
+							 
+							 	
+								  <?php							  
+								  	if(sizeof($comprobarHospitalizacionActiva) > 0){
+								  ?>
+								  	
+								  		<div class="chip orange">
+								  			<?php echo $lang_historiaClinica[13]//Paciente Hospitalizado?>
+								  		</div>
+								  	
+								  <?php
+								  	}
+								  ?>
+							 
+							  </div>
+							  
+        
+        						<a class="btn-floating waves-effect waves-light black tooltipped" data-position="bottom" data-delay="50" data-tooltip="Imprimir historia clínica" onclick="tipoImpresionHistoriaClinica()" ><i class="fa fa-print" aria-hidden="true"></i></a>
+        				
+					 	</div>
+					</div>
+
+					<div class="row">
+						
+						<div class="col s12 m12 l12 ">
+													
+						<ul class="tabs" style="overflow-x: auto !important;">
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/cirugias/')" class="black-text" ><?php echo $lang_historiaClinica[0]//Cirugías?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalCirugias?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/consultas/')" class="black-text" ><?php echo $lang_historiaClinica[1]//Consultas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalConsultas?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/desparasitantes/')" class="black-text" ><?php echo $lang_historiaClinica[2]//Desparasitantes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuDesparasitantes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/examenes/')" class="black-text" ><?php echo $lang_historiaClinica[3]//Exámenes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalExamenes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/formulas/')" class="black-text" ><?php echo $lang_historiaClinica[4]//Formulas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalFormulas?></span></a></li>
+					        <li class="tab col s2 m2 l2  grey lighten-2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/hospitalizacion/')" class="black-text active" ><?php echo $lang_historiaClinica[5]//Hospitalizaciones?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalHospitalizaciones?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/vacunas/')" class="black-text" ><?php echo $lang_historiaClinica[6]//Vacunas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalVacunas?></span></a></li>
+					        
+						</ul>
+							
+						</div>
+						
+					</div><!-- Fin row-->
+
+
+				<div class="row modificarIndicatorHospitalizacion" >
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								<?php
+									if(sizeof($hospitalizacionActiva) <= 0){
+								?>
+								
+								<h4 id="tituloLi" class="center-align"><?php echo $lang_hospitalizaciones[6]//Hospitalizaciones?>
+									<?php
+										//saber si tiene permiso para hospitalizar
+											if(in_array("93", $_SESSION['permisos_usuario'] )){
+										?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_hospitalizaciones[7]//Nueva hospitalización?>" onclick="abrirFormNuevaHospitalizacion()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+											}
+									?>		
+						  		</h4>						  		
+						  		<br />
+								<?php
+								//saber si tiene permiso para hospitalizar
+									if(in_array("93", $_SESSION['permisos_usuario'] )){
+								?>
+								<div id="hidden_nuevaHospitalizacion" style="display: none;" >
+									
+									<div class="col s12 m12 l12">
+			                      		<h4 class="center-align"><?php echo $lang_hospitalizaciones[7]//Nueva hospitalización?></h4>
+			                      	</div>
+									
+									<form id="form_nuevaHospitalizacion" name="form_nuevaHospitalizacion" method="post" action="" >
+										
+										<input type="hidden"  id="hidden_evioFormNuevaHospitalizacion" name="hidden_evioFormNuevaHospitalizacion" value="enviar" />
+										<input type="hidden" id="idPaciente" name="idPaciente" value="<?php echo $_GET['id1'] ?>" />
+									
+										<input type="hidden" id="idPacienteReplica" name="idPacienteReplica" value="<?php echo $datosPP_idReplica?>" />
+									
+										 <div class="row">
+										 	
+										 		
+										 		<div class="col s12 m4 l4 input-field">
+										 			<input id="fechaIngreso" name="fechaIngreso" type="text" maxlength="10"  >
+					          					    <label id="label_fechaIngreso" for="fechaIngreso" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[8]//Fecha de ingreso (Selecciona ó escribe con el formato AAA/MM/DD)?></label>
+										 		</div>
+										 		
+										 		<div class="col s12 m4 l4 input-field">
+										 			<input id="horaIngreso" name="horaIngreso" type="text" class="datetimepicker" maxlength="10" >
+					          					    <label id="label_horaIngreso" for="horaIngreso" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[9]//Hora de ingreso (Selecciona ó escribe. Formato HH:mm 24 ejem: 16:45)?></label>
+										 		</div>
+										 		
+										 		<div class="col s12 m4 l4 ">
+											    	 <div class="input-field col s12">
+													    <select id="espacioHospitalizacion" name="espacioHospitalizacion">
+													      <option value="0" disabled selected><?php echo $lang_hospitalizaciones[10]//Elegir un espacio hospitalización?></option>
+													      
+													      <?php
+													      	foreach ($espaciosHospitalizacion as $espaciosHospitalizacion1) {
+														 ?>
+														 		<option value="<?php echo $espaciosHospitalizacion1['idEspacioHospitalizacion'] ?>"><?php echo $espaciosHospitalizacion1['nombre']." (".$espaciosHospitalizacion1['capacidad']."/".$espaciosHospitalizacion1['espaciosOcupados'].")"?>  </option>
+														 <?php		  
+															  }
+														  ?>
+													      													      
+													      <option value="" disabled></option>
+													    </select>
+													    <label><?php echo $lang_hospitalizaciones[11]//Espacios disponibles?></label>
+													  </div>
+											    </div>
+										 	
+										 </div><!-- Fin row-->
+										 
+										 <div class="row">							 	
+										 		
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_motivoHospitalizacion" style="cursor: pointer;" ></i>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoMotivoHospitalizacion" style="cursor: pointer;"></i>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="hospitalizacion_limpiarTextareaMotivoHospitalizacion()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloMotivoHospitalizacion" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5> <?php echo $lang_hospitalizaciones[1]//Motivo de hospitalización?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="hospitalizacion_recuperarTextareaMotivoHospitalizacion()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_motivoHospitalizacion" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorMotivoHospitalizacion" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="motivoHospitalizacion" name="motivoHospitalizacion" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_motivoHospitalizacion" for="motivoHospitalizacion"><?php echo $lang_hospitalizaciones[1]//Motivo de hospitalización?> </label>
+											       </div> 
+									    		</div>
+									    		
+									    		
+									    		<div class="col s12 m6 l6">
+									    			<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_observacionesHospitalizacion" style="cursor: pointer;" ></i>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoObservacionesHospitalizacion" style="cursor: pointer;"></i>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="hospitalizacion_limpiarTextareaObservacionesHospitalizacion()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloObservacionesHospitalizacion" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5><?php echo $lang_consultas[23]//Observaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="hospitalizacion_recuperarTextareaObservacionesHospitalizacion()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_observacionesHospitalizacion" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorObservacionesHospitalizacion" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="observacionesHospitalizacion" name="observacionesHospitalizacion" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_observacionesHospitalizacion" for="observacionesHospitalizacion"><?php echo $lang_consultas[23]//Observaciones?></label>
+											       </div> 
+									    		</div>		
+									    		
+									    </div><!-- Fin row-->									    
+									    
+									    	
+									    							    				
+						    			</form>									    
+									    	
+								    	<div class="row">
+								    		<div class="col s12">
+								    			<span id="textoErrorGuardarHospitalizacion" style="display: none;"><?php echo $lang_hospitalizaciones[12]//Debe ingresar un motivo de hospitalización?></span>
+								    			<span id="textoErrorGuardarHospitalizacion2" style="display: none;"><?php echo $lang_hospitalizaciones[13]//Debe elegir un espacio para la hospitalización?></span>
+								    			<span id="errorGuardandoHospitalizacion" class="red-text">&nbsp;</span>
+								    		</div>
+								    		<div class="col s12 m12 l12 right-align">
+								    	
+								    												    			
+								              	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaHospitalizacion()"><?php echo $lang_botones[5]//Cancelar?></a>					  								
+	                    						<a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaHospitalizacion()"><?php echo $lang_botones[2]//Guardar?></a>									    			
+								    		</div>
+								    	</div>
+									    		    	
+									
+								</div><!-- Fin div para nueva hospitalizacion-->
+								
+								<?php
+										}//fin if si tiene permiso para hospitalizar
+										
+									}else{//fin if si no tiene hospitalizaciones activas
+								?>
+									<h4 id="tituloLi" class="center-align"><?php echo $lang_hospitalizaciones[6]//Hospitalizaciones?></h4>						  		
+						  			<br />
+						  			<?php
+										//saber si tiene permiso para dar de alta
+											if(in_array("94", $_SESSION['permisos_usuario'] )){
+										?>
+						  			<div id="hidden_dardeAltapaciente" style="display: none;">
+							  			
+						  				<form id="form_altaPaciente" name="form_altaPaciente" action="" method="post">
+						  					
+						  					<input type="hidden" id="alta_idHospitalizacion" name="alta_idHospitalizacion" value="0" />
+						  					<input type="hidden"  id="hidden_evioFormAlta" name="hidden_evioFormAlta" value="enviarAlta" />
+						  					<input type="hidden" id="idPacienteAlta" name="idPacienteAlta" value="<?php echo $_GET['id1'] ?>" />
+						  					<input type="hidden" id="idRelacionEspacioHospitalizacion" name="idRelacionEspacioHospitalizacion" value="0" />
+						  					<input type="hidden" id="idEspacioHospitalizacionAlta" name="idEspacioHospitalizacionAlta" value="0" />
+						  					
+						  					
+						  					<div class="row">
+						  						<div class="col s12 m4 l4 input-field">
+										 			<input id="fechaAlta" name="fechaAlta" type="text" maxlength="10"  >
+					          					    <label id="label_fechaAlta" for="fechaAlta" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[14]//Fecha de alta (Selecciona ó escribe con el formato AAA/MM/DD)?></label>
+										 		</div>
+										 		
+										 		<div class="col s12 m4 l4 input-field">
+										 			<input id="horaAlta" name="horaAlta" type="text" class="datetimepicker" maxlength="10" >
+					          					    <label id="label_horaAlta" for="horaAlta" class="active" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_hospitalizaciones[15]//Hora de alta (Selecciona ó escribe. Formato HH:mm 24 ejem: 16:45)?></label>
+										 		</div>
+						  					</div>
+						  					
+						  					<div class="row">
+						  						<div class="col s12 m5 l5 ">
+						  							<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_observacionesAlta" style="cursor: pointer;" ></i>
+									    					<!-- <i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoObservacionesAlta" style="cursor: pointer;"></i>-->
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="hospitalizacion_limpiarTextareaObservacionesAlta()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloObservacionesAlta" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5><?php echo $lang_consultas[23]//Observaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="hospitalizacion_recuperarTextareaObservacionesAlta()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_observacionesAlta" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorObservacionesAlta" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="observacionesAlta" name="observacionesAlta" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_observacionesAlta" for="observacionesAlta"><?php echo $lang_consultas[23]//Observaciones?></label>
+											       </div> 
+						  						</div>
+						  						<div class="col s12 m5 l5 ">
+						  							<div class="input-field">
+									    				
+									    				<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_cuidadosAlta" style="cursor: pointer;" ></i>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoCuidadosAlta" style="cursor: pointer;"></i>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="hospitalizacion_limpiarTextareaCuidadosAlta()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloCuidadosAlta" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5><?php echo $lang_hospitalizaciones[5]//Cuidados y recomendaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="hospitalizacion_recuperarTextareaCuidadosAlta()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_cuidadosAlta" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorCuidadosAlta" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												          <textarea id="cuidadosAlta" name="cuidadosAlta" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+												          <label id="label_cuidadosAlta" for="cuidadosAlta"><?php echo $lang_hospitalizaciones[5]//Cuidados y recomendaciones?></label>
+											       </div> 
+						  						</div>	
+						  						<div class="col s12 m2 l2 ">
+						  							 <div class="input-field col">
+													    <select id="alta_estado" name="alta_estado">
+													      <option value="" disabled selected><?php echo $lang_hospitalizaciones[16]//Estado?></option>
+													      <option value="Si"><?php echo $lang_hospitalizaciones[17]//Vivo?></option>
+													      <option value="No"><?php echo $lang_hospitalizaciones[18]//Muerto?></option>
+													    </select>
+													    <label><?php echo $lang_hospitalizaciones[19]//Estado del paciente?></label>
+													  </div>
+						  						</div>		
+						  					</div><!-- Fin row-->
+						  					
+						  				</form>
+						  				<div class="row">
+								    		<div class="col s12">
+								    			<span id="textoErrorGuardarAlta" style="display: none;"><?php echo $lang_hospitalizaciones[20]//Debe elegir el estado del paciente?></span>								    			
+								    			<span id="errorGuardandoAlta" class="red-text">&nbsp;</span>
+								    		</div>
+								    		<div class="col s12 m12 l12 right-align">	
+								    			
+								    			
+								    											    			
+								              	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoAlta()"><?php echo $lang_botones[5]//Cancelar?></a>					  								
+	                    						<a class="waves-effect waves-light btn" onclick="validarGuardadoAlta()"><?php echo $lang_botones[2]//Guardar?></a>									    			
+								    		</div>
+								    	</div>
+							  				
+							  	
+						  			</div><!-- Fin div con formulario para dar de alta a un paciente-->
+						  			<?php
+						  				}//fin permiso dar de alta
+									?>
+						  			
+						  			<br/>
+								<?php
+									}
+								?>
+								
+								
+								
+						  	</li>
+						  	
+						</ul>
+					</div><!-- Fin col-->
+				</div><!-- Fin row-->
+
+
+
+
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+					
+						  <ul class="collapsible popout" data-collapsible="accordion">
+						  	
+						  	<?php
+						  	
+								foreach ($listadoHospitalizaciones as $listadoHospitalizaciones1) {
+												
+									$btnAlta = "";		
+										
+									if(($listadoHospitalizaciones1['idHospitalizacionAlta'] == null) or ($listadoHospitalizaciones1['idHospitalizacionAlta'] == "")){
+							?>				
+								
+										<input type="hidden" id="alta_idHospitalizacion_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" name="alta_idHospitalizacion_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" value="<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" />
+					  					<input type="hidden" id="idRelacionEspacioHospitalizacion_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" name="idRelacionEspacioHospitalizacion_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" value="<?php echo $listadoHospitalizaciones1['idRelacionEspacioHospitalizacion']?>" />
+					  					<input type="hidden" id="idEspacioHospitalizacionAlta_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" name="idEspacioHospitalizacionAlta_<?php echo $listadoHospitalizaciones1['idHospitalizacion']?>" value="<?php echo $listadoHospitalizaciones1['idEspacioHospitalizacion']?>" />
+														
+											
+							<?php			
+										//saber si tiene permiso para dar de alta
+											if(in_array("94", $_SESSION['permisos_usuario'] )){
+										
+													$btnAlta = '<span id="spanAH_'.$listadoHospitalizaciones1['idHospitalizacion'].'"> <a id="'.$listadoHospitalizaciones1['idHospitalizacion'].'" class="waves-effect black btn secondary-content" onclick="darDeAltaPaciente(this.id)"><i class="fa fa-hand-pointer-o fa-2x" aria-hidden="true"></i></a></span>';
+												}else{
+													$btnAlta = "";	
+												}
+									}//fin if				
+													
+							?>		
+							
+											  	
+						 	<li>
+						 		<div class="collapsible-header" >
+								      <i class="fa fa-file-text" aria-hidden="true"></i><?php echo $listadoHospitalizaciones1['fechaIngreso']." ".$listadoHospitalizaciones1['horaIngreso']." / ".$listadoHospitalizaciones1['nombreUsuario']." ".$listadoHospitalizaciones1['apellido']." / ".$listadoHospitalizaciones1['nombreSucursal']." (".$listadoHospitalizaciones1['nombreEspacio'].")"?>
+										<?php echo $btnAlta ?>
+								</div>
+								
+								<div class="collapsible-body">
+						      		<br />
+						      				
+						      		<div class="col s12 valign">
+						      			<a href="http://www.nanuvet.com/impresiones/hospitalizacion/<?php echo $listadoHospitalizaciones1['idHospitalizacion']  ?>/" target="_blank" class="waves-effect waves-light btn"><i class="fa fa-print left" aria-hidden="true"></i><?php echo $lang_botones[9]//Imprimir?></a>
+						      		</div>
+						      		
+								      	<div class="row">
+								      		
+								      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+										      	
+										      		
+										      		<h6><b><?php echo $lang_hospitalizaciones[1]//Motivo de hospitalización?>:</b></h6>
+										      		<p  >
+		 												<?php echo $listadoHospitalizaciones1['motivoHospitalizacion'] ?> 
+										      		</p>
+										      	
+								      		</div>
+								      		
+								      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+										      	
+										      		
+										      		<h6><b><?php echo $lang_hospitalizaciones[3]//Observaciones de hospitalización?>:</b></h6>
+										      		<p >
+										      			<?php echo $listadoHospitalizaciones1['observacion'] ?> 
+										      		</p>
+										      	
+								      		</div>
+								      		
+								      		<?php 
+								      			if($listadoHospitalizaciones1['idHospitalizacionAlta']){
+								      		?>
+								      				
+								      				<div class="col s12 center-align">
+								      					<h5><?php echo $lang_hospitalizaciones[21]//Datos alta de paciente?></h5>
+								      				</div>
+								      				
+								      				<table>
+								      					<thead>
+								      						<tr>
+								      							<th style="text-align: center;"><?php echo $lang_hospitalizaciones[22]//Fecha?></th>
+								      							<th style="text-align: center;"><?php echo $lang_hospitalizaciones[23]//Hora?></th>
+								      							<th><?php echo $lang_hospitalizaciones[24]//Usuario?></th>
+								      						</tr>
+								      					</thead>
+								      					<tbody>
+								      						<tr>
+								      							<td style="text-align: center;"><?php echo $listadoHospitalizaciones1['fechaAlta']?></td>
+								      							<td style="text-align: center;"><?php echo $listadoHospitalizaciones1['horaAlta']?></td>
+								      							<td><?php echo $listadoHospitalizaciones1['identificacionAlta']." ".$listadoHospitalizaciones1['nombreUsuarioAlta']." ".$listadoHospitalizaciones1['apellidoAlta']?></td>
+								      						</tr>
+								      					</tbody>
+								      				</table>
+								      				
+													<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+													      	
+														      		
+														      		<h6><b><?php echo $lang_hospitalizaciones[25]//Observaciones (alta)?>:</b></h6>
+														      		<p  >
+						 												<?php echo $listadoHospitalizaciones1['observacionesAlta'] ?> 
+														      		</p>
+														      	
+												      		</div>
+												      		
+												      		<div class="col s12 m6 l6" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+														      	
+														      		
+														      		<h6><b><?php echo $lang_hospitalizaciones[5]//Cuidados y recomendaciones?>:</b></h6>
+														      		<p >
+														      			<?php echo $listadoHospitalizaciones1['cuidadosATener'] ?> 
+														      		</p>
+														      	
+											      		</div>								      				
+										      				
+								      				
+								      		<?php		
+								      			}
+								      		?>
+								      		
+								      	</div><!-- Fin row-->
+						      		
+									<br />						      			
+						  		</div><!-- Fin collapside body-->
+						 	</li>
+						  	
+						  	
+						  
+						  
+							<?php	
+								}//fin foreach							
+							?>						  
+						  </ul>
+					</div>
+				</div>
+
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+
+	
+</main>
+
+<script>
+	$(document).ready(function () {
+		
+		
+			$('#fechaIngreso').datetimepicker({
+				dayOfWeekStart : 1,
+				lang:'es',
+				timepicker: false,
+				mask:true,
+				minDate: 0,
+				formatDate:'Y/m/d',
+				format: 'Y/m/d'
+								
+			 });		 
+
+			 
+			$('#horaIngreso').datetimepicker({
+				datepicker:false,
+				step:10,
+				lang:'es',
+				timepicker: true,
+				mask:true,
+				format: 'H:i'
+								
+			 });
+			 
+
+		
+			$('#fechaAlta').datetimepicker({
+				dayOfWeekStart : 1,
+				lang:'es',
+				timepicker: false,
+				mask:true,
+				minDate: 0,
+				formatDate:'Y/m/d',
+				format: 'Y/m/d'
+								
+			 });		 
+
+			 
+			$('#horaAlta').datetimepicker({
+				datepicker:false,
+				step:10,
+				lang:'es',
+				timepicker: true,
+				mask:true,
+				format: 'H:i'
+								
+			 });
+
+			 var theLanguage = $('html').attr('lang');
+			 
+			 switch(theLanguage) {
+				    case 'Es':
+				        $.datetimepicker.setLocale('es');
+				        break;
+				    case 'En':
+				        $.datetimepicker.setLocale('en');
+				        break;
+				    default:
+				        $.datetimepicker.setLocale('es');
+				}	
+		
+		//funcion para evitar que se salga del sitio y perder los cambios
+			window.onbeforeunload = function(e) {
+				  e = e || window.event,
+				  message = "Seguro que desea salir sin guardar?";
+				 
+				  // show alert if there are some unsaved form
+				  if ($('.unsavedForm').size()) {
+				    // For IE and Firefox
+				                if (e) {
+				                  e.returnValue = message;
+				                }
+				                // For Safari
+				                return message;
+				  }
+				};
+				
+				
+	});
+</script>

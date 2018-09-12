@@ -1,0 +1,245 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+				
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_razas[0]//Razas?>
+									<?php
+									//saber si tiene permiso para crear razas
+										if(in_array("33", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_razas[1]//Nueva raza?>" onclick="mostrarFormNuevaRaza()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		
+						  		<div id="hidden_editarRaza" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><? echo $lang_razas[2]//Editar raza?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarRaza" name="form_editarRaza" action="" method="post" >
+						  					<input type="hidden" id="idEditarEspecie" name="idEditarEspecie" value="" />
+						  					<input type="hidden" id="idEditarRaza" name="idEditarRaza" value="" />
+							  				<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="input-field col s12 m4 l4">
+							  					<input type="text" id="editarNombreRaza" name="editarNombreRaza" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreRaza" for="editarNombreRaza"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" >Nombre raza</label>
+							  				</div>
+							  				<div class="input-field col s12 m4 l4">
+							  					<input type="text" id="editarNombreEspecie" name="editarNombreEspecie" value="" length="100" maxlength="100" disabled/>
+							  					<label class="active" id="label_editarNombreEspecie" for="editarNombreEspecie"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_razas[3]//Nombre Especie?></label>
+							  				</div>
+						  				</form>
+						  				<div class="input-field col s12 m4 l4 center-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionRaza()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionRaza()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+									//saber si tiene permiso para crear razas
+										if(in_array("33", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevaRaza" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevaRaza" name="form_nuevaRaza" action="" method="post">
+						  					<input type="hidden" id="idEspecie"   name="idEspecie"    value="0"/>
+						                    <input type="hidden" id="envioNuevaRaza" name="envioNuevaRaza"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      <div class="col s12 m4 l4">
+							  						<div class="input-field col s12 m12 l12">							  							 
+							  							<input id="especie" name="especie" type="text" class="validate" onkeypress="buscarEspecieListados()" >
+					          							<label id="label_especie" for="especie" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_nuevo[12] //Especie (escribe y selecciona)?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="col s12 m4 l4">
+							  						<div class="input-field col s12 m12 l12">							  							 
+							  							<input id="nombreRaza" name="nombreRaza" type="text" class="validate" disabled  >
+					          							<label id="label_nombreRaza" for="nombreRaza" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_razas[4]//Nombre de la nueva raza?></label>
+							  						</div>
+							  					</div>
+						                      
+						                  
+						                  
+							                  <div class="input-field col s12 m4 l4 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaRaza()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaRaza()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>
+						  					
+						  					
+						  				</div><!-- fin row-->
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nueva raza-->
+						  		<?php
+						  			}//fin if permiso crear raza
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_razas[5]//Buscar raza (Escribe y selecciona)?>" id="buscarRaza" type="text" class="validate" onkeypress="buscarRazaListados()" >
+						<input type="hidden" id="idRazaBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaRaza()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_razas[6]//Activar raza?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_razas[7]//Desactivar raza?></span>
+						
+							<div id="resultadoRazasAjax">
+								
+							</div><!-- Fin para el resultado de las razas ajax-->
+							
+							<div id="resultadoRazas">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_razas[8]//Raza?></th>
+											<th><?php echo $lang_razas[9]//Especie?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoRazas as $listadoRazas1) {
+												
+												if($listadoRazas1['estado'] == 'A'){																																																			//Desactivar raza
+													$btn = '<span id="spanB_'.$listadoRazas1['idRaza'].'"> <a id="'.$listadoRazas1['idRaza'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarRaza(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_razas[7].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar raza
+													$btn = '<span id="spanB_'.$listadoRazas1['idRaza'].'"> <a id="'.$listadoRazas1['idRaza'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarRaza(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_razas[6].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoRazas1['idRaza']."','".$listadoRazas1['nombreR']."','".$listadoRazas1['idEspecie']."','".$listadoRazas1['nombreE']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("33", $_SESSION['permisos_usuario'] )){ ?> onclick="editarRaza(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoRazas1['nombreR']?></td>
+												<td <?php if(in_array("33", $_SESSION['permisos_usuario'] )){ ?> onclick="editarRaza(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoRazas1['nombreE']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de las razas-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

@@ -1,0 +1,150 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>	
+			<th><?php echo $lang_reportes[77]//Medicamentos?></th>			
+			<th><?php echo $lang_reportes[78]//Observaciones generales?></th>					
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>	
+			<th><?php echo $lang_reportes[16]//Médico?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoFormulas as $listadoFormulas1) {
+		
+		$medicamentos = $objetoReportes->consultarMedicamentosFormula($listadoFormulas1['idFormula']);
+		
+		if($listadoFormulas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoFormulas1['fecha']?></td>
+			<td><?php echo $listadoFormulas1['hora']?></td>
+			<td>				
+				
+				<?php foreach ($medicamentos as $medicamentos1) {
+					?>
+						<?php echo "- (".$medicamentos1['codigo'].") ".$medicamentos1['nombreMedicamento']."<br />"?>
+					<?php	
+				} ?>
+			</td>			
+			<td><?php echo $listadoFormulas1['observaciones']?></td>
+			<td><?php echo $listadoFormulas1['nombreMascota']." (".$sexo.")"?></td>		
+			<td><?php echo "(".$listadoFormulas1['identificacionPropietario'].") ".$listadoFormulas1['nombrePropietario']." ".$listadoFormulas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoFormulas1['telefono']?></td>
+			<td><?php echo $listadoFormulas1['nombreUsuario']." ".$listadoFormulas1['apellidoUsuario']?></td>
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[28]//Hora?></th>	
+			<th><?php echo $lang_reportes[77]//Medicamentos?></th>			
+			<th><?php echo $lang_reportes[78]//Observaciones generales?></th>					
+			<th><?php echo $lang_reportes[33]//Paciente?></th>
+			<th><?php echo $lang_reportes[54]//Sexo?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>	
+			<th><?php echo $lang_reportes[16]//Médico?></th>
+			<th><?php echo $lang_reportes[40]//Sucursal?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoFormulasExportar as $listadoFormulas1) {
+		
+		$medicamentos = $objetoReportes->consultarMedicamentosFormula($listadoFormulas1['idFormula']);
+		
+		
+		if($listadoFormulas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//H
+		}
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoFormulas1['fecha']?></td>
+			<td><?php echo $listadoFormulas1['hora']?></td>
+			<td>
+				
+				<table>
+					<tr>
+						<th><?php echo $lang_reportes[77]//Medicamentos?></th>	
+						<th><?php echo $lang_reportes[79]//Vía?></th>
+						<th><?php echo $lang_reportes[80]//Cantidad?></th>
+						<th><?php echo $lang_reportes[81]//Frecuencia?></th>
+						<th><?php echo $lang_reportes[82]//Dosificación?></th>
+						<th><?php echo $lang_reportes[38]//Observaciones?></th>
+					</tr>
+				
+				<?php foreach ($medicamentos as $medicamentos1) {
+					?>
+					
+						<tr>
+							<td><?php echo "(".$medicamentos1['codigo'].") ".$medicamentos1['nombreMedicamento'] ?></td>
+							<td><?php echo $medicamentos1['via'] ?></td>
+							<td><?php echo $medicamentos1['cantidad'] ?></td>
+							<td><?php echo $medicamentos1['frecuencia'] ?></td>
+							<td><?php echo $medicamentos1['dosificacion'] ?></td>
+							<td><?php echo $medicamentos1['observacion'] ?></td>
+						</tr>
+					<?php	
+				} ?>
+				</table>				
+			</td>					
+			<td><?php echo $listadoFormulas1['observaciones']?></td>	
+			<td><?php echo $listadoFormulas1['nombreMascota']?></td>
+			<td><?php echo $sexo?></td>
+			<td><?php echo "(".$listadoFormulas1['identificacionPropietario'].") ".$listadoFormulas1['nombrePropietario']." ".$listadoFormulas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoFormulas1['telefono']?></td>
+			<td><?php echo $listadoFormulas1['nombreUsuario']." ".$listadoFormulas1['apellidoUsuario']?></td>			
+			<td><?php echo $listadoFormulas1['nombreSucursal']?></td>
+			
+			
+		</tr>
+<?php		
+
+		$contador = $contador+1;
+
+	}
+	
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

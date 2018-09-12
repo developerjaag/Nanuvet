@@ -1,0 +1,244 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div> 
+
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_ciudades[3]//Ciudades?> 
+									<?php
+									//saber si tiene permiso para crear ciudad
+										if(in_array("18", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//Nueva ciudad?>" onclick="mostrarFormNuevaCiudad()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}//fin if permiso crear ciudad
+						  			?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+								//saber si tiene permiso para editar ciudad
+									if(in_array("19", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_editarCiudad" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_ciudades[4]//Editar ciudad?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarCiudad" name="form_editarCiudad" action="" method="post" >
+						  					<input type="hidden" id="idEditarPais" name="idEditarPais" value="" />
+						  					<input type="hidden" id="idEditarCiudad" name="idEditarCiudad" value="" />
+							  				<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="input-field col s12 m8 l8">
+							  					<input type="text" id="editarNombreCiudad" name="editarNombreCiudad" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreCiudad" for="editarNombreCiudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_ciudades[2]//Nombre ciudad?></label>
+							  				</div>
+						  				</form>
+						  				<div class="input-field col s12 m4 l4 center-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionCiudad()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionCiudad()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar ciudad
+								
+								//saber si tiene permiso para crear ciudad
+									if(in_array("18", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_NuevaCiudad" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevaCiudad" name="form_nuevaCiudad" action="" method="post">
+						  					<input type="hidden" id="idPais"   name="idPais"    value="0"/>
+						                    <input type="hidden" id="envioNuevaCiudad" name="envioNuevaCiudad"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      <div class="input-field col s12 m4 l4">
+						                            <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" >
+						                            <label id="label_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+						                      </div>
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="nombreCiudad" name="nombreCiudad" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreCiudad" for="nombreCiudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_ciudades[5]//Nombre de la nueva ciudad?></label> 
+						                      </div> 
+						                      
+						                  
+						                  
+							                  <div class="input-field col s12 m4 l4 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaCiudad()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaCiudad()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>
+						  					
+						  					
+						  				</div><!-- fin row-->
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nueva ciudad-->
+						  		<?php
+						  			}//fin permiso crear ciudad
+						  		?>
+						  		
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_ciudades[6]//Buscar ciudad (Escribe y selecciona)?>" id="buscarCiudad" type="text" class="validate" onkeypress="buscarCiudadListados()" >
+						<input type="hidden" id="idCiudadBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaCiudad()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_ciudades[7]//Activar ciudad?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_ciudades[8]//Desactivar ciudad?></span>
+						
+							<div id="resultadoCiudadesAjax">
+								
+							</div><!-- Fin para el resultado de las ciudades ajax-->
+							
+							<div id="resultadoCiudades">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_barrios[9]//Ciudad?></th>
+											<th><?php echo $lang_barrios[10]//País?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoCiudades as $listadoCiudades1) {
+												
+												if($listadoCiudades1['estado'] == 'A'){																																																			//Desactivar ciudad
+													$btn = '<span id="spanB_'.$listadoCiudades1['idCiudad'].'"> <a id="'.$listadoCiudades1['idCiudad'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarCiudad(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_ciudades[8].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar ciudad
+													$btn = '<span id="spanB_'.$listadoCiudades1['idCiudad'].'"> <a id="'.$listadoCiudades1['idCiudad'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarCiudad(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_ciudades[7].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoCiudades1['idCiudad']."','".$listadoCiudades1['nombreC']."','".$listadoCiudades1['idPais']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("19", $_SESSION['permisos_usuario'] )){?> onclick="editarCiudad(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoCiudades1['nombreC']?></td>
+												<td  <?php if(in_array("19", $_SESSION['permisos_usuario'] )){?> onclick="editarCiudad(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoCiudades1['nombreP']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de las ciudades-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

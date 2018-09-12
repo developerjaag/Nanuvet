@@ -1,0 +1,540 @@
+<!-- Modal para decidir la forma de impresion -->
+
+<div id="modal_impresionHC" class="modal" style="margin-top: 5%;">
+    <div class="modal-content">
+      <h4 class="center-align"><?php echo $lang_historiaClinica[10]//Imprimir historia clínica?></h4>
+      <br />
+      <div class="row">
+      	<div class="col s12 center-align">      		
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCFechas/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[11]//Por fechas?></a>
+			<a target="_blank"  class="waves-effect waves-light btn modal-close" href="http://www.nanuvet.com/impresiones/HCElementos/<?php echo $_GET['id1']  ?>/" ><?php echo $lang_historiaClinica[12]//Agrupando elementos?></a>
+      	</div>
+      </div>
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class=" modal-action modal-close waves-effect waves-red btn-flat"><?php echo $lang_botones[5]//Cancelar?></a>
+    </div>
+  </div>
+
+
+<!-- Fin  Modal para decidir la forma de impresion -->
+
+<!-- Modal para generar un resultado para un examen-->
+
+<div id="modal_resultadoExamen" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_examenes[13]//Resultado del examen?></h4> 
+      
+      
+	      <div id="cuerpoResultadoExamen" style="display: none;">   	
+	      </div>
+<?php
+	//permiso resultado examen
+	if(in_array("75", $_SESSION['permisos_usuario'] )){
+?>	      
+	      <div id="formResultadoExamen">
+	      
+		      <div class="row">
+		        <form class="col s12 m12 l12">
+		          <input type="hidden" id="idExamenDetalleResultado" name="idExamenDetalleResultado" value="0" />
+		          <div class="row">
+		          
+		          	<div class="input-field col s12 m12 l12">
+		            	<select id="resultadoGeneral">
+					      <option value="0" disabled selected><?php echo $lang_examenes[14]//Elige una opción?></option>
+					      <option value="Bueno"><?php echo $lang_examenes[15]//Bueno?></option>
+					      <option value="Regular"><?php echo $lang_examenes[16]//Regular?></option>
+					      <option value="Malo"><?php echo $lang_examenes[17]//Malo?></option>
+					    </select>
+					    <label><?php echo $lang_examenes[18]//Resultado general?></label>
+		            </div>     
+		          	            
+		            <div class="input-field col s12 m12 l12">              
+		            	<textarea id="observacionesResultadoExamen" name="observacionesResultadoExamen" class="materialize-textarea"></textarea>
+         				<label id="label_observacionesResultadoExamen" for="observacionesResultadoExamen" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_examenes[19]//Observaciones?></label>
+		            </div>  
+		            
+		          </div><!-- Fin row-->
+		          
+		        </form>
+		        
+		        	<div class="row">
+		        		<div class="col s12 m12 l12 right-align">
+		        			<span id="textoErrorGuardandoResultadoExamen" style="display: none;"><?php echo $lang_examenes[20]//Debe elegir el resultado general?></span>
+							<span id="errorGuardadoResultadoExamen" class="red-text">&nbsp;</span>
+		        		</div>
+		        		<div class="col s12 m12 l12 right-align">
+		        			<a class="waves-effect waves-light btn" onclick="guardarResultadoExamen()" ><?php echo $lang_botones[2]//Guardar?></a>
+		        		</div>
+		        	</div>
+		        
+		      </div>
+	      
+	    </div><!-- Fin cuerpoResultadoExamen -->
+<?php
+	}//fin if permiso resultado examen
+?>
+    </div>
+    <div class="modal-footer">      
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_botones[3]//Cerrar?></a>
+    </div>
+</div>
+
+
+
+<!-- Fin Modal para generar un resultado para un examen-->
+
+
+
+<!-- Modal para texto observaciones -->
+
+<div id="modal_observacionesExamen" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+       <iframe id="iframe_observaciones" src="http://www.nanuvet.com/Views/Layout/editorDeTexto.phtml" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+    	<div class="input-field">    		
+	      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="examen_ObtenerTxtObservacionesExamen()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+        </div>
+    </div>
+  </div>
+
+
+<!--Fin  Modal para el observaciones -->
+
+<!-- Modal para personalizado de observaciones-->
+<?php
+//saber si tiene permiso para personalizados
+	if(in_array("1", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_personalizadoObservacionesExamen" class="modal" style="height: 78% !important ; margin-top: 5%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 85%;">
+      <h4 class="center-align"><?php echo $lang_examenes[21]//Personalizados observaciones de examen?></h4> 
+      
+      <div class="row">
+        <form class="col s12 m12 l12" style="max-height: 350px; overflow-y: scroll;">
+          <div class="row">
+            
+            <div class="input-field col s12 m8 l8">
+              <input placeholder="<?php echo $lang_consultas[5]//Buscar personalizado (Escribe y selecciona)?>" id="buscarPersonalizadoOE" type="text" class="validate" onkeypress="examen_buscarPersonalizadoObservacionesExamen()" >
+              <label id="label_buscarPersonalizado"  for="buscarPersonalizado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_examenes[22]//Observaciones de examen?></label>
+            	<input type="hidden" id="idPersonalizadoObservacionesExamenBuscado" name="idPersonalizadoObservacionesExamenBuscado" value="" />
+            </div>           
+            
+          </div><!-- Fin row-->
+          
+          <div class="row">
+          	<div class="col s12 m12 l12" >
+          		<div id="resultadoBusquedaPersonalizadoObservacionesExamen">
+          			
+          		</div>
+          	</div>
+          </div><!-- Fin row-->
+          
+        </form>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a class=" modal-action modal-close waves-effect waves-light btn" onclick="obtenerTxtPersonalizadoObservacionesExamen()" ><?php echo $lang_general[14]//Aplicar?></a>
+	      <a class=" modal-action modal-close waves-effect red darken-1 btn" style="margin-right: 10px;"><?php echo $lang_general[15]//Descartar?></a>
+    </div>
+</div>
+<?php
+	}
+?>
+<!-- Modal para personalizado de observaciones de examen-->
+
+
+
+<main>
+		
+	 <div class="row">
+ 	
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+            	
+					<div class="row">
+						<div class="col s12 l12 m12">
+					 			
+					 		<a href="http://www.nanuvet.com/nuevo/<?php echo $datosPP_idPropietario?>">
+							  <div class="chip" style="cursor: pointer;" >
+							    <?php echo $lang_consultas[9]//Propietario:?> <?php echo "(".$datosPP_identificacionPropietario.") ".$datosPP_nombrePropietario." ".$datosPP_apellidoPropietario." -- ".$datosPP_celularPropietario?>
+							  </div>
+							</a>	
+							  
+							  <div class="chip">
+							  	
+							  	<?php
+							  		if($datosPP_urlFotoPaciente != ""){
+							  	?>
+							  			<img  src="<?php echo "../../../Public/uploads/".$_SESSION['BDC_carpeta']."/img_pacientes/".$datosPP_urlFotoPaciente ?>" alt="foto">
+							  	<?php
+							  		}
+									
+									if($datosPP_sexoPaciente == 'M'){
+										$sexoP	= $lang_consultas[10]/*Macho*/;
+									}else{
+										$sexoP	= $lang_consultas[11]/*Hembra*/;
+									}
+									
+									if($datosPP_esterilizadoPaciente == "Si"){
+										$esterilizadoP = $lang_consultas[12]/*Si*/;
+									}else{
+										$esterilizadoP = $lang_consultas[13]/*No*/;
+									}
+									
+							  	?>							  								  
+							    					<!-- -Nombre: -->												<!-- -Sexo:-->								<!-- -Edad:-->															<!-- -Esterilizado:-->								<!-- -Raza: -->
+							    <?php echo "<u>/".$lang_consultas[14]."</u> ".$datosPP_nombrePaciente."   <u>/".$lang_consultas[15]."</u> ".$sexoP."   <u>/".$lang_consultas[16]."</u> ".$datosPP_edadPacientePaciente."   <u>/".$lang_consultas[17]."</u> ".$esterilizadoP."   <u>/".$lang_consultas[18]."</u> ".$datosPP_nombreRazaPaciente ?>
+							 
+								  <?php							  
+								  	if(sizeof($comprobarHospitalizacionActiva) > 0){
+								  ?>
+								  	
+								  		<div class="chip orange">
+								  			<?php echo $lang_historiaClinica[13]//Paciente Hospitalizado?>
+								  		</div>
+								  	
+								  <?php
+								  	}
+								  ?>
+							 
+							  </div>
+							  
+							 <a class="btn-floating waves-effect waves-light black tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_historiaClinica[10]//Imprimir historia clínica?>" onclick="tipoImpresionHistoriaClinica()" ><i class="fa fa-print" aria-hidden="true"></i></a>
+        
+					 	</div>
+					</div>
+
+					<div class="row">
+						
+						<div class="col s12 m12 l12 ">
+													
+						<ul class="tabs" style="overflow-x: auto !important;">
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/cirugias/')" class="black-text" ><?php echo $lang_historiaClinica[0]//Cirugías?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalCirugias?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/consultas/')" class="black-text" ><?php echo $lang_historiaClinica[1]//Consultas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalConsultas?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/desparasitantes/')" class="black-text" ><?php echo $lang_historiaClinica[2]//Desparasitantes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuDesparasitantes?></span></a></li>
+					        <li class="tab col s1 m1 l1 grey lighten-2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/examenes/')" class="black-text active" ><?php echo $lang_historiaClinica[3]//Exámenes?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalExamenes?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/formulas/')" class="black-text" ><?php echo $lang_historiaClinica[4]//Formulas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalFormulas?></span></a></li>
+					        <li class="tab col s2 m2 l2"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/hospitalizacion/')" class="black-text" ><?php echo $lang_historiaClinica[5]//Hospitalizaciones?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalHospitalizaciones?></span></a></li>
+					        <li class="tab col s1 m1 l1"><a href="javascript:void(0)" onclick="redireccionEnHC('http://www.nanuvet.com/historiaClinica/<?php echo $_GET['id1']?>/vacunas/')" class="black-text" ><?php echo $lang_historiaClinica[6]//Vacunas?><span class="Bootstrapbadge teal lighten-2"><?php echo $menuTotalVacunas?></span></a></li>
+					        
+						</ul>
+							
+						</div>
+						
+					</div><!-- Fin row-->
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								<h4 id="tituloLi" class="center-align"><?php echo $lang_examenes[23]//Nuevo examen?>
+									<?php
+									//crear nuevo examen
+										if(in_array("69", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_examenes[23]//Nuevo examen?>" onclick="abrirFormNuevoExamen()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}//fin if permiso crear examen
+									?>
+						  		</h4>						  		
+						  		<br />
+								<?php
+									//crear nuevo examen
+										if(in_array("69", $_SESSION['permisos_usuario'] )){
+									?>
+								<div id="hidden_nuevoExamen" style="display:none;" >
+									
+									<div class="col s12 m12 l12">
+			                      		<h4 class="center-align"><?php echo $lang_examenes[23]//Nuevo examen?></h4>
+			                      	</div>
+									
+										 <div class="row">
+										 	
+										 		<div class="col s12 m6 l6">
+									    			
+									    			
+									    			<div class="row">
+										    		
+											    		<div class="col s12 m12 l12">
+											    			<div class="input-field">
+											    				<!-- <i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoExamenItem" data-target="modal_nuevoExamenItem" data-position="right" data-delay="50" data-tooltip="Nuevo examen" style="cursor:pointer;" onclick="limpiarModalExamen()"></i>-->
+											    				<input id="buscarExamen" type="text" class="validate" onkeypress="examen_buscarExamen()">
+														    	<label id="label_buscarExamen" for="buscarExamen" data-error="<?php echo $lang_examenes[25]//El examen ya se adicionó?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_examenes[24]//Buscar examen?></label>
+											    			</div>
+											    		</div>
+											    		
+											    		<div class="col s12 m12 l12">
+											    			
+											    			<div class="input-field">
+											    				<textarea id="observacionesExamen" name="observacionesExamen" class="materialize-textarea" style="max-height: 6rem; min-height: 6rem !important; overflow-y: scroll;"></textarea>
+														        <label id="label_observacionesExamen" for="observacionesExamen"><?php echo $lang_examenes[22]//Observaciones de examen?></label>
+											    			</div>								    			
+											    			
+											    		</div>
+											    		
+											    		<div class="col s12 m12 l12 center-align">
+											    			<span id="textoErrorAdicionarExamenItem" style="display: none;"><?php echo $lang_examenes[26]//El examen para adicionar no es valido?></span>
+											    			<span id="textoErrorAdicionarExamenItem2" style="display: none;"><?php echo $lang_examenes[25]//El examen ya se adicionó?></span>
+											    			<span id="errorAdicionarExamenItem" class="red-text">&nbsp;</span>
+											    		</div>
+											    		
+											    		<div class="col s12 m12 l12 center-align">
+											    			<input type="hidden" id="idExamenBuscadoItems" name="idExamenBuscadoItems" value="0" />
+											    			<input type="hidden" id="nombreExamenBuscadoItems" name="nombreExamenBuscadoItems" value="0" />											    			
+											    			<a class="waves-effect red darken-1 btn" onclick="limpiarExamenBuscadoItems()"><?php echo $lang_botones[10]//Limpiar?></a>
+											    			<a class="waves-effect waves-light btn" onclick="adicionarExamenBuscadoItems()"><?php echo $lang_examenes[27]//Adicionar?></a>
+											    		</div>
+											    		
+											    		
+											    		
+											    	</div><!--Fin row -->
+									    			
+									    			
+									    			
+									    		</div>
+										 	
+										 	
+										 	
+										 	<form id="form_nuevoExamen" name="form_nuevoExamen" method="post" action="" >
+										 		
+										 		<input type="hidden" id="hidden_evioFormNuevoExamen" name="hidden_evioFormNuevoExamen" value="enviar" />
+										 		<input type="hidden" id="idPaciente" name="idPaciente" value="<?php echo $_GET['id1'] ?>" />
+										 		<input type="hidden" id="contadorIE" name="contadorIE" value="0" />
+										 		
+										 		<input type="hidden" id="idPacienteReplica" name="idPacienteReplica" value="<?php echo $datosPP_idReplica?>" />
+										 		
+									    		<div class="input-field col s12 m6 l6">
+									    			
+									    			<span class="prefix">
+									    					<i class="fa fa-pencil-square-o modal-trigger" aria-hidden="true" href="#modal_observacionesExamen" style="cursor: pointer;" ></i>
+									    					<?php
+																//saber si tiene permiso para personalizados
+																	if(in_array("1", $_SESSION['permisos_usuario'] )){
+																?>
+									    					<i class="fa fa-bookmark  modal-trigger" aria-hidden="true" href="#modal_personalizadoObservacionesExamen" style="cursor: pointer;"></i>
+									    					<?php
+																	}
+															?>
+									    					<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" onclick="examen_limpiarTextareaObservacionesExamen()"></i>
+									    				</span>
+									    				
+									    				<div id="tituloObservaciones" style="display: none;">
+									    					<div>
+									    						<span style="text-align: center;"><h5><?php echo $lang_examenes[19]//Observaciones?> <i  style="cursor: pointer; margin-left: 20%;" class="fa fa-eraser" aria-hidden="true" onclick="examen_recuperarTextareaObservaciones()"></i> </h5> </span>
+									    					</div>
+									    					
+									    				</div>
+									    				
+									    				<span id="contenidoTextoTexarea_observaciones" style="display: none;"></span>
+									    				
+									    				
+									    				<div id="contenidoEditorObservaciones" style="display: none; overflow-y: scroll; max-height: 120px; min-height: 120px; margin-left: 6%;">
+									    					
+									    				</div>		
+									    									    					
+												        <textarea id="observaciones" name="observaciones" class="materialize-textarea" style="max-height: 12rem; min-height: 12rem !important; overflow-y: scroll;"></textarea>
+												        <label id="label_observaciones" for="observaciones"><?php echo $lang_examenes[19]//Observaciones?></label>
+												        
+									    		</div>
+									    		
+									    		
+									    		
+									    		
+									    	</div><!-- Fin row-->
+									    	
+									    							    				
+						    			</form>
+						    				
+						    				<span id="removerExamen" style="display: none;"><?php echo $lang_examenes[28]//Remover examen?></span>
+									    	
+									    	<div class="row">
+									    											    		
+									    		<div class="col s12 m12 l12">
+									    			
+							    			      <ul class="collection with-header" id="ul_Examenes">
+											        <li class="collection-header"><h5 class="center-align"><?php echo $lang_examenes[29]//Exámenes?></h5></li>											        
+											      </ul>
+											      
+									    		</div>
+									    		
+									    	</div><!-- Fin row-->
+									    	
+									    	<div class="row">
+									    		<div class="col s12 m12 l12 right-align">
+									    			<span id="textoErrorGuardandoExamen" style="display: none;"><?php echo $lang_examenes[30]//Debe adicionar almenos un examen?></span>
+									    			<span id="errorGuardadoExamen" class="red-text">&nbsp;</span>
+									    		</div>
+									    		<div class="col s12 m12 l12 right-align">
+									    			
+									    			<!-- textos para mostrar alerta cancelar examen-->
+									       			<span id="estaSeguro" style="display: none;"><?php echo $lang_examenes[31]//Esta seguro de cancelar el examen??></span>
+									       			<span id="Seperderan" style="display: none;"><?php echo $lang_consultas[53]//Se perderán todos los datos?></span>
+									       			<span id="SiCancelarla" style="display: none;"><?php echo $lang_consultas[54]//Si, cancelarla?></span>
+									    			
+									              	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoExamen()"><?php echo $lang_botones[5]//Cancelar?></a>					  								
+		                    						<a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoExamen()"><?php echo $lang_botones[2]//Guardar?></a>									    			
+									    		</div>
+									    	</div>
+									    		    	
+									
+								</div><!-- Fin div para nuevo examen-->
+								<?php
+					  				}//fin if permiso crear examen
+								?>
+						  	</li>
+						  	
+						</ul>
+					</div><!-- Fin col-->
+				</div><!-- Fin row-->
+
+
+
+
+
+
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+					
+						  <ul class="collapsible popout" data-collapsible="accordion">
+						  	
+						  	<?php
+								foreach ($listadoExamenes as $listadoExamenes1) {
+									
+									//consultar los detalles del examen (items o examenes)
+									$detalleExamen	= $objetoExamenes->consultarDetalleExamenEncabezado($listadoExamenes1['idExamen']);
+							?>		
+								
+									<li>							
+								      	<div class="collapsible-header">
+								      		<i class="fa fa-file-text" aria-hidden="true"></i><?php echo $listadoExamenes1['fecha']." ".$listadoExamenes1['hora']." / ".$listadoExamenes1['nombreUsuario']." ".$listadoExamenes1['apellido']." / ".$listadoExamenes1['nombreSucursal']?>
+
+									
+										</div>
+										
+									  	<div class="collapsible-body">
+						      				<br />
+						      				
+								      		<div class="col s12 m2 l2 center-align valign">
+								      			<a href="http://www.nanuvet.com/impresiones/examenes/<?php echo $listadoExamenes1['idExamen']  ?>/" target="_blank" class="waves-effect waves-light btn"><i class="fa fa-print left" aria-hidden="true"></i><?php echo $lang_botones[9]//Imprimir?></a>
+								      		</div>
+								      		
+						      				<div class="row">
+						      		
+									      		<div class="col s12 m12 l12" style="max-height: 150px; min-height: 150px; overflow-y: scroll;">
+											      	
+											      		
+											      		<h6><b><?php echo $lang_examenes[19]//Observaciones?>:</b></h6>
+											      		<p>
+			 												<?php echo $listadoExamenes1['observaciones'] ?> 
+											      		</p>
+											      	
+									      		</div>
+									      		
+									      	</div><!-- Fin row-->
+									      	
+								      	 	  <ul class="collection with-header">
+										        <li class="collection-header"><h4><?php echo $lang_examenes[29]//Exámenes?></h4></li>
+										        
+										        <?php
+										        	foreach ($detalleExamen as $detalleExamen1) {
+										        		
+														$iconoEstadoGeneral = "";
+														
+														switch ($detalleExamen1['general']) {
+															case 'Bueno':
+																$iconoEstadoGeneral = '<i  class="fa fa-thumbs-o-up tooltipped" data-position="left" data-delay="50" data-tooltip="'.$lang_examenes[15].'" aria-hidden="true"></i>';
+															break;
+																
+															case 'Regular':
+																$iconoEstadoGeneral = '<i  class="fa fa-hand-rock-o tooltipped" data-position="left" data-delay="50" data-tooltip="'.$lang_examenes[16].'" aria-hidden="true"></i>';
+															break;
+																
+															case 'Malo':
+																$iconoEstadoGeneral = '<i  class="fa fa-thumbs-o-down tooltipped" data-position="left" data-delay="50" data-tooltip="'.$lang_examenes[17].'" aria-hidden="true"></i>';
+															break;
+														}
+														
+												?>
+														<li class="collection-item"><div><b><?php echo "(".$detalleExamen1['codigo'].")  ".$detalleExamen1['nombre']." --- " ?></b> <?php echo $detalleExamen1['observacion'] ?><a href="#modal_resultadoExamen" class="secondary-content modal-trigger" onclick="consultarResultadoExamen(<?php echo $detalleExamen1['idExamenDetalle']?>)"><i class="fa fa-reply fa-2x" aria-hidden="true"></i></a>  <a style="margin-right: 5px;" href="javascript:void(0)" class="secondary-content"><?php echo $iconoEstadoGeneral?></a></a>  </div></li>
+												<?php		
+														
+														
+													}//fin foreach
+										        ?>
+										        
+										        
+										      </ul>
+										      
+										      <br />
+										      <br />
+						      			
+						      			</div>
+										
+									</li>		
+							<?php	
+								}//fin foreach
+							
+							?>
+						  	
+						  	
+						  </ul>
+					</div>
+				</div>
+
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+
+	
+</main>
+
+<script>
+	$(document).ready(function () {
+		//funcion para evitar que se salga del sitio y perder los cambios
+			window.onbeforeunload = function(e) {
+				  e = e || window.event,
+				  message = "Seguro que desea salir sin guardar?";
+				 
+				  // show alert if there are some unsaved form
+				  if ($('.unsavedForm').size()) {
+				    // For IE and Firefox
+				                if (e) {
+				                  e.returnValue = message;
+				                }
+				                // For Safari
+				                return message;
+				  }
+				};
+				
+				
+	});
+</script>

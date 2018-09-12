@@ -1,0 +1,286 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+
+
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_examenes[1]//Listado examenes?>
+									<?php
+									//saber si tiene permiso para crear examenes
+										if(in_array("71", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_examenes[2]//Nuevo item listado examenes?>" onclick="mostrarFormNuevoExamen()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+						  				}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+									//saber si tiene permiso para editar examenes
+										if(in_array("73", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarExamen" style="display:  none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_examenes[3]//Editar item listado examenes?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarExamen" name="form_editarExamen" action="" method="post" >
+						  					<input type="hidden" id="idEditarExamen" name="idEditarExamen" value="" />
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="editarNombreExamen" name="editarNombreExamen" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_editarNombreExamen" for="editarNombreExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[4]//Nombre examen?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="editarCodigoExamen" name="editarCodigoExamen" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_editarCodigoExamen" for="editarCodigoExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[5]//Código?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">		
+						                      	   <i class="fa fa-usd prefix" aria-hidden="true"></i>				                            
+						                           <input id="editarPrecioExamen" name="editarPrecioExamen" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumerosPuntos(event)" >
+						                           <label id="label_editarPrecioExamen" for="editarPrecioExamen" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[6]//Precio?></label>
+						                      </div> 
+						                      
+						                   </div><!-- fin row -->
+						                  
+						                  <div class="row">
+						                  	    
+						                      <div class="input-field col s12 m8 l8">						                            
+						                           <input id="editarDescripcionExamen" name="editarDescripcionExamen" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_editarDescripcionExamen" for="editarDescripcionExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[7]//Descripción?></label>
+						                      </div> 	
+							  				
+						  				</form>
+							  				<div class="input-field col s12 m4 l4 right-align">					  					
+							  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionExamen()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+							  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionExamen()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+							  				</div>
+							  			</div><!-- fin row -->
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar examen
+								
+									//saber si tiene permiso para crear examenes
+										if(in_array("71", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevoExamen" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoExamen" name="form_nuevoExamen" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevoExamen" name="envioNuevoExamen"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="nombreExamen" name="nombreExamen" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreExamen" for="nombreExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[8]//Nombre del nuevo examen?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="codigoExamen" name="codigoExamen" type="text" class="validate" length="20" maxlength="20">
+						                            <label id="label_codigoExamen" for="codigoExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[5]//Código?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">		
+						                      	   <i class="fa fa-usd prefix" aria-hidden="true"></i>				                            
+						                           <input id="precioExamen" name="precioExamen" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumerosPuntos(event)" >
+						                           <label id="label_precioExamen" for="precioExamen" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[6]//Precio?></label>
+						                      </div> 
+						                      
+						                   </div><!-- fin row -->
+						                  
+						                  <div class="row">
+						                  	    
+						                      <div class="input-field col s12 m8 l8">						                            
+						                           <input id="descripcionExamen" name="descripcionExamen" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_descripcionExamen" for="descripcionExamen"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_examenes[7]//Descripción?></label>
+						                      </div> 					                      
+						                  
+						                  
+							                  <div class="input-field col s12 m4 l4 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoExamen()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoExamen()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>
+						                  
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo examen-->
+						  		<?php
+						  			}//fin if permiso crear nuevo examen
+						  		?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_examenes[9]//Buscar item examenes (Escribe y selecciona)?>" id="buscarExamen" type="text" class="validate" onkeypress="buscarExamenListados()" >
+						<input type="hidden" id="idExamenBuscada" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaExamen()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_examenes[10]//Activar examen?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_examenes[11]//Desactivar examen?></span>
+						
+							<div id="resultadoExamenesAjax">
+								
+							</div><!-- Fin para el resultado de los examenes ajax-->
+							
+							<div id="resultadoExamenes">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_examenes[12]//Examen?></th>
+											<th><?php echo $lang_examenes[5]//Código?></th>
+											<th><?php echo $lang_examenes[6]//Precio?></th>
+											<th><?php echo $lang_examenes[7]//Descripción?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoExamenes as $listadoExamenes1) {
+												
+												if($listadoExamenes1['estado'] == 'A'){																																																			//Desactivar examen
+													$btn = '<span id="spanB_'.$listadoExamenes1['idListadoExamen'].'"> <a id="'.$listadoExamenes1['idListadoExamen'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarExamen(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_examenes[11].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar examen
+													$btn = '<span id="spanB_'.$listadoExamenes1['idListadoExamen'].'"> <a id="'.$listadoExamenes1['idListadoExamen'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarExamen(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_examenes[10].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoExamenes1['idListadoExamen']."','".$listadoExamenes1['nombre']."','".$listadoExamenes1['codigo']."','".$listadoExamenes1['precio']."','".$listadoExamenes1['descripcion']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("73", $_SESSION['permisos_usuario'] )){ ?> onclick="editarExamen(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoExamenes1['nombre']?></td>
+												<td <?php if(in_array("73", $_SESSION['permisos_usuario'] )){ ?> onclick="editarExamen(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoExamenes1['codigo']?></td>
+												<td <?php if(in_array("73", $_SESSION['permisos_usuario'] )){ ?> onclick="editarExamen(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoExamenes1['precio']?></td>
+												<td <?php if(in_array("73", $_SESSION['permisos_usuario'] )){ ?> onclick="editarExamen(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoExamenes1['descripcion']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los examenes-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

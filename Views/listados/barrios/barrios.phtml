@@ -1,0 +1,251 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+				  <div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+				  
+              </span>
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>            
+              
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_barrios[3]//Barrios?> 
+									<?php
+									//saber si tiene permiso para crear barrios
+										if(in_array("15", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_barrios[0]//Nuevo barrio?>" onclick="mostrarFormNuevoBarrio()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}//fin permiso crear barrio
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+								//saber si tiene permiso para editar barrios
+									if(in_array("16", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_editarBarrio" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_barrios[4]//Editar barrio?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarBarrio" name="form_editarBarrio" action="" method="post" >
+						  					<input type="hidden" id="idEditarBarrio" name="idEditarBarrio" value="" />
+						  					<input type="hidden" id="idEditarCiudad" name="idEditarCiudad" value="" />
+							  				<div class="input-field col s12 m8 l8">
+							  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  					<input type="text" id="editarNombreBarrio" name="editarNombreBarrio" value="" length="100" maxlength="100"/>
+							  					<label id="label_editarNombreBarrio" for="editarNombreBarrio"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_barrios[2]//Nombre del barrio?></label>
+							  				</div>
+						  				</form>
+						  				<div class="input-field col s12 m4 l4 center-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionBarrio()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionBarrio()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar barrio
+						  			
+								//saber si tiene permiso para crear barrios
+									if(in_array("15", $_SESSION['permisos_usuario'] )){
+								?>
+						  		<div id="hidden_NuevoBarrio" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoBarrio" name="form_nuevoBarrio" action="" method="post">
+						  					<input type="hidden" id="idPais"   name="idPais"    value="0"/>
+						                    <input type="hidden" id="idCiudad" name="idCiudad"  value="0"/>
+						                    <input type="hidden" id="envioNuevoBarrio" name="envioNuevoBarrio"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      <div class="input-field col s12 m4 l4">
+						                            <input id="pais" name="pais"  type="text" class="validate" onkeypress="buscarPais()" >
+						                            <label id="label_pais" for="pais" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[5]//País (Escriba y seleccione)?></label> 
+						                      </div>
+						                      
+						                      <div class="input-field col s12 m4 l4">
+						                            <i class="fa fa-plus-circle prefix tooltipped modal-trigger" id="iconoNuevaCiudad"  href="#modal_nuevaCiudad" data-target="modal_nuevaCiudad"  data-position="left" data-delay="50" data-tooltip="<?php echo $lang_ciudades[0]//nueva ciudad ?>" style="cursor:pointer; display:none;"></i>
+						                            <input id="ciudad" name="ciudad" type="text" class="validate" onkeypress="buscarCiudad()" disabled>
+						                            <label id="label_ciudad" for="ciudad"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_general[6]//Ciudad (Escriba y seleccione)?></label> 
+						                      </div>
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="nombreBarrio" name="nombreBarrio" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreBarrio" for="nombreBarrio"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_barrios[2]//Nombre del barrio?></label> 
+						                      </div> 
+						                      
+						                  </div><!-- fin row-->
+						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoBarrio()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoBarrio()"><?php echo $lang_botones[2]//Guardar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo barrio-->
+						  		<?php
+									}//fin permiso crear barrio
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_barrios[5]//Buscar barrio (Escribe y selecciona)?>" id="buscarBarrio" type="text" class="validate" onkeypress="buscarBarrioListados()" >
+						<input type="hidden" id="idBarrioBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaBarrio()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_barrios[6]//Activar barrio?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_barrios[7]//Desactivar barrio?></span>
+						
+							<div id="resultadoBarriosAjax">
+								
+							</div><!-- Fin para el resultado de los barrios ajax-->
+							
+							<div id="resultadoBarrios">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_barrios[8]//Barrio?></th>
+											<th><?php echo $lang_barrios[9]//Ciudad?></th>
+											<th><?php echo $lang_barrios[10]//País?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoBarrios as $listadoBarrios1) {
+												
+												if($listadoBarrios1['estado'] == 'A'){																																																			//Desactivar barrio
+													$btn = '<span id="spanB_'.$listadoBarrios1['idBarrio'].'"> <a id="'.$listadoBarrios1['idBarrio'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarBarrio(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_barrios[7].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar barrio
+													$btn = '<span id="spanB_'.$listadoBarrios1['idBarrio'].'"> <a id="'.$listadoBarrios1['idBarrio'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarBarrio(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_barrios[6].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoBarrios1['idBarrio']."','".$listadoBarrios1['nombreB']."','".$listadoBarrios1['idCiudad']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("16", $_SESSION['permisos_usuario'] )){ ?> onclick="editarBarrio(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoBarrios1['nombreB']?></td>
+												<td <?php if(in_array("16", $_SESSION['permisos_usuario'] )){ ?> onclick="editarBarrio(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoBarrios1['nombreC']?></td>
+												<td <?php if(in_array("16", $_SESSION['permisos_usuario'] )){ ?> onclick="editarBarrio(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoBarrios1['nombreP']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los barrios-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

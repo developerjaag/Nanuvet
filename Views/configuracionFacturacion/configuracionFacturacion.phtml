@@ -1,0 +1,632 @@
+
+ <div id="modal_facturadoresResolucion" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+      <h4 class="center-align" ><?php echo $lang_configuracionFacturacion[0]//Facturadores de una resolución?></h4>
+      
+
+      
+      <div id="resultadoVinculosResolucionFacturadores">
+      	
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat "><?php echo $lang_botones[3] //Cerrar?></a>
+    </div>
+  </div>
+
+
+<main>
+
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+              	
+              	
+              	<div class="row">
+              		<div class="col s6">
+              			<?php echo $lang_configuracionFacturacion[1] //Configuración facturación?>
+              		</div>
+              		<div class="col s6 right-align">                			            			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_general[19]//Ver tutorial?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+              		</div>
+              	</div>                	
+              	
+              </span>
+              
+              
+              
+              <div class="row">	
+				<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+						<h5>Video-tutorial</h5>
+					 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600" controls>					    
+					  
+					  			<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/usuarios/usuarios.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/configuracionFacturacion/configuracionFacturacion.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+					  
+					  </video>
+					  <h6 class="center-align">
+					  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_general[18]//Cerrar video?></a>
+					  </h6>
+				</div><!-- Fin div col video-->
+			</div>
+
+					
+					<br />
+					<br />
+					
+					<div class="row z-depth-1" >
+						
+						<div class="col s12 m4 l4 input-field">
+							<input id="precioConsulta" name="precioConsulta" type="text" class="validate" onkeypress="return soloNumerosPuntos(event)" maxlength="10" length="10" value="<?php echo $configuraciones[0]['precioConsulta']?>">
+          					<label id="label_precioConsulta" for="precioConsulta"><?php echo  $lang_configuracionFacturacion[2]//Precio consulta?></label>
+						</div>
+						
+						<div class="col s12 m4 l4 input-field">
+							<input id="precioHospitalizacion" name="precioHospitalizacion" type="text" class="validate" onkeypress="return soloNumerosPuntos(event)" maxlength="10" length="10" value="<?php echo $configuraciones[0]['precioHoraHospitalizacion']?>">
+          					<label id="label_precioHospitalizacion" for="precioHospitalizacion"><?php echo $lang_configuracionFacturacion[3]//Precio hora hospitalización?></label>
+						</div>
+						
+						<div class="col s12 m4 l4 input-field center-align">
+							<span id="confirmacionGuardadoPrecio" style="display: none;"><?php echo $lang_configuracionFacturacion[4]//Precios guardados correctamente!?></span>
+							<a class="waves-effect waves-light btn" onclick="guardarPreciosConfiguracion()"><?php echo $lang_botones[2]//Guardar?></a>
+						</div>
+						
+					</div><!-- Fin row-->
+						
+
+
+				  <div class="row">
+				    <div class="col s12">
+				      <ul class="tabs">
+				        <li class="tab col s3"><a class="active black-text" href="#tab_resolucionesFacturadores"><?php echo $lang_configuracionFacturacion[5]//Resoluciones Y Facturadores?></a></li>
+				       <!-- <li class="tab col s3"><a class="black-text" href="#tab_cajas">Cajas</a></li>-->
+				      </ul>
+				    </div>
+				    <div id="tab_resolucionesFacturadores" class="col s12">
+				    	
+				    	<br />
+				    	
+				    	
+							<div class="row">
+							
+								<div id="columnaNuevaResolucion" class="col s12 m6 l6">
+									
+									<ul class="collection with-header">
+									
+										<li class="collection-header">
+											<h4 id="tituloLiResolucion" class="center-align" ><?php echo $lang_configuracionFacturacion[6]//Resoluciones?>
+												<?php
+													//saber si tiene permisos para adicionar resoluciones
+													if(in_array("42", $_SESSION['permisos_usuario'] )){
+												?>
+									  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_configuracionFacturacion[7]//Nueva resolución?>" onclick="mostrarFormNuevaResolucion()">
+									  				<i class="material-icons">add</i>
+									  			</a>
+									  			<?php
+													}
+												?>
+									  		</h4>
+									  		
+									  		<br />
+									  		<?php
+													//saber si tiene permisos para adicionar resoluciones
+													if(in_array("42", $_SESSION['permisos_usuario'] )){
+												?>
+									  		<div id="div_hiddenNuevaResolucion" style="display: none;">
+									  			
+									  			<h4 class="center-align"><?php echo $lang_configuracionFacturacion[7]//Nueva resolución?></h4>
+									  		<form id="form_nuevaResolucion" name="form_nuevaResolucion" method="post" action="">	
+									  			<input type="hidden" id="hidden_enviarFormNuevaResolucion"  name="hidden_enviarFormNuevaResolucion" value="enviar" />
+									  			<div class="row">									  				
+									  			
+										  			<div class="input-field col s6">
+											          <input id="resolucion_numero" name="resolucion_numero" type="text" class="validate" maxlength="45" length="45">
+											          <label id="label_resolucion_numero" for="resolucion_numero" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[8]//Número de resolución?></label>
+											        </div>
+											        
+											        
+										    		  <div class="input-field col s6 m3 l3" id="resolucion_select_autocorrectorIva">
+													    <select id="resolucion_autocorrectorIva" name="resolucion_autocorrectorIva" onchange="cambiarValorPorcentajeIVA()">
+													      <option value="" disabled selected><?php echo $lang_configuracionFacturacion[9]//Elige una opción?></option>
+													      <option value="Si"><?php echo $lang_configuracionFacturacion[10]//Si?></option>
+													      <option value="No"><?php echo $lang_configuracionFacturacion[11]//No ?></option>
+													    </select>
+													    <label><?php echo $lang_configuracionFacturacion[12]//Autocorrector de IVA?></label>
+													  </div>
+													  
+													  <div class="input-field col s6 m2 l2">
+											          	<input id="resolucion_porcentajeIva" name="resolucion_porcentajeIva" type="text" class="validate"  onkeypress="return soloNumeros(event)" maxlength="2" length="2" value="0" >
+											          	<label id="label_resolucion_porcentajeIva" for="resolucion_porcentajeIva" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[13]//Porcentaje IVA?></label>
+											          </div>
+													  
+													 											        
+										    	</div><!-- Fin row-->
+										    	<div class="row">
+										    		
+										    		<div class="input-field col s4 m2 l2">
+											          <input id="resolucion_consecutivoInicial" name="resolucion_consecutivoInicial" type="text" class="validate" onkeypress="return soloNumeros(event)">
+											          <label id="label_resolucion_consecutivoInicial" for="resolucion_consecutivoInicial" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[14]//Consecutivo inicial?></label>
+											        </div>
+											        
+											        <div class="input-field col s4 m2 l2">
+											          <input id="resolucion_consecutivoFinal" name="resolucion_consecutivoFinal" type="text" class="validate"  onkeypress="return soloNumeros(event)">
+											          <label id="label_resolucion_consecutivoFinal" for="resolucion_consecutivoFinal" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[15]//Consecutivo final?></label>
+											        </div>
+											        
+											        <div class="input-field col s4 m2 l2">
+											          <input id="resolucion_iniciarEn" name="resolucion_iniciarEn" type="text" class="validate"  onkeypress="return soloNumeros(event)">
+											          <label id="label_resolucion_iniciarEn" for="resolucion_iniciarEn" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[16]//Iniciar facturación en?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input id="resolucion_fecha" name="resolucion_fecha" type="text" class="validate" maxlength="10">
+											          <label id="label_resolucion_fecha" for="resolucion_fecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[17] //Fecha de resolución?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input disabled id="resolucion_fechaVencimiento" name="resolucion_fechaVencimiento" type="text" class="validate">
+											          <label id="label_resolucion_fechaVencimiento" for="resolucion_fechaVencimiento" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[18]//Fecha de vencimiento?></label>
+											        </div>
+										    		
+										    	</div><!-- Fin row-->
+										    	
+										    </form>
+										    	
+										    	<div class="row">
+										    		 <div class="col s12 right-align">
+													  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevaResolucion()"><?php echo $lang_botones[5]//Cancelar?></a>
+								                        <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevaResolucion()"><?php echo $lang_botones[2]//Guardar?></a>
+													  </div>
+										    	</div><!-- Fin row-->
+										    	
+									  		</div><!-- Fin hiden nueva resolucion-->
+											   <?php
+											   		}//fin if permiso nueva resolucion
+											   	?> 	
+						    			</li>
+						    			
+						    		</ul>
+						  		</div><!-- Fin col-->
+						  		
+						  		<div id="columnaNuevoFacturador" class="col s12 m6 l6">
+									
+									<ul class="collection with-header">
+									
+										<li class="collection-header">
+											<h4 id="tituloLiFacturadores" class="center-align" ><?php echo $lang_configuracionFacturacion[19]//Facturadores?>
+												<?php
+													//saber si tiene permisos para adicionar facturadores
+													if(in_array("39", $_SESSION['permisos_usuario'] )){
+												?>
+									  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_configuracionFacturacion[20]//Nuevo facturador?>" onclick="mostrarFormNuevoFacturador()">
+									  				<i class="material-icons">add</i>
+									  			</a>
+									  			<?php
+									  				}
+									  			?>
+									  		</h4>
+									  		
+									  		<br />
+									  		<?php
+													//saber si tiene permisos para adicionar facturadores
+													if(in_array("39", $_SESSION['permisos_usuario'] )){
+												?>
+									  		<div id="div_hiddenNuevoFacturador" style="display: none;">
+									  			
+									  			<h4 class="center-align"><?php echo $lang_configuracionFacturacion[20] //Nuevo facturador?></h4>
+									  		
+									  		<form id="form_nuevoFacturador" name="form_nuevoFacturador" action="" method="post">	
+									  			
+									  			<input type="hidden" id="hidden_enviarFormNuevoFacturador"  name="hidden_enviarFormNuevoFacturador" value="enviarFacturador" />
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s12 m4 l4">
+											          <input  id="facturador_identifiacion" name="facturador_identifiacion" type="text" class="validate">
+											          <label id="label_facturador_identifiacion" for="facturador_identifiacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[1]//Identificación?></label>
+											        </div>
+											        
+											        <div class="input-field col s12 m4 l4">
+											          <input  id="facturador_nombre" name="facturador_nombre" type="text" class="validate">
+											          <label id="label_facturador_nombre" for="facturador_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[2]//Nombres?></label>
+											        </div>
+											        
+											        <div class="input-field col s12 m4 l4">
+											          <input  id="facturador_apellido" name="facturador_apellido" type="text" class="validate">
+											          <label id="label_facturador_apellido" for="facturador_apellido" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[3]//Apellidos?></label>
+											        </div>
+									  				
+									  			</div><!-- Fin row-->
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											          <input  id="facturador_telefono" name="facturador_telefono" type="text" class="validate">
+											          <label id="label_facturador_telefono" for="facturador_telefono" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+											        </div>
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											          <input  id="facturador_celular" name="facturador_celular" type="text" class="validate">
+											          <label id="label_facturador_celular" for="facturador_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input  id="facturador_direccion" name="facturador_direccion" type="text" class="validate">
+											          <label id="label_facturador_direccion" for="facturador_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input  id="facturador_email" name="facturador_email" type="text" class="validate">
+											          <label id="label_facturador_email" for="facturador_email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >E-mail</label>
+											        </div>
+									  				
+									  			</div><!-- Fin row-->
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											           <select id="facturador_tipoRegimen" name="facturador_tipoRegimen">
+													      <option value="" disabled selected><?php echo $lang_configuracionFacturacion[9]//Elige una opción?></option>
+													      <option value="1"><?php echo $lang_configuracionFacturacion[25]//Común?></option>
+													      <option value="2"><?php echo $lang_configuracionFacturacion[26]//Simplificado?></option>
+													    </select>
+													    <label><?php echo $lang_configuracionFacturacion[27]//Tipo de régimen?></label>
+											        </div>
+											        
+											        
+											         <div class="input-field col s6 m3 l3">
+											          <input  id="facturador_razonSocial" name="facturador_razonSocial" type="text" class="validate">
+											          <label id="label_facturador_razonSocial" for="facturador_razonSocial" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[21]//Razón social?></label>
+											        </div>
+											        
+											         <div class="input-field col s6 m3 l3">
+											          <input  id="facturador_identifiacionEmisor" name="facturador_identifiacionEmisor" type="text" class="validate">
+											          <label id="label_facturador_identifiacionEmisor" for="facturador_identifiacionEmisor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[22]//Identificación emisor?></label>
+											        </div>
+									  				
+									  				 <div class="input-field col s6 m3 l3">
+											          <input  id="facturador_nombreEmisor" name="facturador_nombreEmisor" type="text" class="validate">
+											          <label id="label_facturador_nombreEmisor" for="facturador_nombreEmisor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[23]//Nombre emisor?></label>
+											        </div>
+									  				
+									  				
+									  			</div><!-- fin row-->
+									  			
+									  		</form>
+									  			
+									  			<div class="row">
+										    		 <div class="col s12 right-align">
+													  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoFacturador()"><?php echo $lang_botones[5]//Cancelar?></a>
+								                        <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoFacturador()"><?php echo $lang_botones[2]//Guardar?></a>
+													  </div>
+										    	</div><!-- Fin row-->
+										    	
+										    	<br />
+									  			
+									  			
+									  		</div><!-- Fin div_hiddenNuevoFacturador-->
+									  		<?php
+									  			}//fin if crear facturador
+									  		?>
+									  		
+									  		
+									  		
+									  		<?php
+													//saber si tiene permisos para editar facturadores
+													if(in_array("38", $_SESSION['permisos_usuario'] )){
+												?>
+									  		<div id="div_hiddenEditarFacturador" style="display: none;">
+									  			
+									  			<h4 class="center-align"><?php echo $lang_configuracionFacturacion[24]//Editar facturador?></h4>
+									  		
+									  		<form id="form_editarFacturador" name="form_editarFacturador" action="" method="post">	
+									  			
+									  			<input type="hidden" id="editar_facturador_id"  name="editar_facturador_id" value="0" />
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s12 m4 l4">
+											          <input  id="editar_facturador_identifiacion" name="editar_facturador_identifiacion" type="text" class="validate">
+											          <label id="label_editar_facturador_identifiacion" for="editar_facturador_identifiacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[1]//Identificación?></label>
+											        </div>
+											        
+											        <div class="input-field col s12 m4 l4">
+											          <input  id="editar_facturador_nombre" name="editar_facturador_nombre" type="text" class="validate">
+											          <label id="label_editar_facturador_nombre" for="editar_facturador_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[2]//Nombres?></label>
+											        </div>
+											        
+											        <div class="input-field col s12 m4 l4">
+											          <input  id="editar_facturador_apellido" name="editar_facturador_apellido" type="text" class="validate">
+											          <label id="label_editar_facturador_apellido" for="editar_facturador_apellido" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[3]//Apellidos?></label>
+											        </div>
+									  				
+									  			</div><!-- Fin row-->
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_telefono" name="editar_facturador_telefono" type="text" class="validate">
+											          <label id="label_editar_facturador_telefono" for="editar_facturador_telefono" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[0]//Teléfono?></label>
+											        </div>
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_celular" name="editar_facturador_celular" type="text" class="validate">
+											          <label id="label_editar_facturador_celular" for="editar_facturador_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[2]//Celular?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_direccion" name="editar_facturador_direccion" type="text" class="validate">
+											          <label id="label_editar_facturador_direccion" for="editar_facturador_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_general[3]//Dirección?></label>
+											        </div>
+											        
+											        <div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_email" name="editar_facturador_email" type="text" class="validate">
+											          <label id="label_editar_facturador_email" for="editar_facturador_email" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >E-mail</label>
+											        </div>
+									  				
+									  			</div><!-- Fin row-->
+									  			
+									  			<div class="row">
+									  				
+									  				<div class="input-field col s6 m3 l3">
+											           <select id="editar_facturador_tipoRegimen" name="editar_facturador_tipoRegimen">
+													      <option value=""><?php echo $lang_consultas[34]//No aplica?></option>
+													      <option value="1"><?php echo $lang_configuracionFacturacion[25]//Común?></option>
+													      <option value="2"><?php echo $lang_configuracionFacturacion[26]//Simplificado?></option>
+													    </select>
+													    <label><?php echo $lang_configuracionFacturacion[27]//Tipo de régimen?></label>
+											        </div>
+											        
+											        
+											         <div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_razonSocial" name="editar_facturador_razonSocial" type="text" class="validate">
+											          <label id="label_editar_facturador_razonSocial" for="editar_facturador_razonSocial" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[21]//Razón social?></label>
+											        </div>
+											        
+											         <div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_identifiacionEmisor" name="editar_facturador_identifiacionEmisor" type="text" class="validate">
+											          <label id="label_editar_facturador_identifiacionEmisor" for="editar_facturador_identifiacionEmisor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[22]//Identificación emisor?></label>
+											        </div>
+									  				
+									  				 <div class="input-field col s6 m3 l3">
+											          <input  id="editar_facturador_nombreEmisor" name="editar_facturador_nombreEmisor" type="text" class="validate">
+											          <label id="label_editar_facturador_nombreEmisor" for="editar_facturador_nombreEmisor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_configuracionFacturacion[23]//Nombre emisor?></label>
+											        </div>
+									  				
+									  				
+									  			</div><!-- fin row-->
+									  			
+									  		</form>
+									  			
+									  			<div class="row">
+										    		 <div class="col s12 right-align">
+													  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoEditarFacturador()"><?php echo $lang_botones[5]//Cancelar?></a>
+								                        <a class="waves-effect waves-light btn" onclick="validarGuardadoEditarFacturador()"><?php echo $lang_botones[2]//Guardar?></a>
+													  </div>
+										    	</div><!-- Fin row-->
+										    	
+										    	<br />
+									  			
+									  			
+									  		</div><!-- Fin div_hiddenNuevoFacturador-->
+									  		
+									  		<?php
+									  			}//fin if permiso editar facturador
+									  		?>
+									  		
+									  		
+											    	
+						    			</li>
+						    			
+						    		</ul>
+						  		</div><!-- Fin col-->
+										  		
+						 	</div><!-- Fin row-->
+						 	
+						 	<div class="col s12">
+						      <ul class="tabs">
+						        <li class="tab col s3"><a class="active black-text" href="#tab_listadoResoluciones"><?php echo $lang_configuracionFacturacion[6]//Resoluciones?></a></li>
+						        <li class="tab col s3"><a class="black-text" href="#tab_listadoFacturadores"><?php echo $lang_configuracionFacturacion[19]//Facturadores?></a></li>
+						      </ul>
+						    </div>
+						    
+						    <div id="tab_listadoResoluciones">
+						    	<span id="spanActivar" style="display: none;"><?php echo $lang_configuracionFacturacion[28]//Activar resolución?></span>
+								<span id="spanDesactivar" style="display: none;"><?php echo $lang_configuracionFacturacion[29]//Desactivar resolución?></span>
+						    		<table class="bordered highlight">
+							
+										<thead>
+											<tr>
+												<th><?php echo $lang_configuracionFacturacion[30]//Número?></th>
+												<th><?php echo $lang_configuracionFacturacion[31]//C. inicial?></th>
+												<th><?php echo $lang_configuracionFacturacion[32]//C. Final?></th>
+												<th><?php echo $lang_configuracionFacturacion[33]//Fecha?></th>
+												<th><?php echo $lang_configuracionFacturacion[34]//Fecha vencimiento?></th>
+												<th><?php echo $lang_configuracionFacturacion[13] //Procentaje IVA?></th>
+												<th><?php echo $lang_configuracionFacturacion[35]//# próxima factura?></th>
+												<th><?php echo $lang_general[12] //Estado?></th>
+												<th></th>
+											</tr>
+										</thead>
+										
+										<tbody>
+											
+											<?php  foreach ($listadoResoluciones as $listadoResoluciones1) { 
+												
+												if($listadoResoluciones1['estado'] == 'A'){																																																			//Desactivar resolución
+														$btn = '<span id="spanR_'.$listadoResoluciones1['idResolucionDian'].'"> <a id="'.$listadoResoluciones1['idResolucionDian'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarResolucion(this.id)"  data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[36].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+													
+													    $btn2 = '<span id="btnFacturadores_'.$listadoResoluciones1['idResolucionDian'].'"><a id="btnFacturadores_'.$listadoResoluciones1['idResolucionDian'].'" class="waves-effect waves-light btn black tooltipped modal-trigger" data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[19].'" data-target="modal_facturadoresResolucion" href="#modal_facturadoresResolucion" onclick="consultarRelacionFacturadores('.$listadoResoluciones1['idResolucionDian'].')" >
+																	<i class="fa fa-users" aria-hidden="true"></i>
+																</a></span>';
+												}else{																																																											//Activar resolución
+														$btn = '<span id="spanR_'.$listadoResoluciones1['idResolucionDian'].'"> <a id="'.$listadoResoluciones1['idResolucionDian'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarResolucion(this.id)" data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[37].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+													
+														$btn2 = '<span id="btnFacturadores_'.$listadoResoluciones1['idResolucionDian'].'"><a class="disabled waves-effect waves-light btn black tooltipped" data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[19].'" >
+																	<i class="fa fa-users" aria-hidden="true"></i>
+																</a></span>';
+												}
+												
+											?>
+												
+												<tr>
+													<td><?php echo $listadoResoluciones1['numeroResolucion']  ?> </td>
+													<td><?php echo $listadoResoluciones1['consecutivoInicial']  ?> </td>
+													<td><?php echo $listadoResoluciones1['consecutivoFinal']  ?> </td>
+													<td><?php echo $listadoResoluciones1['fechaResolucion']  ?> </td>
+													<td><?php echo $listadoResoluciones1['fechaVencimiento']  ?> </td>
+													<td><?php echo $listadoResoluciones1['porcentajeIva']  ?> </td>
+													<td><?php echo $listadoResoluciones1['proximaFactura']  ?> </td>
+													<td><?php echo $btn ?></td>
+													<td>
+														<?php echo $btn2 ?>
+													</td>
+													
+												</tr>
+												
+												
+											<?php }  ?>
+											
+											
+										</tbody>
+										
+									</table>
+						    	
+						    	
+						    </div><!-- Fin tab interno listado resoluciones-->
+						    
+						    
+						    
+						    
+						    <div id="tab_listadoFacturadores">
+						    	
+						    	<span id="spanActivarFacturador" style="display: none;"><?php echo $lang_configuracionFacturacion[38]//Activar facturador?></span>
+								<span id="spanDesactivarFacturador" style="display: none;"><?php echo $lang_configuracionFacturacion[39]//Desactivar facturador?></span>
+								
+						    	<table class="bordered highlight">
+						    		
+						    		<thead>
+						    			<tr>
+						    				<!--<th>Por defecto</th>-->
+						    				<th><?php echo $lang_perfil[1]//Identificación?></th>
+						    				<th><?php echo $lang_perfil[2]//Nombres?></th>
+						    				<th><?php echo $lang_perfil[3] //Apellidos?></th>
+						    				<th><?php echo $lang_general[0]//Teléfono?></th>
+						    				<th>E-mail</th>
+						    				<th><?php echo $lang_configuracionFacturacion[27]//Tipo régimen?></th>
+						    				<th><?php echo $lang_configuracionFacturacion[21]//Razón social?></th>
+						    				<th><?php echo $lang_configuracionFacturacion[40]//Idnt. emisor?></th>
+						    				<th><?php echo $lang_configuracionFacturacion[41]//Nombre emisor?></th>
+						    				<th></th>
+						    			</tr>
+						    		</thead>
+						    		
+						    		<tbody>
+						    			<?php
+						    				foreach ($listadoFacturadores as $listadoFacturadores1) {
+						    					
+												switch ($listadoFacturadores1['tipoRegimen']) {
+													case '1':
+														$textTipoRegimen = $lang_configuracionFacturacion[25];//Común
+													break;
+													
+													case '2':
+														$textTipoRegimen = $lang_configuracionFacturacion[26];//Simplificado
+													break;
+													
+													default:
+														$textTipoRegimen = $lang_configuracionFacturacion[42];//Ninguno
+													break;
+												}
+												
+												if($listadoFacturadores1['estado'] == "A"){
+													
+													$btn = '<span id="spanF_'.$listadoFacturadores1['idFacturador'].'"> <a id="'.$listadoFacturadores1['idFacturador'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarFacturador(this.id)"  data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[39].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+													
+											
+												
+												}else{
+													
+													$btn = '<span id="spanF_'.$listadoFacturadores1['idFacturador'].'"> <a id="'.$listadoFacturadores1['idFacturador'].'" class="waves-effect waves-light red darken-1 btn tooltipped" onclick="activarFacturador(this.id)"  data-position="bottom" data-delay="50" data-tooltip="'.$lang_configuracionFacturacion[38].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+													
+													
+												}
+												
+												if( $listadoFacturadores1['idFacturador'] == $idFacturadorPorDefecto ){
+														$check = '<span id="spanFPD_'.$listadoFacturadores1['idFacturador'].'"><p>
+												      			<input type="checkbox" id="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'" name="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'" onclick="marcarFacturadorDefecto('.$listadoFacturadores1['idFacturador'].')" checked="checked" disabled="disabled" />
+												      			<label for="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'"></label>
+												    		</p></span>';
+													}else{
+														$check = '<span id="spanFPD_'.$listadoFacturadores1['idFacturador'].'"><p>
+												      			<input type="checkbox" id="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'" name="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'" onclick="marcarFacturadorDefecto('.$listadoFacturadores1['idFacturador'].')" />
+												      			<label for="facturadorDefecto_'.$listadoFacturadores1['idFacturador'].'"></label>
+												    		</p></span>';
+													}
+												
+												$parametros = "'".$listadoFacturadores1['idFacturador']."','".$listadoFacturadores1['identificacion']."','".$listadoFacturadores1['nombre']."','".$listadoFacturadores1['apellido']."','".$listadoFacturadores1['telefono']."','".$listadoFacturadores1['celular']."','".$listadoFacturadores1['direccion']."','".$listadoFacturadores1['email']."','".$listadoFacturadores1['tipoRegimen']."','".$listadoFacturadores1['razonSocial']."','".$listadoFacturadores1['identificacionEmisor']."','".$listadoFacturadores1['nombreEmisor']."'";
+												
+										?>
+										
+							    			<tr style="cursor: pointer;">
+													<!--<td style="text-align: center;">
+														<?php echo $check ?>
+												 </td>-->
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['identificacion']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['nombre']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['apellido']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['telefono']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['email']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $textTipoRegimen?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['razonSocial']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['identificacionEmisor']?></td>
+							    				<td <?php if(in_array("38", $_SESSION['permisos_usuario'] )){ ?> onclick="editarFacturador(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoFacturadores1['nombreEmisor']?></td>
+							    				<td><?php echo $btn ?></td>
+							    			</tr>
+						    			
+						    			<?php		
+											}
+						    			?>
+						    		</tbody>
+						    		
+						    	</table>
+						    	
+						    	
+						    </div><!-- Fin tab interno listado facturadores-->
+						 	
+						 	
+						
+						 	
+						    					    	
+				    </div><!-- Fin tab_resolucionesFacturadores-->
+				    <!--<div id="tab_cajas" class="col s12">
+				    	
+				    	<br />
+				    	
+				    	Test 2
+				    </div><!-- Fin tab_cajas-->
+				  </div>
+	
+
+
+			
+          </div>
+        </div>
+      </div>
+     </div>
+
+</main>

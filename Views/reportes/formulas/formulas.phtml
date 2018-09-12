@@ -1,0 +1,156 @@
+<main>
+	<div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_reportes[12]//Reportes?>				    
+						  </div>
+						  <?php echo $lang_reportes[6] //Formulas?>
+						  
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+                 <div class="row">	
+					<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+							<h5>Video-tutorial</h5>
+						 <video id="videoTutorial_personalizados" class="responsive-video" controls>
+						    <source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/reportes/reportes.mp4" type="video/mp4">
+						  </video>
+						  <h6 class="center-align">
+						  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar video?></a>
+						  </h6>
+					</div><!-- Fin div col video-->
+				</div> 
+              
+              
+              <form id="form_filtroFormulas" name="form_filtroFormulas" action="" method="post">
+				
+				<input type="hidden" id="envioFormFiltros" name="envioFormFiltros" value="enviar" />
+				
+				<div class="row">
+					
+						
+						<div class="input-field col s2">
+				          <i class="fa fa-calendar prefix" aria-hidden="true"></i>
+				          <input  id="fechaInicial" name="fechaInicial" type="text" class="validate fechaInicio">
+				          <label class="label_fechaInicial" for="fechaInicial" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_reportes[13]//Fecha inicial?></label>
+				        </div>
+				        
+				        <div class="input-field col s2">
+				          <i class="fa fa-calendar prefix" aria-hidden="true"></i>
+				          <input id="fechaFinal" name="fechaFinal" type="text" class="validate fechaFin">
+				          <label class="label_fechaFinal" for="fechaFinal" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_reportes[14]//Fecha final?></label>
+				        </div>
+				        
+				        <div class="input-field col s4">
+						    <select id="usuarios" name="usuarios">
+						      <option value="" disabled selected><?php echo $lang_reportes[15]//Elige el médico?></option>
+						     	<?php
+						     		foreach ($listadoUsuariosCirugia as $listadoUsuariosCirugia1) {
+								?>
+										<option value="<?php echo $listadoUsuariosCirugia1['idUsuario']?>" ><?php echo "(".$listadoUsuariosCirugia1['identificacion'].") ".$listadoUsuariosCirugia1['nombre']." ".$listadoUsuariosCirugia1['apellido']?></option>
+								<?php		 
+									 }
+						     	?>
+						    </select>
+						    <label><?php echo $lang_reportes[16]//Médico?></label>
+						</div>
+						
+						<div class="input-field col s4">
+						    	<input type="hidden" id="idMedicamento" name="idMedicamento" value="0" />
+					          <input  id="buscarMedicamento" name="buscarMedicamento" type="text" class="validate" onkeypress="buscarMedicamentoFormula()">
+					          <label for="buscarMedicamento"><?php echo $lang_reportes[76]//Medicamento?></label>
+						</div>
+												
+			    </div><!-- Fin row-->
+			    
+			    <div class="row">
+			    	
+			    	 <div class="input-field col s4">
+			    	 	<input type="hidden" id="idPropietario" name="idPropietario" value="0" />
+			          <input  id="propietario" name="propietario" type="text" class="validate" onkeypress="buscarPropietarioCita()">
+			          <label for="propietario"><?php echo $lang_reportes[18]//Propietario?></label>
+			        </div>
+			        
+			        <div class="input-field col s4"  id="selectPacienterDelPropietario">
+						    <select  id="cita_pacientes" name="cita_pacientes" >
+						      <option value="" disabled selected><?php echo $lang_reportes[19]//Elige un paciente?></option>
+						    </select>
+						    <label><?php echo $lang_reportes[20]//Pacientes?></label>
+					</div>
+			    	    
+				</form>			    	    
+			    	    
+			        <div class="input-field col s4 center-align">
+			        	<a class="waves-effect waves-light btn" onclick="formulas_filtrar()"><?php echo $lang_reportes[21]//Buscar?></a>
+			        	<a class="waves-effect waves-light black btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_reportes[22]//Exportar a hoja de calculo?>" onclick="exportarHCalculo()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>   <?php echo $lang_reportes[23]//Exportar?></a>
+			        	
+			        </div>
+			        
+				</div><!-- Fin row-->
+				
+
+				<div class="row">
+					<div class="col s12 center-align">
+						<span class="red-text" style="display: none;" id="spanErrorFiltro"><?php echo $lang_reportes[24]//Debe aplicar al menos un filtro?></span>
+					</div>
+				</div>
+				
+				<form id="form_excel" name="form_excel" action="http://www.nanuvet.com/Controllers/impresiones/hojaCalculo/hojaCalculoController.php" method="post" target="_blank">
+					<input type="hidden" id="envioForm" name="envioForm" value="" />
+				</form>
+				
+				<h6><?php echo $lang_reportes[25]//Total registros:?><b><?php echo $totalRegistros?></b> <i><?php echo $lang_reportes[26]//(Para más detalles exporta a una hoja de calculo)?></i></h6>
+				
+				<div id="resultadoReporte">
+					
+					<?php
+						require_once("resultadoReporteFormulas.phtml");
+					?>
+					
+				</div><!--Fin Div resultado reportes-->
+
+			 </div>
+          </div>
+        </div>
+      </div>
+      
+ <?php 
+ 	if(!isset($_SESSION['filtro_post'])){
+ ?>
+      	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+ <?php		
+ 	}else{
+			unset($_SESSION['filtro_post']);
+		   	unset($_SESSION['filtro_1']);
+			unset($_SESSION['filtro_2']);
+			unset($_SESSION['filtro_3']);
+			unset($_SESSION['filtro_4']);
+			unset($_SESSION['filtro_5']);
+			unset($_SESSION['filtro_6']);
+ 	}
+ ?> 	      
+      
+</main>

@@ -1,0 +1,293 @@
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              	<div class="row">
+              		<div class="col s6">
+              			 <div data-activates="slide-out" class="chip button-collapse" style="cursor: pointer;">
+		              		<i class="fa fa-bars" aria-hidden="true"></i>
+						    <?php echo $lang_listados[1]//Listas?>				    
+						  </div>
+              		</div>
+              		<div class="col s6 right-align">
+              			
+              			<i style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_personalizados[44]//Ver tutorial ?>" class="fa fa-play tooltipped" aria-hidden="true" onclick="playVideoTutorial()"></i>
+
+              		</div>
+              	</div>
+              </span>
+              
+					<div class="row">	
+						<div id="div_videoTutorial" style="display: none;" class="col s12 center-align">
+								<h5><?php echo $lang_personalizados[27] //Tutorial personalizados?></h5>
+							 <video id="videoTutorial_personalizados" class="responsive-video" height="600" width="600"  controls>
+							 	
+							 	<?php 
+							 		
+							 		if(is_file("Public/videos/tutoriales/".$idiomaIndex."/listados/listados.mp4")){
+							 	
+								?>
+										<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/listados/listados.mp4" type="video/mp4">
+								<?php	
+							 		}else{
+							 	?>
+							 			<source src="<?php echo Config::ruta()?>Public/videos/tutoriales/<?php echo $idiomaIndex ?>/FueraServicio/fueraServicio.mp4" type="video/mp4">
+							 	<?php	
+							 		}
+							 	?>
+							 	
+							    
+							  </video>
+							  <h6 class="center-align">
+							  	<a class="waves-effect red darken-1 btn" onclick="cerrarVideoTutorial()"><i class="fa fa-stop" aria-hidden="left"></i> <?php echo $lang_personalizados[28] //Cerrar vídeo?></a>
+							  </h6>
+						</div><!-- Fin div col video-->
+					</div>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_diagnosticos[1]//Diagnósticos para cirugias?>
+									<?php
+									//saber si tiene permiso para crear diagnosticos
+										if(in_array("21", $_SESSION['permisos_usuario'] )){
+									?>
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[2]//Nuevo diagnóstico?>" onclick="mostrarFormNuevoDiagnosticoCirugia()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			<?php
+										}
+									?>
+						  		</h4>						  		
+						  		<br />
+						  		<?php
+									//saber si tiene permiso para editar diagnosticos
+										if(in_array("22", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarDiagnostico" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_diagnosticos[3]//Editar diagnóstico?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarDiagnostico" name="form_editarDiagnostico" action="" method="post" >
+						  					<input type="hidden" id="idEditarDiagnostico" name="idEditarDiagnostico" value="" />
+						  					<input type="hidden" id="replicaNombre" name="replicaNombre" value="" />
+							  				<div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="nombreEditarDiagnostico" name="nombreEditarDiagnostico" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreEditarDiagnostico" for="nombreEditarDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[4]//Nombre diagnóstico?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="codigoEditarDiagnostico" name="codigoEditarDiagnostico" type="text" class="validate" length="10" maxlength="10">
+						                            <label id="label_codigoEditarDiagnostico" for="codigoEditarDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[5]//Código diagnóstico?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m2 l2">						                            
+						                            <i id="editarbtnGenerarCodigo" class="fa fa-random fa-2x tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodiagnosticoCirugia('codigoEditarDiagnostico')"></i> 
+						                      </div> 
+						                      
+						                    </div>
+						                      
+						                   <div class="row">
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                           <input id="observacionEditarDiagnostico" name="observacionEditarDiagnostico" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_observacionEditarDiagnostico" for="observacionEditarDiagnostico" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[6]//Observación?></label>
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">		
+						                      	   <i class="fa fa-usd prefix" aria-hidden="true"></i>				                            
+						                           <input id="precioEditarDiagnostico" name="precioEditarDiagnostico" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumerosPuntos(event)" >																		<!-- Precio -->
+						                           <label id="label_precioEditarDiagnostico" for="precioEditarDiagnostico" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[7]." ".$lang_general[13]//(Utilizar punto solo para decimales)?></label>
+						                      </div> 
+						                      
+						                  </div><!-- fin row-->
+							  				
+						  				</form>
+						  				<div class="input-field col s12 m12 l12 right-align">					  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionDiagnosticoCirugia()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionDiagnosticoCirugia()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  		<?php
+						  		
+						  			}//fin if permiso editar diagnostico
+								
+									//saber si tiene permiso para crear diagnosticos
+										if(in_array("21", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevoDiagnostico" style="display: none ;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoDiagnostico" name="form_nuevoDiagnostico" action="" method="post">
+						  					
+						                    <input type="hidden" id="envioNuevoDiagnostico" name="envioNuevoDiagnostico"  value="envio"/>
+						                    
+						                    <div class="row">
+                          
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                            <input id="nombreDiagnostico" name="nombreDiagnostico" type="text" class="validate" length="100" maxlength="100">
+						                            <label id="label_nombreDiagnostico" for="nombreDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[8]//Nombre del nuevo diagnóstico?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">						                            
+						                            <input id="codigoDiagnostico" name="codigoDiagnostico" type="text" class="validate" length="10" maxlength="10">
+						                            <label id="label_codigoDiagnostico" for="codigoDiagnostico"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[9]//Código del nuevo diagnóstico?></label> 
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m2 l2">						                            
+						                            <i id="btnGenerarCodigo" class="fa fa-random fa-2x tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodiagnosticoCirugia('codigoDiagnostico')"></i> 
+						                      </div> 
+						                      
+						                    </div>
+						                      
+						                   <div class="row">
+						                      
+						                      <div class="input-field col s12 m6 l6">						                            
+						                           <input id="observacionDiagnostico" name="observacionDiagnostico" type="text" class="validate" length="200" maxlength="200">
+						                           <label id="label_observacionDiagnostico" for="observacionDiagnostico" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[6]//Observación?></label>
+						                      </div> 
+						                      
+						                      <div class="input-field col s12 m4 l4">		
+						                      	   <i class="fa fa-usd prefix" aria-hidden="true"></i>				                            
+						                           <input id="precioDiagnostico" name="precioDiagnostico" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumerosPuntos(event)" >																	<!-- Precio-->
+						                           <label id="label_precioDiagnostico" for="precioDiagnostico" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_diagnosticos[7]." ".$lang_general[13]//(Utilizar punto solo para decimales)?></label>
+						                      </div> 
+						                      
+						                  </div><!-- fin row-->
+						                  
+						                  <div class="input-field col s12 m12 l12 right-align">
+						                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoDiagnosticoCirugia()"><?php echo $lang_botones[5]//Cancelar?></a>
+						                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoDiagnosticoCirugia()"><?php echo $lang_botones[2]//Guardar?></a>
+						                  </div><!-- fin row-->
+						  					
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo diagnotico-->
+						  		<?php
+						  			}//fin if permiso crear diagnostico
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_diagnosticos[11]//Buscar diagnóstico (Escribe y selecciona)?>" id="buscarDiagnostico" type="text" class="validate" onkeypress="buscarDiagnosticoCirugiaListados()" >
+						<input type="hidden" id="idDiagnosticoBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaDiagnosticoCirugia()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_diagnosticos[12]//Activar diagnóstico?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_diagnosticos[13]//Desactivar diagnóstico?></span>
+						
+							<div id="resultadoDiagnosticosAjax">
+								
+							</div><!-- Fin para el resultado de los diagnoticos ajax-->
+							
+							<div id="resultadoDiagnosticos">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>
+											<th><?php echo $lang_diagnosticos[14]//Diagnóstico?></th>
+											<th><?php echo $lang_diagnosticos[15]//Código?></th>
+											<th><?php echo $lang_diagnosticos[6]//Observación?></th>
+											<th><?php echo $lang_diagnosticos[7]//Precio?></th>
+											<th><?php echo $lang_general[12]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php									
+											foreach ($listadoDiagnosticos as $listadoDiagnoticos1) {
+												
+												if($listadoDiagnoticos1['estado'] == 'A'){																																																			//Desactivar diagnótico
+													$btn = '<span id="spanB_'.$listadoDiagnoticos1['idPanelCirugiaDiagnostico'].'"> <a id="'.$listadoDiagnoticos1['idPanelCirugiaDiagnostico'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarDiagnosticoCirugia(this.id)"  data-position="right" data-delay="50" data-tooltip="'.$lang_diagnosticos[13].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																											//Activar diagnótico
+													$btn = '<span id="spanB_'.$listadoDiagnoticos1['idPanelCirugiaDiagnostico'].'"> <a id="'.$listadoDiagnoticos1['idPanelCirugiaDiagnostico'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarDiagnosticoCirugia(this.id)" data-position="right" data-delay="50" data-tooltip="'.$lang_diagnosticos[12].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}
+												
+												$parametros = "'".$listadoDiagnoticos1['idPanelCirugiaDiagnostico']."','".$listadoDiagnoticos1['nombre']."','".$listadoDiagnoticos1['codigo']."','".$listadoDiagnoticos1['observacion']."','".$listadoDiagnoticos1['precio']."'";
+										?>
+										
+											<tr style="cursor: pointer;">
+												<td <?php if(in_array("22", $_SESSION['permisos_usuario'] )){ ?> onclick="editarDiagnosticoCirugia(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoDiagnoticos1['nombre']?></td>
+												<td <?php if(in_array("22", $_SESSION['permisos_usuario'] )){ ?> onclick="editarDiagnosticoCirugia(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoDiagnoticos1['codigo']?></td>
+												<td <?php if(in_array("22", $_SESSION['permisos_usuario'] )){ ?> onclick="editarDiagnosticoCirugia(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoDiagnoticos1['observacion']?></td>
+												<td <?php if(in_array("22", $_SESSION['permisos_usuario'] )){ ?> onclick="editarDiagnosticoCirugia(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoDiagnoticos1['precio']?></td>
+												<td>
+													<?php echo $btn ?>											
+												</td>
+											</tr>											
+												
+										<?php		
+											}//fin foreach								
+										?>
+										
+										
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los diagnoticos-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

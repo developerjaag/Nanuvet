@@ -1,0 +1,52 @@
+
+
+
+
+	<div class="section" id="section2" style="background-image: url(Public/img/fondos/lightpaperfibers.png)">
+
+        <br />
+        <br />
+        <br />
+	    
+	    <h1><?php echo $lang_index[5]//Tu mascota?></h1>
+	    
+	    <p class="flow-text"><?php echo $lang_index[17]//Aquí puedes consultar la historia clínica de tu mascota, así como registrar la aplicación desparasitantes, antipulgas...?></p>
+	
+	
+
+	    <div class="container">
+	        
+	    
+	    
+    	    <div class="row">
+              <div class="col s12 m12 l12">
+                <div class="card-panel">
+            	        <form>
+                          <div class="row">
+                              
+                           <div class="input-field col s12 l12 m12">
+                           	  <input type="hidden" id="idPropietarioReplica" name="idPropietarioReplica" value="0" />
+                              <input id="buscarPropietarioReplica" name="buscarPropietarioReplica" type="text" class="validate" onkeypress="buscarPropietarioDesdeReplica()" >
+                              <label id="label_buscarPropietarioReplica" class="active" for="buscarPropietarioReplica" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;"><?php echo $lang_index[18]//Buscar propietario (Escribe y selecciona)?></label>
+                            </div>
+                           </div><!-- Fin row--> 
+                           
+                           <div class="row">
+                           
+                            <div class="input-field col s6">
+                                <a class="waves-effect waves-light btn" onclick="aplicarBusqueda()"><?php echo $lang_index[19]//Consultar?></a>
+                            </div>
+                            <div class="input-field col s6">
+                                <a class="waves-effect waves-light btn modal-trigger" href="#modal_nuevoPropietarioReplica" onclick="limpiarModalNuevoPropietarioReplica()"><?php echo $lang_index[20]//Registrarse?></a>
+                            </div>
+                            
+                          </div><!--Fin row -->
+                        </form>           
+                  <h5 class="center-align"><?php echo $lang_index[21]//Muy pronto NanuVet en tu dispositivo móvil?> <i class="fa fa-mobile fa-2x" aria-hidden="true"></i></h5>
+                </div>
+              </div>
+            </div><!-- fin row-->
+        
+        </div>
+	
+	</div><!-- fin section 2-->

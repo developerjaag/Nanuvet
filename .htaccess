@@ -1,0 +1,55 @@
+
+#para que la sesion dure 2 horas
+php_value session.gc_maxlifetime 7200
+
+
+RewriteEngine On
+
+
+
+#personalizar errores de navegador
+
+#ErrorDocument 404 /error404.php
+#ErrorDocument 403 /error404.php
+#ErrorDocument 500 /error500.php
+
+
+#solo controlador
+RewriteRule ^([a-zA-Z0-9_-]+)\/$ index.php?accion=$1 [S]
+#dos parámetros
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/*$ index.php?accion=$1&id1=$2 [S]
+#3 parámetros
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/*$ index.php?accion=$1&id1=$2&id2=$3 [S]
+#4 parámetros
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/*$ index.php?accion=$1&id1=$2&id2=$3&id3=$4 [S]
+#5 parámetros
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/*$ index.php?accion=$1&id1=$2&id2=$3&id3=$4&id4=$5 [S]
+
+#para permitir tamaño de archivo en upload
+#php_value upload_max_filesize 80M 
+#php_value post_max_size 80M 
+#php_value max_execution_time 800 
+#php_value max_input_time 800 
+
+
+#Comprimir archivos js css html 
+
+<IfModule mod_gzip.c>
+
+    mod_gzip_on       Yes
+
+    mod_gzip_dechunk  Yes
+
+    mod_gzip_item_include file      \.(html?|txt|css|js|php|pl)$
+
+    mod_gzip_item_include handler   ^cgi-script$
+
+    mod_gzip_item_include mime      ^text/.*
+
+    mod_gzip_item_include mime      ^application/x-javascript.*
+
+    mod_gzip_item_exclude mime      ^image/.*
+
+    mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
+
+</IfModule>

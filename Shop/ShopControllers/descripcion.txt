@@ -1,0 +1,1 @@
+Se crean los controladores con metodos y/o funciones generales

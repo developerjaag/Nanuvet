@@ -1,0 +1,204 @@
+<?php 
+
+require_once('../../Config/config.php');//se importa las configuraciones
+ $idiomaIndex = Config::getUserLanguage();
+            
+			$lang_form = array();
+			
+			
+            switch ($idiomaIndex) {
+            	case 'es':
+            		$lang_form[0]	= "Cancelar";
+					$lang_form[1]	= "Diligencia los datos del titular de la cuenta";
+					$lang_form[2]	= "Identifiación";
+					$lang_form[3]	= "Nombre (Persona o empresa)";
+					$lang_form[4]	= "Nombre de la persona a contactar";
+					$lang_form[5]	= "Dirección";
+					$lang_form[6]	= "Télefono";
+					$lang_form[7]	= "Celular";
+					$lang_form[8]	= "País";
+					$lang_form[9]	= "Ciudad";
+					$lang_form[10]	= "Vendedor";
+					$lang_form[11]	= "Ninguno";
+					$lang_form[12]	= "Ejecutivo comercial";
+					$lang_form[13]	= "Ver terminos y condiciones";
+					$lang_form[14]	= "Aceptar terminos y condiciones";
+					$lang_form[15]	= "Debes aceptar los terminos y condiciones";
+					$lang_form[16]	= "Crear cuenta Demo";
+					$lang_form[17]	= "Debe completar este campo";
+					$lang_form[18]	= "Cuenta demo por 15 días";
+            		break;
+            		
+            	case 'en':
+            		$lang_form[0] = "Cancel";
+					$lang_form[1] = "Diligence of account holder data";
+					$lang_form[2] = "Identification";
+					$lang_form[3] = "Name (Person or company)";
+					$lang_form[4] = "Name of the person to contact";
+					$lang_form[5] = "Address";
+					$lang_form[6] = "Phone";
+					$lang_form[7] = "Mobile";
+					$lang_form[8] = "Country";
+					$lang_form[9] = "City";
+					$lang_form[10] = "Vendor";
+					$lang_form[11] = "None";
+					$lang_form[12] = "Business executive";
+					$lang_form[13] = "See terms and conditions";
+					$lang_form[14] = "Accept terms and conditions";
+					$lang_form[15] = "You must accept the terms and conditions";
+					$lang_form[16] = "Create demo account";
+					$lang_form[17]	= "You must complete this field";
+					$lang_form[18]	= "Demo account for 15 days";
+            		break;
+            	
+            	default:
+            		$lang_form[0]	= "Cancelar";
+					$lang_form[1]	= "Diligencia los datos del titular de la cuenta";
+					$lang_form[2]	= "Identifiación";
+					$lang_form[3]	= "Nombre (Persona o empresa)";
+					$lang_form[4]	= "Nombre de la persona a contactar";
+					$lang_form[5]	= "Dirección";
+					$lang_form[6]	= "Télefono";
+					$lang_form[7]	= "Celular";
+					$lang_form[8]	= "País";
+					$lang_form[9]	= "Ciudad";
+					$lang_form[10]	= "Vendedor";
+					$lang_form[11]	= "Ninguno";
+					$lang_form[12]	= "Ejecutivo comercial";
+					$lang_form[13]	= "Ver terminos y condiciones";
+					$lang_form[14]	= "Aceptar terminos y condiciones";
+					$lang_form[15]	= "Debes aceptar los terminos y condiciones";
+					$lang_form[16]	= "Crear cuenta Demo";
+					$lang_form[17]	= "Debe completar este campo";
+					$lang_form[18]	= "Cuenta demo por 15 días";
+            		break;
+            }
+			
+			
+
+?>
+
+        <br />
+        <br />
+        <br />
+	    <h1  class="flow-text blue-text text-darken-2"><?php echo $lang_form[18]//Cuenta demo por 15 días?> <a class="waves-effect waves-red btn-flat" onclick="cancelarCompra()"><?php echo $lang_form[0]//Cancelar?></a></h1>
+	    
+	  
+	    
+	     <div class="container">
+	     
+	    
+    	    <div class="row">
+              <div class="col s12 m12 l12">
+                <div class="card-panel">
+                  
+                  
+            	        
+            	        
+            	        <form id="form_registroNuevaCuentaDemo" name="form_registroNuevaCuentaDemo" action="" method="post">
+            	            <h5><?php echo $lang_form[1]//Diligencia los datos del titular de la cuenta?></h5>
+            	            
+                    	         <div class="row">
+                    	                 
+                    	               <div class="input-field col s12 m6 l6 ">
+                                          <input id="identificacion_titular" type="text" class="validate" maxlength="50">
+                                          <label id="label_identificacion_titular" for="identificacion_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[2]//Identifiación?></label>
+                                        </div>  
+                                        
+                                        <div class="input-field col s12 m6 l6 ">
+                                          <input id="nombre_titular" type="text" class="validate" maxlength="100">
+                                          <label id="label_nombre_titular" for="nombre_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[3]//Nombre (Persona o empresa)?></label>
+                                        </div>  
+                    	             
+                                    
+                                  </div>
+                                  
+                                  <div class="row">
+                    	                 
+                    	               <div class="input-field col s12 m6 l6 ">
+                                          <input id="personaContacto_titular" type="text" class="validate" maxlength="100">
+                                          <label id="label_personaContacto_titular"  for="personaContacto_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[4]//Nombre de la persona a contactar?></label>
+                                        </div>  
+                                        
+                                        <div class="input-field col s12 m6 l6 ">
+                                          <input id="direccion_titular" type="text" class="validate" maxlength="100">
+                                          <label id="label_direccion_titular" for="direccion_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[5]//Dirección?></label>
+                                        </div>  
+                    	             
+                                    
+                                  </div>
+                                  
+                                  
+                                  <div class="row">
+                    	                 
+                    	               <div class="input-field col s12 m4 l4 ">
+                                          <input id="telefono1_titular" type="text" class="validate" maxlength="20">
+                                          <label id="label_telefono1_titular" for="telefono1_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[6]//Télefono?></label>
+                                        </div>  
+                                        
+                                        <div class="input-field col s12 m4 l4 ">
+                                          <input id="telefono2_titular" type="text" class="validate" maxlength="20">
+                                          <label for="telefono2_titular"><?php echo $lang_form[6]//Télefono?> 2</label>
+                                        </div> 
+                                        
+                                        <div class="input-field col s12 m4 l4 ">
+                                          <input id="celular_titular" type="text" class="validate" maxlength="100">
+                                          <label id="label_celular_titular" for="celular_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[7]//Celular?></label>
+                                        </div>
+                    	             
+                                    
+                                  </div>
+                                  
+                                  <div class="row">
+                    	                 
+                    	               <div class="input-field col s12 m4 l4 ">
+                                          <input id="email_titular" type="text" class="validate" maxlength="100">
+                                          <label id="label_email_titular"  for="email_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" >E-amail</label>
+                                        </div>  
+                                        
+                                        <div class="input-field col s12 m4 l4 ">
+                                          <input id="pais_titular" type="text" class="validate" maxlength="50">
+                                          <label id="label_pais_titular"  for="pais_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[8]//País?></label>
+                                        </div> 
+                                        
+                                        <div class="input-field col s12 m4 l4 ">
+                                          <input id="ciudad_titular" type="text" class="validate" maxlength="50">
+                                          <label id="label_ciudad_titular"  for="ciudad_titular" data-error="<?php echo $lang_form[17]//debe completar este campo?>" data-success="OK" style="width:100%; text-align: left;" ><?php echo $lang_form[9]//Ciudad?></label>
+                                        </div>
+                    	             
+                                    
+                                  </div>
+                                  <div class="row">  
+                                  	<div class="input-field col s8 right-align">
+                                  		<a class="modal-trigger waves-effect waves-teal btn-flat" href="#modal_terminosCondiciones" ><?php echo $lang_form[13]//ver terminos y condiciones?></a>
+                                  	</div>                                	
+                                  	<div class="input-field col s4 right-align">
+                                  		<p>
+									      <input id="terminosCondiciones" name="terminosCondiciones" type="checkbox"/>
+									      <label for="terminosCondiciones"><?php echo $lang_form[14]//Aceptar terminos y condiciones?></label>
+									    </p>
+                                  	</div>
+                                  </div>
+                                  
+                                  <div class="row">
+                    	                
+                    	               <div class="col s12">
+                    	               	<span id="errorTerminosCondiciones" class="red-text text-darken-2" style="display: none;"><?php echo $lang_form[15]//Debes aceptar los terminos y condiciones?></span>
+                    	               </div>
+                    	                
+                    	               <div class="input-field col s12 m12 l12 ">
+                    	               	<input type="hidden" id="plan" name="plan" value="<?php echo $plan?>" />
+                    	               	
+										<a class="waves-effect waves-light btn" onclick="validarDatosCuentaDemo()"><?php echo $lang_form[16]//Crear cuenta DEMO?></a>
+                                    </div>  
+                                        
+                                  </div>
+                          
+                        </form>  
+      
+                  
+                </div>
+              </div>
+            </div><!-- fin row-->
+        
+        </div><!-- fin container -->

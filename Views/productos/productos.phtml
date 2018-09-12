@@ -1,0 +1,1161 @@
+<!-- Modal para vincular los desparasitantes-->
+<div id="modal_vincularDesparasitantes" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+				<h4 class="center-align"><?php echo $lang_productos[0]	//Vincular desparasitantes a productos?></h4> 
+		
+		    
+		    <div class="row">		    	
+					
+								    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">							  							 
+  							<input id="cabeceraD_precio" name="cabeceraD_precio" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  							<label id="label_cabeceraD_precio" for="cabeceraD_precio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[1]//Precio de venta?></label>
+  						</div>
+			    	</div>
+
+		    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">						          														  							 
+  							    <select class="browser-default" id="cabeceraD_categoria" name="cabeceraD_categoria">							  							    	
+							      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+							      <?php
+							      	foreach ($categoriasProductos as $categoriasProductos1) {
+								  ?>
+								  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+								  <?php
+									  }//fin foreach
+							      ?>										
+							    </select>
+							    <!--<label>Categoría</label>-->
+  						</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m3 l3">
+						<div class="input-field">							  							 
+							<a class="waves-effect black btn" onclick="replicarCodigosCabeceraDesparasitantes()"><i class="fa fa-random fa-2x  right"></i><?php echo $lang_productos[3]//Código aleatorio?></a>							
+						</div>
+					</div>
+			    	
+			    	<div class="col s12 m3 l3 center-align">
+			    		<div class="input-field">
+			    			<a class="waves-effect waves-light btn" onclick="replicarCabeceraVincularDesparasitantes()"><?php echo $lang_productos[4]//Aplicar a todos?></a>
+			    		</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m12 l12  center-align">
+		          	  	<span id="textoErrorReplicarDesparasitantes" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+		          	  	<span id="errorReplicarDesparasitantes" class="red-text">&nbsp;</span>
+		          	</div>
+
+		    
+		    </div><!-- Fin row -->
+		    
+		    <div class="row">
+		    	<table class="bordered">
+		    		<thead>
+		    			<tr>
+		    				<th><?php echo $lang_productos[6]//Vincular?></th>
+	    					<th><?php echo $lang_productos[7]//Nombre?></th>
+	    					<th><?php echo $lang_productos[8]//Código?></th>
+	    					<th><?php echo $lang_productos[9]//Precio?></th>
+	    					<th><?php echo $lang_productos[10]//Categoría?></th>
+		    			</tr>
+		    		</thead>
+		    		<tbody>
+		    			<?php 
+		    				$i = 0;
+		    				foreach ($desparasitantesSinVincular as $desparasitantesSinVincular1) {
+		    					
+								$i = $i+1;
+						?>
+							<tr id="Dtr_<?php echo $i?>">
+								<td>
+									<div class="input-field">	
+										<input type="hidden" id="idTablaDesparasitante_<?php echo $i?>" name="idTablaDesparasitante_<?php echo $i?>" value="<?php echo $desparasitantesSinVincular1['idDesparasitante']?>" />
+										<p>
+									      <input type="checkbox" class="filled-in checkDesparasitantes" id="DchkVincular_<?php echo $i?>" name="DchkVincular_<?php echo $i?>" onclick="DactivarInactivarCampos(this.id)" />
+									      <label for="DchkVincular_<?php echo $i?>">&nbsp;</label>
+									    </p>
+								    </div>
+								</td>
+								<td>
+									<div class="input-field">	
+										<span id="Dnombre_<?php echo $i?>" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $desparasitantesSinVincular1['descripcion']?>"><?php echo $desparasitantesSinVincular1['nombre']?></span>
+										<span id="Ddescripcion_<?php echo $i?>" style="display: none;" ><?php echo $desparasitantesSinVincular1['descripcion']?></span>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">
+										<i id="DbtnGenerarCodigo_<?php echo $i?>" class="fa fa-random fa-2x tooltipped prefix" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodigo('Dcodigo_<?php echo $i?>')"></i>
+										<input disabled id="Dcodigo_<?php echo $i?>" name="Dcodigo_<?php echo $i?>" type="text" class="validate" maxlength="20" >
+										<label id="label_Dcodigo_<?php echo $i?>" for="Dcodigo_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[8]//Código?></label>
+										
+									</div>
+								</td>								
+								<td>
+									<div class="input-field">
+										<input disabled id="Dprecio_<?php echo $i?>" name="Dprecio_<?php echo $i?>" type="text" class="validate" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  										<label id="label_Dprecio_<?php echo $i?>" for="Dprecio_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[11]//Precio de venta?></label>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">						          														  							 
+		  							    <select disabled class="browser-default" id="Dcategoria_<?php echo $i?>" name="Dcategoria_<?php echo $i?>">							  							    	
+									      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+									      <?php
+									      	foreach ($categoriasProductos as $categoriasProductos1) {
+										  ?>
+										  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+										  <?php
+											  }//fin foreach
+									      ?>										
+									    </select>
+									    <!--<label>Categoría</label>-->
+		  							</div>
+		  								
+						          	  	<span id="textoErrorReplicarDesparasitantes_<?php echo $i?>" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+						          	  	<span id="errorReplicarDesparasitantes_<?php echo $i?>" class="red-text">&nbsp;</span>						          
+		  						</td>
+							</tr>
+								
+						<?php								
+							}//fin foreach
+		    			?>
+		    		</tbody>
+		    	</table>
+		    </div><!-- Fin row-->
+		    
+    
+    	</div>    
+    <div class="modal-footer">    		
+	      	<a class="modal-action modal-close waves-effect waves-red btn-flat" ><?php echo $lang_botones[3]//Cerrar?></a>
+	      	<a class="waves-effect waves-green btn-flat" onclick="guardarVinculacionDesparasitantes()" ><?php echo $lang_productos[12]//Vincular selección?></a>    	 
+    </div>
+</div>
+<!--Fin  Modal para vincular los desparasitantes-->
+
+
+
+
+
+
+
+
+<!-- Modal para vincular los medicamendos-->
+<div id="modal_vincularmedicamentos" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+				<h4 class="center-align"><?php echo $lang_productos[13]//Vincular medicamentos a productos?></h4> 
+		
+		    
+		    <div class="row">		    	
+					
+								    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">							  							 
+  							<input id="cabeceraM_precio" name="cabeceraM_precio" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  							<label id="label_cabeceraM_precio" for="cabeceraM_precio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[1]//Precio de venta?></label>
+  						</div>
+			    	</div>
+
+		    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">						          														  							 
+  							    <select class="browser-default" id="cabeceraM_categoria" name="cabeceraM_categoria">							  							    	
+							      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+							      <?php
+							      	foreach ($categoriasProductos as $categoriasProductos1) {
+								  ?>
+								  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+								  <?php
+									  }//fin foreach
+							      ?>										
+							    </select>
+							    <!--<label>Categoría</label>-->
+  						</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m3 l3">
+						<div class="input-field">							  							 
+							<a class="waves-effect black btn" onclick="replicarCodigosCabeceraMedicamentos()"><i class="fa fa-random fa-2x  right"></i><?php echo $lang_productos[3]//Código aleatorio?></a>							
+						</div>
+					</div>
+			    	
+			    	<div class="col s12 m3 l3 center-align">
+			    		<div class="input-field">
+			    			<a class="waves-effect waves-light btn" onclick="replicarCabeceraVincularMedicamentos()"><?php echo $lang_productos[4]//Aplicar a todos?></a>
+			    		</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m12 l12  center-align">
+		          	  	<span id="textoErrorReplicarMedicamentos" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+		          	  	<span id="errorReplicarMedicamentos" class="red-text">&nbsp;</span>
+		          	</div>
+
+		    
+		    </div><!-- Fin row -->
+		    
+		    <div class="row">
+		    	<table class="bordered">
+		    		<thead>
+		    			<tr>
+		    				<th><?php echo $lang_productos[6]//Vincular?></th>
+	    					<th><?php echo $lang_productos[7]//Nombre?></th>
+	    					<th><?php echo $lang_productos[8]//Código?></th>
+	    					<th><?php echo $lang_productos[9]//Precio?></th>
+	    					<th><?php echo $lang_productos[10]//Categoría?></th>
+		    			</tr>
+		    		</thead>
+		    		<tbody>
+		    			<?php 
+		    				$i = 0;
+		    				foreach ($medicamentosSinVincular as $medicamentosSinVincular1) {
+		    					
+								$i = $i+1;
+						?>
+							<tr id="Mtr_<?php echo $i?>">
+								<td>
+									<div class="input-field">	
+										<input type="hidden" id="idTablaMedicamento_<?php echo $i?>" name="idTablaMedicamento_<?php echo $i?>" value="<?php echo $medicamentosSinVincular1['idMedicamento']?>" />
+										<p>
+									      <input type="checkbox" class="filled-in checkMedicamentos" id="MchkVincular_<?php echo $i?>" name="MchkVincular_<?php echo $i?>" onclick="MactivarInactivarCampos(this.id)" />
+									      <label for="MchkVincular_<?php echo $i?>">&nbsp;</label>
+									    </p>
+								    </div>
+								</td>
+								<td>
+									<div class="input-field">	
+										<span id="Mnombre_<?php echo $i?>" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $medicamentosSinVincular1['observacion']?>"><?php echo $medicamentosSinVincular1['nombre']?></span>
+										<span id="Mdescripcion_<?php echo $i?>" style="display: none;" ><?php echo $medicamentosSinVincular1['observacion']?></span>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">
+										<i id="MbtnGenerarCodigo_<?php echo $i?>" class="fa fa-random fa-2x tooltipped prefix" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodigo('Mcodigo_<?php echo $i?>')"></i>
+										<input disabled id="Mcodigo_<?php echo $i?>" name="Mcodigo_<?php echo $i?>" type="text" class="validate" maxlength="20" value="<?php echo $medicamentosSinVincular1['codigo']?>" >
+										<label id="label_Mcodigo_<?php echo $i?>" for="Mcodigo_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[8]//Código?></label>
+										
+									</div>
+								</td>								
+								<td>
+									<div class="input-field">
+										<input disabled id="Mprecio_<?php echo $i?>" name="Mprecio_<?php echo $i?>" type="text" class="validate" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  										<label id="label_Mprecio_<?php echo $i?>" for="Mprecio_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[1]//Precio de venta?></label>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">						          														  							 
+		  							    <select disabled class="browser-default" id="Mcategoria_<?php echo $i?>" name="Mcategoria_<?php echo $i?>">							  							    	
+									      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+									      <?php
+									      	foreach ($categoriasProductos as $categoriasProductos1) {
+										  ?>
+										  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+										  <?php
+											  }//fin foreach
+									      ?>										
+									    </select>
+									    <!--<label>Categoría</label>-->
+		  							</div>
+		  								
+						          	  	<span id="textoErrorReplicarmedicamentos_<?php echo $i?>" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+						          	  	<span id="errorReplicarMedicamentos_<?php echo $i?>" class="red-text">&nbsp;</span>						          
+		  						</td>
+							</tr>
+								
+						<?php								
+							}//fin foreach
+		    			?>
+		    		</tbody>
+		    	</table>
+		    </div><!-- Fin row-->
+		    
+    
+    	</div>    
+    <div class="modal-footer">    		
+	      	<a class="modal-action modal-close waves-effect waves-red btn-flat" ><?php echo $lang_botones[3]//Cerrar?></a>
+	      	<a class="waves-effect waves-green btn-flat" onclick="guardarVinculacionMedicamentos()" ><?php echo $lang_productos[12]//Vincular selección?></a>    	 
+    </div>
+</div>
+<!--Fin  Modal para vincular los medicamentos-->
+
+
+<!-- Modal para vincular la vacunas-->
+<div id="modal_vincularVacunas" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+				<h4 class="center-align"><?php echo $lang_productos[14]//Vincular vacunas a productos?></h4> 
+				<p class="center-align"><?php echo $lang_productos[15]//Al momento de suministrar una vacuna se descontará del inventario?></p>
+		
+		    
+		    <div class="row">		    	
+					
+								    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">							  							 
+  							<input id="cabeceraV_precio" name="cabeceraV_precio" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  							<label id="label_cabeceraV_precio" for="cabeceraV_precio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[1]//Precio de venta?></label>
+  						</div>
+			    	</div>
+
+		    	
+			    	<div class="col s12 m3 l3">
+			    		<div class="input-field">						          														  							 
+  							    <select class="browser-default" id="cabeceraV_categoria" name="cabeceraV_categoria">							  							    	
+							      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+							      <?php
+							      	foreach ($categoriasProductos as $categoriasProductos1) {
+								  ?>
+								  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+								  <?php
+									  }//fin foreach
+							      ?>										
+							    </select>
+							    <!--<label>Categoría</label>-->
+  						</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m3 l3">
+						<div class="input-field">							  							 
+							<a class="waves-effect black btn" onclick="replicarCodigosCabeceraVacunas()"><i class="fa fa-random fa-2x  right"></i><?php echo $lang_productos[3]//Código aleatorio?></a>							
+						</div>
+					</div>
+			    	
+			    	<div class="col s12 m3 l3 center-align">
+			    		<div class="input-field">
+			    			<a class="waves-effect waves-light btn" onclick="replicarCabeceraVincularVacunas()"><?php echo $lang_productos[4]//Aplicar a todos?></a>
+			    		</div>
+			    	</div>
+			    	
+			    	<div class="col s12 m12 l12  center-align">
+		          	  	<span id="textoErrorReplicarVacunas" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+		          	  	<span id="errorReplicarVacunas" class="red-text">&nbsp;</span>
+		          	</div>
+
+		    
+		    </div><!-- Fin row -->
+		    
+		    <div class="row">
+		    	<table class="bordered">
+		    		<thead>
+		    			<tr>
+		    				<th><?php echo $lang_productos[6]//Vincular?></th>
+	    					<th><?php echo $lang_productos[7]//Nombre?></th>
+	    					<th><?php echo $lang_productos[8]//Código?></th>
+	    					<th><?php echo $lang_productos[9]//Precio?></th>
+	    					<th><?php echo $lang_productos[10]//Categoría?></th>
+		    			</tr>
+		    		</thead>
+		    		<tbody>
+		    			<?php 
+		    				$i = 0;
+		    				foreach ($vacunasSinVincular as $vacunasSinVincular1) {
+		    					
+								$i = $i+1;
+						?>
+							<tr id="tr_<?php echo $i?>">
+								<td>
+									<div class="input-field">	
+										<input type="hidden" id="idTablaVacuna_<?php echo $i?>" name="idTablaVacuna_<?php echo $i?>" value="<?php echo $vacunasSinVincular1['idVacuna']?>" />
+										<p>
+									      <input type="checkbox" class="filled-in checkVacunas" id="VchkVincular_<?php echo $i?>" name="VchkVincular_<?php echo $i?>" onclick="VactivarInactivarCampos(this.id)" />
+									      <label for="VchkVincular_<?php echo $i?>">&nbsp;</label>
+									    </p>
+								    </div>
+								</td>
+								<td>
+									<div class="input-field">	
+										<span id="Vnombre_<?php echo $i?>" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $vacunasSinVincular1['descripcion']?>"><?php echo $vacunasSinVincular1['nombre']?></span>
+										<span id="Vdescripcion_<?php echo $i?>" style="display: none;" ><?php echo $vacunasSinVincular1['descripcion']?></span>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">
+										<i id="btnGenerarCodigo_<?php echo $i?>" class="fa fa-random fa-2x tooltipped prefix" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodigo('Vcodigo_<?php echo $i?>')"></i>
+										<input disabled id="Vcodigo_<?php echo $i?>" name="Vcodigo_<?php echo $i?>" type="text" class="validate" maxlength="20" >
+										<label id="label_Vcodigo_<?php echo $i?>" for="Vcodigo_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[8]//Código?></label>
+										
+									</div>
+								</td>								
+								<td>
+									<div class="input-field">
+										<input disabled id="Vprecio_<?php echo $i?>" name="Vprecio_<?php echo $i?>" type="text" class="validate" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+  										<label id="label_Vprecio_<?php echo $i?>" for="Vprecio_<?php echo $i?>" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[11]//Precio de venta?></label>
+									</div>
+								</td>
+								<td>
+									<div class="input-field">						          														  							 
+		  							    <select disabled class="browser-default" id="Vcategoria_<?php echo $i?>" name="Vcategoria_<?php echo $i?>">							  							    	
+									      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+									      <?php
+									      	foreach ($categoriasProductos as $categoriasProductos1) {
+										  ?>
+										  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+										  <?php
+											  }//fin foreach
+									      ?>										
+									    </select>
+									    <!--<label>Categoría</label>-->
+		  							</div>
+		  								
+						          	  	<span id="textoErrorReplicarVacunas_<?php echo $i?>" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+						          	  	<span id="errorReplicarVacunas_<?php echo $i?>" class="red-text">&nbsp;</span>						          
+		  						</td>
+							</tr>
+								
+						<?php								
+							}//fin foreach
+		    			?>
+		    		</tbody>
+		    	</table>
+		    </div><!-- Fin row-->
+		    
+    
+    	</div>    
+    <div class="modal-footer">    		
+	      	<a class="modal-action modal-close waves-effect waves-red btn-flat" ><?php echo $lang_botones[3]//Cerrar?></a>
+	      	<a class="waves-effect waves-green btn-flat" onclick="guardarVinculacionVacunas()" ><?php echo $lang_productos[12]//Vincular selección?></a>    	 
+    </div>
+</div>
+<!-- Modal para vincular la vacunas-->
+
+
+
+
+<!-- modal para el stock de un producto en las distintas sucursales-->
+<div id="modal_productoStock" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+
+
+		<h4 class="center-align"><?php echo $lang_productos[16]//Stock de?> <u><span id="ps_nombreProducto"></span></u> </h4> 
+		<input type="hidden" id="stock_idProducto" name="stock_idProducto" value="0" />
+
+		<div id="divCrearNuevoStock">
+						
+						<div class="row">
+				                          
+			              <div class="col s12 m4 l4">
+								<div class="input-field">							  							 
+									<select id="stock_sucursal" name="stock_sucursal">
+								      <option value="" disabled selected><?php echo $lang_productos[17]//Elige una sucursal?></option>
+								      <?php
+								      	foreach ($sucursales as $sucursales1) {
+									  ?>
+									  		<option value="<?php echo $sucursales1['idSucursal'] ?>"><?php echo $sucursales1['nombre'] ?></option>
+									  <?php	  
+										  }
+								      ?>
+								    </select>
+								    <label><?php echo $lang_productos[18]//Sucursales?></label>
+								</div>
+							</div>
+							
+							<div class="col s12 m3 l3">
+								<div class="input-field">							  							 
+									<input id="stock_cantidad" name="stock_cantidad" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumeros(event)" >
+									<label id="label_stock_cantidad" for="stock_cantidad" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[19]//Cantidad?></label>
+								</div>
+							</div>
+							
+							<div class="col s12 m3 l3">
+								<div class="input-field">							  							 
+									<input id="stock_minimo" name="stock_minimo" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumeros(event)" >
+									<label id="label_stock_minimo" for="stock_minimo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[20]	//Cantidad minima (alerta)?></label>
+								</div>
+							</div>
+							
+							<div class="col s12 m2 l2">
+								<div class="input-field">
+									<a class="waves-effect waves-light btn" onclick="guardarNuevoStock()"><?php echo $lang_botones[2]//Guardar?></a>
+								</div>
+							</div>
+							
+							  <div class="col s12 m12 l12">
+				          	  	<span id="stock_textoErrorGuardarStock" style="display: none;"><?php echo $lang_productos[21]//Debe elegir una sucursal?></span>
+				          	  	<span id="stock_textoErrorVinculandoStock" style="display: none;"><?php echo $lang_productos[22]//El producto ya tiene un vinculo con esta sucursal?></span>
+				          	  	<span id="stock_errorGuardarStock" class="red-text">&nbsp;</span>
+				          	  </div>
+							
+							
+			              
+			  			</div><!-- Fin row-->
+		</div><!-- Fin div crear nuevo stock-->
+		
+		<div id="divEditarStock" style="display: none;">
+			
+			<div class="row">
+				<input type="hidden" id="editar_idProductoSucursal" name="editar_idProductoSucursal" value="0" />
+				<div class="col s12 m4 l4">
+						<div class="input-field">							  							 
+							<select disabled id="editar_stock_sucursal" name="editar_stock_sucursal">
+						      <option value="" disabled selected><?php echo $lang_productos[17]//Elige una sucursal?></option>
+						      <?php
+						      	foreach ($sucursales as $sucursales1) {
+							  ?>
+							  		<option value="<?php echo $sucursales1['idSucursal'] ?>"><?php echo $sucursales1['nombre'] ?></option>
+							  <?php	  
+								  }
+						      ?>
+						    </select>
+						    <label><?php echo $lang_productos[18]//Sucursales?></label>
+						</div>
+					</div>
+					
+					<div class="col s12 m2 l2">
+						<div class="input-field">							  							 
+							<input id="editar_stock_cantidad" name="editar_stock_cantidad" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumeros(event)" >
+							<label id="label_editar_stock_cantidad" for="editar_stock_cantidad" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[19]//Cantidad?></label>
+						</div>
+					</div>
+					
+					<div class="col s12 m2 l2">
+						<div class="input-field">							  							 
+							<input id="editar_stock_minimo" name="editar_stock_minimo" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumeros(event)" >
+							<label id="label_editar_stock_minimo" for="editar_stock_minimo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[20]//Cantidad minima (alerta)?></label>
+						</div>
+					</div>
+					
+					<div class="col s12 m4 l4">
+						<div class="input-field">
+							<a class="modal-action waves-effect red darken-1 btn" onclick="cerrarEdicionStock()"><?php echo $lang_botones[5]//Cancelar?></a>
+							<a class="waves-effect waves-light btn" onclick="validarEdicionStock()"><?php echo $lang_botones[2]//Guardar?></a>
+						</div>
+					</div>
+					
+					  <div class="col s12 m12 l12">
+		          	  	<span id="stock_editar_textoErrorGuardarStock" style="display: none;"><?php echo $lang_productos[21]//Debe elegir una sucursal?></span>
+		          	  	<span id="stock_editar_errorGuardarStock" class="red-text">&nbsp;</span>
+		          	  </div>
+							
+				
+			</div><!-- Fin row-->
+			
+			
+		</div><!-- Fin div divEditarStock-->
+		
+		<!-- Div registrar una nueva entrada-->
+		<div id="div_registrarEntradaproducto" style="display: none;">
+				
+				<h6><?php echo $lang_productos[23]//Nueva entrada para?> <span id="nuevaEntrada_nombreSucursal"></span></h6>
+				
+				<div class="row">					
+						
+						<div class="col s12 m4 l4">
+							<div class="input-field" id="nuevaEntrada_divSelectProveedores">							  							 
+								<select disabled id="nuevaEntrada_proveedores" name="nuevaEntrada_proveedores">
+							      <option value="" disabled selected><?php echo $lang_productos[24]//Elige un proveedor?></option>
+							      
+							    </select>
+							    <label><?php echo $lang_productos[25]//Proveedor?></label>
+							</div>
+						</div>
+						
+						<div class="col s12 m2 l2">
+							<div class="input-field">							  							 
+								<input id="nuevaEntrada_costo" name="nuevaEntrada_costo" type="text" class="validate" onkeypress="return soloNumerosPuntos(event)" length="10" maxlength="10" >
+								<label id="label_nuevaEntrada_costo" for="nuevaEntrada_costo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[26]//Costo?></label>
+							</div>
+						</div>
+
+						<div class="col s12 m2 l2">
+							<div class="input-field">							  							 
+								<input id="nuevaEntrada_cantidad" name="nuevaEntrada_cantidad" type="text" class="validate" length="10" maxlength="10" onkeypress="return soloNumeros(event)">
+								<label id="label_nuevaEntrada_cantidad" for="nuevaEntrada_cantidad" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[19]//Cantidad?></label>
+							</div>
+						</div>
+
+					<div class="col s12 m4 l4">
+						<div class="input-field">
+							<input type="hidden" id="nuevaEntrada_idSucursal" name="nuevaEntrada_idSucursal" value="0" />
+							<input type="hidden" id="nuevaEntrada_idProducto" name="nuevaEntrada_idProducto" value="0" />
+							<span id="textoNuevaEntradaGuardada" style="display: none;"><?php echo $lang_productos[27]//Entrada guardada correctamente!?></span>
+							<a class="modal-action waves-effect red darken-1 btn" onclick="cancelarNuevaEntrada()"><?php echo $lang_botones[5]//Cancelar?></a>
+							<a class="waves-effect waves-light btn" onclick="validarNuevaEntrada()"><?php echo $lang_botones[2]//Guardar?></a>
+						</div>
+					</div>
+				
+				</div><!-- Fin row-->				
+				
+		</div><!-- Fin div registrar nueva entrada-->
+		
+		<div id="resultadoStock">
+			
+		</div>
+
+    </div>
+    <div class="modal-footer">  	    
+	      <a id="btn_cerrarModalStock" class="modal-action modal-close waves-effect red darken-1 btn" ><?php echo $lang_botones[3]//Cerrar?></a>     
+    </div>
+</div>
+<!-- Fin modal para el stock de un producto en las distintas sucursales-->
+
+
+
+
+<!-- Modal para crear un nuevo proveedor-->
+<?php
+	//saber si tiene permisos para adicionar proveedores
+	if(in_array("48", $_SESSION['permisos_usuario'] )){
+?>
+<div id="modal_nuevoProveedor" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+    	<h4 class="center-align"><?php echo $lang_productos[28]//Nuevo proveedor?></h4> 
+       
+      	 <div class="row">
+  				<form class="col s12 m12 l12" id="form_nuevoProveedor" name="form_nuevoProveedor" action="" method="post">  					
+                    
+                    <div class="row">                      
+                      
+	                      	<div class="row">
+	                          
+		                      <div class="col s12 m6 l6">
+			  						<div class="input-field">							  							 
+			  							<input id="proveedor_identificativo" name="proveedor_identificativo" type="text" class="validate" length="50" maxlength="50" >
+	          							<label id="label_proveedor_identificativo" for="proveedor_identificativo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_perfil[1]//Identificación?></label>
+			  						</div>
+			  					</div>
+			  					
+			  					<div class="col s12 m6 l6">
+			  						<div class="input-field">							  							 
+			  							<input id="proveedor_nombre" name="proveedor_nombre" type="text" class="validate" length="100" maxlength="100" >
+	          							<label id="label_proveedor_nombre" for="proveedor_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[29]//Nombre?></label>
+			  						</div>
+			  					</div>
+		                      
+		          			</div><!-- Fin row-->
+		          			
+		          			<div class="row">
+		          				
+		          				<div class="col s12 m4 l4">
+		          					<div class="input-field">							  							 
+			  							<input id="proveedor_telefono1" name="proveedor_telefono1" type="text" class="validate"  length="20" maxlength="20"  >
+	          							<label id="label_proveedor_telefono1" for="proveedor_telefono1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[30]//Teléfono 1?></label>
+			  						</div>
+		          				</div>
+		          				
+		          				<div class="col s12 m4 l4">
+		          					<div class="input-field">							  							 
+			  							<input id="proveedor_telefono2" name="proveedor_telefono2" type="text" class="validate"  length="20" maxlength="20"  >
+	          							<label id="label_proveedor_telefono2" for="proveedor_telefono2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[31]//Teléfono 2?></label>
+			  						</div>
+		          				</div>
+		          				
+		          				<div class="col s12 m4 l4">
+		          					<div class="input-field">							  							 
+			  							<input id="proveedor_celular" name="proveedor_celular" type="text" class="validate"  length="20" maxlength="20"  >
+	          							<label id="label_proveedor_celular" for="proveedor_celular" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[32]//Celular?></label>
+			  						</div>
+		          				</div>
+		          				
+		          				
+		          			</div><!-- Fin row-->
+		          			
+		          			<div class="row">
+		          				
+		          				<div class="col s12 m6 l6">
+		          					<div class="input-field">							  							 
+			  							<input id="proveedor_direccion" name="proveedor_direccion" type="text" class="validate"  length="50" maxlength="50"  >
+	          							<label id="label_proveedor_direccion" for="proveedor_direccion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[33]//Dirección?></label>
+			  						</div>
+		          				</div>
+		          				
+		          				<div class="col s12 m6 l6">
+		          					<div class="input-field">							  							 
+			  							<input id="proveedor_email" name="proveedor_email" type="text" class="validate"  length="100" maxlength="100"  >
+	          							<label id="label_proveedor_email" for="proveedor_email" data-error="El E-mail no es valido" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" >E-mail</label>
+			  						</div>
+		          				</div>
+		          				
+		          				
+		          			</div><!-- Fin row-->
+
+	                  
+	                  		<div class="row">
+	                  	
+			                  <div class="input-field col s12 m12 l12 right-align">							                  	
+			                    <a class="waves-effect waves-light btn" onclick="guardarNuevoProveedor()"><?php echo $lang_botones[2]//Guardar?></a>
+			                  </div>
+	                  
+	                  	   </div><!-- fin row-->
+	  					
+	  					
+	  				</form>
+	  			</div><!-- Fin row-->       
+       
+    	</div>
+    	
+    </div>
+    <div class="modal-footer">  	    
+	      <a class="modal-action modal-close waves-effect red darken-1 btn" ><?php echo $lang_botones[3]//Cerrar?></a>     
+    </div>
+  </div>
+<?php
+}//fin if permiso crear proveedor
+?>
+<!--Fin  Modal para crear un nuevo proveedor-->
+
+
+<!-- Modal para ver y crear relaciones que tiene un producto con un proveedor--->
+
+<div id="modal_productoProveedor" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content">
+    	
+    	<h4 class="center-align"><?php echo $lang_productos[33]//Proveedores de?> <u><span id="pp_nombreProducto"></span></u> </h4> 
+    	<input type="hidden" id="ppIdProducto" name="ppIdProducto" value="0" />
+    	<input type="hidden" id="ppIdProveedor" name="ppIdProveedor" value="0" />
+    	
+    	<span id="spanActivarVinculo" style="display: none;"><?php echo $lang_productos[34]//Activar producto?></span>
+		<span id="spanDesactivarVinculo" style="display: none;"><?php echo $lang_productos[35]//Desactivar producto?></span>
+		
+    	<div id="hidden_crearVinculoProveedorProducto">   		
+    	
+    	
+	    	<div class="row">
+	    		    		   		
+	    		<div class="col s12 m6 l6">
+	    			<div class="input-field">							  							 
+						<input id="modalPP_proveedor" name="modalPP_proveedor" type="text" class="validate" onkeypress="modalPP_buscarProveedor()">
+						<label id="label_modalPP_proveedor" for="modalPP_proveedor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[36]//Proveedor (escribe y selecciona)?></label>
+					</div>
+	    		</div>
+	    		
+	    		<div class="col s12 m3 l3">
+	    			<div class="input-field">							  							 
+						<input disabled id="modalPP_costo" name="modalPP_costo" type="text" class="validate"  onkeypress="return soloNumerosPuntos(event)" length="10" maxlength="10">
+						<label id="label_modalPP_costo" for="modalPP_costo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[26]//Costo?></label>
+					</div>
+	    		</div>
+	    		
+	    		<div class="input-field col s12 m3 l3">	
+	    			<a class="waves-effect waves-light btn" onclick="guardarProductoProveedor()"><?php echo $lang_botones[2]//Guardar?></a>
+	    		</div>
+	    		
+	    	</div><!-- Fin row -->
+	    	
+	    	 <div class="col s12 m12 l12">
+          	  	<span id="proveedor_textoErrorProveedorProducto" style="display: none;"><?php echo $lang_productos[22]//El producto ya tiene un vinculo con este proveedor?></span>
+          	  	<span id="proveedor_errorGuardarProveedorProducto" class="red-text">&nbsp;</span>
+          	  </div>
+    	
+    	</div><!-- fin hidden_crearVinculoProveedorProducto -->
+    	
+    	
+    	
+    	<div id="hieden_editarPP" style="display: none; ">
+    		<input type="hidden" id="idEditarProductoProveedor" name="idEditarProductoProveedor" value="0" />
+	    	<div class="row">
+	    		<div class="input-field col s12 m6 l6">
+	    			<input disabled id="modalPP_editarProveedor" name="modalPP_editarProveedor" type="text" class="validate"  >
+					<label id="label_modalPP_editarProveedor" for="modalPP_editarProveedor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[25]//Proveedor?></label>
+	    		</div>
+	    		
+	    		<div class="input-field col s12 m3 l3">
+	    			<input id="modalPP_editarCosto" name="modalPP_editarCosto" type="text" class="validate" length="10" maxlength="10"  onkeypress="return soloNumerosPuntos(event)">
+					<label id="label_modalPP_editarCosto" for="modalPP_editarCosto" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[26]//Costo?></label>
+	    		</div>
+	    		
+	    		<div class="input-field col s12 m3 l3">	
+	    		
+	    					<a class="waves-effect red darken-1 btn" onclick="cancelarEditarVinculoProductoProveedor()" ><?php echo $lang_botones[5]//Cancelar?></a>
+	    				
+	    					<a class="waves-effect waves-light btn" onclick="guardarEdicionVinculoProductoProveedor()"><?php echo $lang_botones[4]//Editar?></a>
+	    				
+    				
+    			</div>
+	    		
+	    	</div><!-- Fin row --> 		
+    	</div><!-- fin div oculto para editar vinculo-->
+
+    	
+    	<div id="resultadoProductoProveedores">
+    		
+    	</div>
+       
+    </div>
+    <div class="modal-footer">  	    
+	      <a class="modal-action modal-close waves-effect red darken-1 btn" ><?php echo $lang_botones[3]//Cerrar?></a>     
+    </div>
+</div>
+
+<!--Fin  Modal para ver y crear relaciones que tiene un producto con un proveedor--->
+
+
+
+
+
+<main >
+	
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              </span>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								<h4 id="tituloLi" class="center-align" ><?php echo $lang_productos[37]//Productos?>
+									
+									<?php
+							    		//saber si tiene permisos para adicionar productos
+										if(in_array("44", $_SESSION['permisos_usuario'] )){
+									?>
+									
+						  			<a class="btn-floating waves-effect waves-light teal lighten-2 tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_productos[38] //Nuevo producto?>" onclick="mostrarFormNuevoProductos()">
+						  				<i class="material-icons">add</i>
+						  			</a>
+						  			
+						  			<?php
+										}
+									?>
+						  									  			
+						  		</h4>		
+						  		<div class="row">
+						  			<div class="col s12 m12 l12 center-align">	
+										<a class="waves-effect blue btn modal-trigger" href="#modal_vincularDesparasitantes" ><?php echo $lang_productos[39]//Vincular desparasitantes?></a>										
+										<a class="waves-effect blue btn modal-trigger" href="#modal_vincularmedicamentos" ><?php echo $lang_productos[40]//Vincular medicamentos?></a>
+										<a class="waves-effect blue btn modal-trigger" href="#modal_vincularVacunas"><?php echo $lang_productos[41]//Vincular vacunas?></a>
+						  			</div>
+						  		</div>
+						  			 
+						  			 				  		
+						  		<br />
+						  		<?php
+							    		//saber si tiene permisos para editar productos
+										if(in_array("45", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_editarProducto" style="display: none;">						  			
+						  			
+						  			<div class="row">
+				                      	<div class="col s12 m12 l12">
+				                      		<h4 class="center-align"><?php echo $lang_productos[42]//Editar producto?></h4>
+				                      	</div>
+				                      </div>
+						  			<div class="row">
+						  				<form id="form_editarProducto" name="form_editarProducto" action="" method="post" >
+						  					
+						  					<input type="hidden" id="editar_idProducto" name="editar_idProducto" value="0" />
+						  					
+						                   
+						                   	 <div class="row">
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="editar_nombre" name="editar_nombre" type="text" class="validate" length="50" maxlength="50" >
+					          							<label id="label_editar_nombre" for="editar_nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[29]//Nombre?></label>
+							  						</div>
+							  					</div>
+                          
+						                        <div class="col s12 m4 l4">
+							  						<div class="input-field">							  							 
+							  							<input id="editar_codigo" name="editar_codigo" type="text" class="validate" length="20" maxlength="20" >
+					          							<label id="label_editar_codigo" for="editar_codigo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[8]//Código?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="input-field col s12 m2 l2">						                            
+						                            <i id="btnGenerarCodigo" class="fa fa-random fa-2x tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodigo('editar_codigo')"></i> 
+						                      </div> 
+						                      
+						          			</div><!-- Fin row-->
+						          			
+						          			
+						          			<div class="row">
+						          			
+						          				<div class="col m2 l2">
+						          					&nbsp;
+						          				</div>
+						          				
+						          			   <div class="col s12 m4 l4">
+						          					<div class="input-field">							  							 
+							  							<input id="editar_precio" name="editar_precio" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+					          							<label id="label_editar_precio" for="editar_precio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[11]//Precio de venta?></label>
+							  						</div>
+						          				</div>		          				
+						          				
+						          				<div class="col s12 m4 l4">
+						          					
+						          							<div class="input-field">						          														  							 
+									  							    <select class="browser-default" id="editar_categoria" name="editar_categoria">							  							    	
+																      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+																      <?php
+																      	foreach ($categoriasProductos as $categoriasProductos1) {
+																	  ?>
+																	  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+																	  <?php
+																		  }//fin foreach
+																      ?>										
+																    </select>
+																    <!--<label>Categoría</label>-->
+									  						</div>
+						          						
+						          				</div>
+						          					
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m12 l12">
+						          					<div class="input-field">							  							 
+							  							<textarea id="editar_descripcion" name="editar_descripcion" class="materialize-textarea"></textarea>
+          												<label id="label_editar_descripcion" for="editar_descripcion"><?php echo $lang_productos[43]//Descripción?></label>
+							  						</div>
+						          				</div>						          				
+						          				
+						          			</div><!-- Fin row-->
+						                   
+						          			
+							  				
+						  				</form>
+						  				
+						  				
+						  				<div class="col s12 m12 l12 center-align">
+					                  	  	<span id="editar_textoErrorGuardarProducto" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+					                  	  	<span id="editar_errorGuardarProducto" class="red-text">&nbsp;</span>
+					                  	  </div>
+						  				
+						  				<div class="input-field col s12 m12 l12 right-align">			  					
+						  						<a class="waves-effect red darken-1 btn" onclick="cancelarEdicionProducto()" ><?php echo $lang_botones[5]//Cancelar?></a>		
+						  						<a class="waves-effect waves-light btn" onclick="comprobarEdicionProducto()" ><?php echo $lang_botones[4]//Editar?></a>				  									  					
+						  				</div>
+						  				
+						  			</div><!-- Fin row-->
+						  			
+						  		</div><!-- Fin div oculto para editar producto-->
+						  		<?php
+						  		
+						  				}//fin if editar producto
+								
+							    		//saber si tiene permisos para adicionar productos
+										if(in_array("44", $_SESSION['permisos_usuario'] )){
+									?>
+						  		<div id="hidden_NuevoProducto" style="display: none;">
+						  			
+						  			<div class="row">
+						  				<form class="col s12 m12 l12" id="form_nuevoProducto" name="form_nuevoProducto" action="" method="post">						  					
+						                    <input type="hidden" id="envioNuevoProducto" name="envioNuevoProducto"  value="envio"/>
+						                    <input type="hidden" id="idProveedor" name="idProveedor" value="0" />
+						                    
+						                    <div class="row">
+							  					
+							  					<div class="col s12 m6 l6">
+							  						<div class="input-field">							  							 
+							  							<input id="nombre" name="nombre" type="text" class="validate" length="50" maxlength="50" >
+					          							<label id="label_nombre" for="nombre" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[7]//Nombre?></label>
+							  						</div>
+							  					</div>
+                          
+						                        <div class="col s12 m4 l4">
+							  						<div class="input-field">							  							 
+							  							<input id="codigo" name="codigo" type="text" class="validate" length="20" maxlength="20" >
+					          							<label id="label_codigo" for="codigo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[8]//Código?></label>
+							  						</div>
+							  					</div>
+							  					
+							  					<div class="input-field col s12 m2 l2">						                            
+						                            <i id="btnGenerarCodigo" class="fa fa-random fa-2x tooltipped" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_diagnosticos[10]//Generar código aleatorio ?>" aria-hidden="true" style="cursor: pointer;" onclick="generarCodigodigo('codigo')"></i> 
+						                      </div> 
+						                      
+						          			</div><!-- Fin row-->
+						          			
+						          			
+						          			<div class="row">
+
+						          				<div class="col s12 m4 l4">
+						          					<div class="input-field">	
+						          						<?php
+												    		//saber si tiene permisos para adicionar proveedores
+															if(in_array("48", $_SESSION['permisos_usuario'] )){
+														?>
+						          						<i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoProveedor" data-target="modal_nuevoProveedor" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_productos[44]//Nuevo proveedor?>" style="cursor:pointer;" onclick="limpiarModalNuevoProveedor()"></i>						  							 
+							  							<?php
+															}
+														?>
+							  							
+							  							<input id="proveedor" name="proveedor" type="text" class="validate" onkeypress="creando_buscarProveedor()">
+					          							<label id="label_proveedor" for="proveedor" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[25]//Proveedor?></label>
+							  						</div>
+						          				</div>		
+						          				
+						          				<div class="col s12 m2 l2">
+						          					<div class="input-field">							  							 
+							  							<input disabled id="costo" name="costo" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+					          							<label id="label_costo" for="costo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[26]//Costo?></label>
+							  						</div>
+						          				</div>		
+						          				
+						          			   <div class="col s12 m2 l2">
+						          					<div class="input-field">							  							 
+							  							<input id="precio" name="precio" type="text" class="validate"  length="10" maxlength="10"   onkeypress="return soloNumerosPuntos(event)">
+					          							<label id="label_precio" for="precio" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:100%; text-align: left;" ><?php echo $lang_productos[11]//Precio de venta?></label>
+							  						</div>
+						          				</div>		          				
+						          				
+						          				<div class="col s12 m4 l4">
+						          					
+						          							<div class="input-field">						          														  							 
+									  							    <select class="browser-default" id="categoria" name="categoria">							  							    	
+																      <option value="" disabled selected><?php echo $lang_productos[2]//Elige una categoría?></option>
+																      <?php
+																      	foreach ($categoriasProductos as $categoriasProductos1) {
+																	  ?>
+																	  		<option value="<?php echo $categoriasProductos1['idCategoria']?>"><?php echo $categoriasProductos1['nombre'] ?></option>
+																	  <?php
+																		  }//fin foreach
+																      ?>										
+																    </select>
+																    <!--<label>Categoría</label>-->
+									  						</div>
+						          						
+						          				</div>
+						          					
+						          			</div><!-- Fin row-->
+						          			
+						          			<div class="row">
+						          				
+						          				<div class="col s12 m12 l12">
+						          					<div class="input-field">							  							 
+							  							<textarea id="descripcion" name="descripcion" class="materialize-textarea"></textarea>
+          												<label id="label_descripcion" for="descripcion"><?php echo $lang_productos[43]//Descripción?></label>
+							  						</div>
+						          				</div>						          				
+						          				
+						          			</div><!-- Fin row-->
+						          			
+						                  	<div class="row">
+						                  		
+						                  	  <div class="col s12 m12 l12 center-align">
+						                  	  	<span id="textoErrorGuardarProducto" style="display: none;"><?php echo $lang_productos[5]//Debe elegir una categoría?></span>
+						                  	  	<span id="errorGuardarProducto" class="red-text">&nbsp;</span>
+						                  	  </div>
+						                  		
+							                  <div class="input-field col s12 m12 l12 right-align">
+							                  	<a class="waves-effect red darken-1 btn" onclick="cancelarGuardadoNuevoProducto()"><?php echo $lang_botones[5]//Cancelar?></a>
+							                    <a class="waves-effect waves-light btn" onclick="validarGuardadoNuevoProducto()"><?php echo $lang_botones[2]//Guardar?></a>
+							                  </div>						  					
+						  					
+						  					</div><!-- fin row-->
+						  					
+						  				</form>
+						  			</div><!-- Fin row-->
+						  		</div><!-- fin Div oculto para formulario del nuevo proveedor-->
+						  		<?php
+						  			}//fin if permiso crear producto
+								?>
+						  		
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+				
+				<div class="row">
+					<div class="input-field col s10 m3 l3">
+						<i class="fa fa-search prefix" aria-hidden="true"></i>
+						<input placeholder="<?php echo $lang_productos[45]//Buscar producto (Escribe y selecciona)?>" id="buscarProducto" type="text" class="validate" onkeypress="buscarProducto()" >
+						<input type="hidden" id="idProductoBuscado" value="" />
+					</div>
+					<div class="input-field col s2 m2 l2">
+						<i id="btnCancelarBusqueda" class="fa fa-times-circle fa-3x" aria-hidden="true" style="cursor: pointer; display: none;" onclick="cerrarBusquedaProducto()"></i>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						<span id="spanActivar" style="display: none;"><?php echo $lang_productos[34]//Activar producto?></span>
+						<span id="spanDesactivar" style="display: none;"><?php echo $lang_productos[35]//Desactivar producto?></span>
+						
+							<div id="resultadoProductosAjax">
+								
+							</div><!-- Fin para el resultado de los productos ajax-->
+							
+							<div id="resultadoProductos">
+								<table class="bordered highlight centered responsive-table">
+									
+									<thead>
+										<tr>	
+											<th><?php echo $lang_productos[8]//Código?></th>																					
+											<th><?php echo $lang_productos[7]//Nombre?></th>
+											<th><?php echo $lang_productos[9]//Precio?></th>
+											<th><?php echo $lang_productos[10]//Categoría?></th>
+											<th><?php echo $lang_productos[46]//Proveedores?></th>
+											<th><?php echo $lang_productos[47]//Stock?></th>
+											<th><?php echo $lang_productos[48]//Estado?></th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										<?php
+											foreach ($listadoProductos as $listadoProductos1) {
+														
+												if($listadoProductos1['estado'] == "A"){																																																						//Desactivar proveedor
+													$btn = '<span id="spanP_'.$listadoProductos1['idProducto'].'"> <a id="'.$listadoProductos1['idProducto'].'" class="waves-effect waves-light btn tooltipped" onclick="desactivarProducto(this.id)"  data-position="bottom" data-delay="50" data-tooltip="'.$lang_productos[35].'" ><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}else{																																																															//Activar proveedor
+													$btn = '<span id="spanP_'.$listadoProductos1['idProducto'].'"> <a id="'.$listadoProductos1['idProducto'].'" class="waves-effect red darken-1 btn tooltipped" onclick="activarProducto(this.id)" data-position="bottom" data-delay="50" data-tooltip="'.$lang_productos[34].'"><i class="fa fa-power-off fa-2x" aria-hidden="true"></i></a></span>';
+												}		
+												
+												$parametros = "'".$listadoProductos1['idProducto']."','".$listadoProductos1['codigo']."','".$listadoProductos1['descripcion']."','".$listadoProductos1['nombre']."','".$listadoProductos1['nombreCategoria']."','".$listadoProductos1['idCategoria']."','".$listadoProductos1['precio']."'";
+												
+										?>
+													
+												<tr style="cursor: pointer;">
+													<td <?php if(in_array("45", $_SESSION['permisos_usuario'] )){ ?> onclick="editarProducto(<?php echo $parametros?>)" <?php } ?> ><?php echo $listadoProductos1['codigo']?></td>
+													<td <?php if(in_array("45", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProducto(<?php echo $parametros?>)" <?php } ?>><span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?php echo $listadoProductos1['descripcion']?>" ><?php echo $listadoProductos1['nombre']?></span></td>
+													<td <?php if(in_array("45", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProducto(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoProductos1['precio']?></td>
+													<td <?php if(in_array("45", $_SESSION['permisos_usuario'] )){ ?>  onclick="editarProducto(<?php echo $parametros?>)" <?php } ?>><?php echo $listadoProductos1['nombreCategoria']?></td>													
+													<td><a class="waves-effect black btn modal-trigger" href="#modal_productoProveedor" onclick="consultarVinculosProdcutoProveedor('<?php echo $listadoProductos1['idProducto']?>','<?php echo $listadoProductos1['nombre']?>')"><i class="fa fa-truck" aria-hidden="true"></i></a></td>
+													<td><a class="waves-effect black btn modal-trigger" href="#modal_productoStock" onclick="consultarStockProdcuto('<?php echo $listadoProductos1['idProducto']?>','<?php echo $listadoProductos1['nombre']?>','click')" ><i class="fa fa-cubes" aria-hidden="true"></i></a></td>
+													<td><?php echo $btn?></td>
+												</tr>
+												
+										<?php		
+											}//fin foreach
+										
+										?>
+										
+									</tbody>
+									
+									
+								</table>
+								
+							</div><!-- Fin div para los resultados de los productos-->	
+						
+					</div>
+					
+				</div><!-- Fin row-->
+				
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- paginacion -->
+		<footer class="page-footer white">
+					<?php
+					
+					// render the pagination links
+					$pagination->render();
+					
+					?>
+		</footer>	
+	<!-- fin paginacion -->	
+	
+</main>

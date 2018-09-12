@@ -1,0 +1,1114 @@
+<!-- Modal para crear un nuevo tipo de cita-->
+
+<?php
+	//saber si tiene permiso para adicionar nuevo tipo cita
+	if(in_array("100", $_SESSION['permisos_usuario'] )){
+?>
+
+<div id="modal_nuevoTipoCita" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%;">
+    <div class="modal-content">
+    	
+    	<h4 class="center-align"><?php echo $lang_agenda[1]//Nuevo tipo de cita?></h4> 
+       
+       <div class="row">
+  				<form class="col s12 m12 l12" id="form_nuevoTipoCita" name="form_nuevoTipoCita" action="" method="post">  					
+                    
+                    <div class="row">
+  
+                      
+                      <div class="input-field col s12 m12 l12">						                            
+                            <input id="nombreTipoCita" name="nombreTipoCita" type="text" class="validate" length="100" maxlength="100">
+                            <label id="label_nombreTipoCita" for="nombreTipoCita"   data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;" ><?php echo $lang_agenda[2]//Nombre del nuevo tipo de cita?></label> 
+                      </div> 
+                       
+                      
+                    </div>
+                  
+                  <div class="row">
+                  		<span id="existeTipoCita" style="display: none;"><?php echo $lang_agenda[3]//El tipo de cita ya existe?></span>
+                  		<span id="guardadoTipoCita" style="display: none;"><?php echo $lang_agenda[4]//Tipo de cita guardado correctamente!?></span>
+	                  <div class="input-field col s12 m12 l12 center-align">							                  	
+	                    <a class="waves-effect waves-light btn" onclick="guardarNuevoTipoCita()"><?php echo $lang_botones[2]//Guardar?></a>
+	                  </div>
+                  
+                  </div><!-- fin row-->
+  					
+  					
+  				</form>
+  			</div><!-- Fin row-->
+       
+       
+    </div>
+    <div class="modal-footer">  	    
+	      <a class="modal-action modal-close waves-effect red darken-1 btn" id="btnCerrarModalTipoCita" onclick="limpiarFormNuevoTipoCita()"><?php echo $lang_botones[3]//Cerrar?></a>     
+    </div>
+  </div>
+
+<?php
+	}//fin if para saber si tiene permiso de crear un tipo de cita
+?>
+<!--Fin  Modal para crear un nuevo tipo de cita-->
+
+
+
+<!-- Modal nuevo propietario modal_nuevoPropietario-->
+<?php
+	//saber si tiene permiso para adicionar nuevo propietario
+	if(in_array("59", $_SESSION['permisos_usuario'] )){
+?>
+
+<div id="modal_nuevoPropietario" class="modal modal-fixed-footer" style="height: 78% !important ; margin-top: 3%; width: 95% !important ; max-height: 100% !important ; overflow-y: hidden !important ;">
+    <div class="modal-content" style="height: 100%;">
+       <iframe id="iframe_nuevoPropietarioPaciente" src="http://www.nanuvet.com/nuevo/iframe/" style="border:none; height: 100%; width: 100%;"></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-red btn-flat " onclick="recargarIframePacientePropietario()"><?php echo $lang_botones[3]//cerrar?></a>
+    </div>
+  </div>
+<?php
+	}//fin if permiso nuevo propietario
+?>
+<!-- Fin Modal nuevo propietario modal_nuevoPropietario-->
+
+
+<div id="div_preloader" style="display: none; text-align: center;">
+	 <div class="preloader-wrapper small active">
+	    <div class="spinner-layer spinner-green-only">
+	      <div class="circle-clipper left">
+	        <div class="circle"></div>
+	      </div><div class="gap-patch">
+	        <div class="circle"></div>
+	      </div><div class="circle-clipper right">
+	        <div class="circle"></div>
+	      </div>
+	    </div>
+	  </div>
+</div>
+
+
+<main>
+
+	 <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+	  
+              <span class="card-title">
+              </span>
+				
+				<div class="row">
+					
+					<div class="col s12 m12 l12">
+						
+						<ul class="collection with-header">
+							
+							<li class="collection-header">
+								
+								
+								<div class="row">
+									
+								    <div class="col s12">
+								      <ul class="tabs">
+								        <li class="tab col s3"><a class="black-text active" href="#calendario"><?php echo $lang_agenda[5] //Calendario?></a></li>
+								        <li class="tab col s3"><a class="black-text" href="#horarios"><?php echo $lang_agenda[6]//Horarios?></a></li>
+								      </ul>
+								    </div>
+								    
+								    
+								    <div id="calendario" class="col s12">
+								    	<br>
+								    	
+								    	<div class="row">
+								    		
+								    		<div class="col s12 m6 l6">
+								    			<div class="input-field col s12 center-align">		
+								    				<a class="waves-effect waves-light btn blue" onclick="mostrarFormBuscarCitas()"><?php echo $lang_agenda[7]//Buscar citas?></a>						    				
+													<a class="waves-effect waves-light btn" onclick="mostrarFormNuevaCita()"><?php echo $lang_agenda[16]//Nueva cita?></a>
+								    			</div>
+								    		</div>
+								    		
+								    		<div class="col s12 m6 l6">
+								    			<div id="div_selectUsuario" class="input-field col s12">
+												    <select id="selectUsuario" name="selectUsuario" onchange="consultarCitasUsuario()">
+												      <option value="" disabled selected><?php echo $lang_agenda[8]//Elegir usuario para ver su agenda?></option>
+												      <?php
+												      
+											    		//saber si tiene permisos para ver la agenda de otros usuarios
+														if(in_array("96", $_SESSION['permisos_usuario'] )){
+																$swp = 1;
+															}else{
+																$swp = 0;
+															}
+												      
+												      	foreach ($usuariosActivos as $usuariosActivos1) {
+												      			
+												      		if($swp == 0){
+												      			if ($usuariosActivos1['idUsuario'] == $_SESSION['usuario_idUsuario']) {
+															?>
+																	<option value="<?php echo $usuariosActivos1['idUsuario']?>"><?php echo "(".$usuariosActivos1['identificacion'].") ".$usuariosActivos1['nombre']." ".$usuariosActivos1['apellido']  ?></option>
+															<?php		  
+																  }//fin if si es el mismo usuario
+												      		}else{
+												      		?>
+												      				<option value="<?php echo $usuariosActivos1['idUsuario']?>"><?php echo "(".$usuariosActivos1['identificacion'].") ".$usuariosActivos1['nombre']." ".$usuariosActivos1['apellido']  ?></option>
+												      		<?php	
+												      		}//fin else
+												      		
+												      		
+														  }	//fin foreach										      
+												      ?>											      
+												    </select>
+												    <label><?php echo $lang_agenda[9]//Usuarios?></label>
+											    </div>
+								    		</div>
+								    		
+								    		
+								    		
+								    	</div><!-- Fin row-->
+								    	
+								    	<div class="row">    
+								    		
+								    		<!-- Div hidden para buscar citas-->
+								    		<div id="div_hiddenBuscarcitas" class="col s12" style="margin-bottom: 3%; display: none;">
+								    			<h4 class="center-align"><?php echo $lang_agenda[10]//Buscar cita?></h4>
+								    			
+								    			<div class="row">
+								    				<div class="col s12 m4 l4 input-field">
+								    					<input placeholder="<?php echo $lang_agenda[11]//Escribe y selecciona (identificación, nombre o apellido)?>" id="buscarCita_propietario" name="buscarCita_propietario" type="text" class="validate" onkeypress="buscarPropietarioBuscarCita()">
+	          											<input type="hidden" name="buscarCita_idPropietario" id="buscarCita_idPropietario" value="0" />
+	          											<label  id="label_buscarCita_propietario" for="buscarCita_propietario" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[12]//Propietario?></label>
+								    				</div>
+								    				<div class="col s6 m2 l2 input-field">
+								    					<input placeholder="YYYY/MM/DD" id="buscarCitaFechaInicial" name="buscarCitaFechaInicial" type="text" class="validate calendarioFecha" maxlength="10">
+          												<label id="label_buscarCitaFechaInicial" for="buscarCitaFechaInicial" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[13]//Fecha inicial?></label>
+								    				</div>
+								    				<div class="col s6 m2 l2 input-field">
+								    					<input placeholder="YYYY/MM/DD" id="buscarCitaFechaFinal" name="buscarCitaFechaFinal" type="text" class="validate calendarioFecha" maxlength="10">
+          												<label id="label_buscarCitaFechaFinal" for="buscarCitaFechaFinal" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[14]//Fecha final?></label>
+								    				</div>
+								    				<div class="col s12 m4 l4 input-field center-align">								    					
+								    					<a class="waves-effect waves-light btn red" onclick="cancelarBusquedaCita()"><?php echo $lang_botones[3]//Cerrar?></a>
+								    					<a class="waves-effect waves-light btn" onclick="aplicarBusquedaCitas()"><?php echo $lang_agenda[15]//buscar cita?></a>
+								    				</div>
+								    			</div><!-- Fin row-->
+								    			<br />
+								    			<div id="resultadoBusquedaCitas" class="col s12">
+								    				
+								    			</div>
+								    			
+								    		</div><!-- Fin div para buscar citas -->		
+									    		
+								    	
+									    	<!-- Div para agendar cita-->
+									    	<div class="col s12 m6 l6" id="hidden_agendarCita" style="display: none;">
+									    		
+									    		
+									    		<div class="row">
+									    			
+									    			<div class="col s12">
+									    				<h4 class="center-align"><?php echo $lang_agenda[16]//Nueva cita?></h4>
+									    			</div>
+									    			
+									    			<div class="col s12 input-field">
+									    				<?php
+									    				//saber si tiene permiso para adicionar nuevo propietario
+									    					if(in_array("59", $_SESSION['permisos_usuario'] )){
+									    				?>
+									    				<i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoPropietario" data-target="modal_nuevoPropietario" data-position="right" data-delay="50" data-tooltip="Nuevo propietario" style="cursor:pointer;"></i>
+									    				<?php
+															}
+														?>
+									    				<input placeholder="Escribe y selecciona (identificación, nombre o apellido)" id="cita_propietario" name="cita_propietario" type="text" class="validate" onkeypress="buscarPropietarioCita()">
+	          											<input type="hidden" name="cita_idPropietario" id="cita_idPropietario" value="0" />
+	          											<label  id="label_cita_propietario" for="cita_propietario" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[12]//Propietario?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 input-field" id="selectPacienterDelPropietario">
+									    				<select class="icons" id="cita_pacientes">
+													      <option value="" disabled selected><?php echo $lang_agenda[17]//Elige un paciente?></option>
+													    </select>
+													    <label><?php echo $lang_agenda[18]//Pacientes del propietario?></label>
+									    			</div>
+									    			
+									    			<div class="col s1 input-field">
+									    				<?php
+									    				//saber si tiene permiso para adicionar nuevo tipo cita
+									    					if(in_array("100", $_SESSION['permisos_usuario'] )){
+									    				?>
+																<i class="fa fa-plus-circle prefix tooltipped modal-trigger" href="#modal_nuevoTipoCita" data-target="modal_nuevoTipoCita" data-position="right" data-delay="50" data-tooltip="<?php echo $lang_agenda[19]//Nuevo tipo de cita?>" style="cursor:pointer;"></i>
+														<?php
+															}
+														?>
+									    				
+									    			</div>
+									    			<div class="col s11 input-field" id="div_select_cita_tipoCita">									    				
+									    				<select id="cita_tipoCita">
+													      <option value="" disabled selected>Elige un tipo cita</option>
+													      <?php
+													      	foreach ($tiposDeCita as $tiposDeCita1) {
+														  ?>
+														  		<option value="<?php echo $tiposDeCita1['idTipoCita']?>"><?php echo $tiposDeCita1['nombre']?></option>
+														  <?php	  
+															  }
+													      ?>
+													      
+													    </select>
+													    <label><?php echo $lang_agenda[0]//Tipos de cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="YYYY/MM/DD" id="fecha_cita" name="fecha_cita" type="text" class="validate calendarioFecha" maxlength="10">
+          												<label id="label_fecha_cita" for="fecha_cita" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[20]//Fecha cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="H:M" id="hora_cita" name="hora_cita" type="text" class="validate hora" maxlength="5">
+          												<label id="label_hora_cita" for="hora_cita" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[21]//Hora cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="H" id="duracion_citaHoras" name="duracion_citaHoras" type="text" class="validate duracionHoras" maxlength="2">
+          												<label id="label_duracion_citaHoras" for="duracion_citaHoras" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[22]//Duración cita (Horas)?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="M" id="duracion_citaMinutos" name="duracion_citaMinutos" type="text" class="validate duracionMinutos" maxlength="2">
+          												<label id="label_duracion_citaMinutos" for="duracion_citaMinutos" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[23]//Duración cita (Minutos)?></label>
+									    			</div>
+									    			
+									    			<div class="input-field col s12" id="nuevaCitaOtrosUsuariosMultiple">
+													    <select multiple id="otrosUsuarios" name="otrosUsuarios[]" >
+													    	<option value="" disabled selected><?php echo $lang_agenda[24]//Vincular otros usuarios?></option>
+	
+													    </select>
+													    <label><?php echo $lang_agenda[25]//Adicionar otros usuarios además de?> <span id="nombreUsuarioSeleccionado"></span></label>
+													</div>
+									    			
+									    			<div class="input-field col s12 m12 l12">
+											          <textarea id="cita_observaciones" name="cita_observaciones" class="materialize-textarea" maxlength="300" length="300"></textarea>
+											          <label id="label_cita_observaciones" for="cita_observaciones"><?php echo $lang_agenda[26]//Observaciones?></label>
+											        </div>
+											        
+											        <div class="input-field col s12 m12 l12 right-align">
+											        	<a class="waves-effect waves-light btn red" onclick="cancelarNuevaCita()"><?php echo $lang_botones[5]//Cancelar?></a>
+											        	<a class="waves-effect waves-light btn" onclick="guardarNuevaCita()"><?php echo $lang_botones[2]//Guardar?></a>
+											        </div>
+									    			
+									    		</div><!-- Fin row-->
+									    		
+									    	</div><!-- Fin div para agendar cita-->
+									    	
+									    										    	<!-- Div para editar cita-->
+									    	<div class="col s12 m6 l6" id="hidden_editarCita" style="display: none;">
+									    		
+									    			
+									    			<div class="col s12">
+									    				<div class="row">
+									    					<div class="col s12">
+									    						<h4 class="center-align"><?php echo $lang_agenda[27]//Editar cita?></h4>
+									    					</div>
+									    					<div class="col s12 center-align">
+									    						 <a class="waves-effect waves-red btn-flat" onclick="abrirFormCanelarCita()"><?php echo $lang_agenda[28]//Cancelar cita?></a>
+									    					</div>									    					
+									    				</div>							    				
+									    				
+									    			</div>
+									    			
+									    			<div id="divHiddenCancelarCita" class="row" style="display: none;">
+									    				<div class="col s12  input-field">
+									    					<textarea id="motivoCancelacion" name="motivoCancelacion" class="materialize-textarea" length="200" maxlength="200" ></textarea>
+            												<label id="label_motivoCancelacion" for="motivoCancelacion" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[29]//Motivo de la cancelación?></label>
+									    				</div>
+									    				<div class="col s12  input-field right-align">
+									    					<a class="waves-effect waves-light btn blue" onclick="cerrarCancelacionCita()"><?php echo $lang_botones[3]//Cerrar?></a>
+									    					<a class="waves-effect waves-light btn red" onclick="cancelarCita()"><?php echo $lang_agenda[28]//Cancelar cita?></a>											        		
+									    				</div>
+									    			</div>
+									    			
+									    			<div class="col s12 input-field">
+									    				<input id="editar_cita_propietario" name="editar_cita_propietario" type="text" class="validate" disabled="disabled">
+	          											<label id="label_editar_cita_propietario" for="editar_cita_propietario" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[12]//Propietario?></label>
+									    			</div>
+									    			
+									    			<div class="col s10 m11 l11 input-field" id="editar_selectPacienterDelPropietario">
+									    				<select class="icons" id="editar_cita_pacientes" name="editar_cita_pacientes" disabled>
+													      
+													    </select>
+													    <label><?php echo $lang_agenda[30]//Pacientes del propietario?></label>
+									    			</div>
+									    			<div class="col s2 m1 l1 input-field">
+									    				<a id="aEnlacePaciente" href="javascript:void(0)" ><i class="fa fa-eye fa-2x" aria-hidden="true"></i></a>
+									    			</div>
+									    			
+									    			<div class="col s12 input-field">									    				
+									    				<select id="editar_cita_tipoCita">
+									    					<option value="0"><?php echo $lang_agenda[31]//Elegir tipo de cita?></option>
+													      <?php
+													      	foreach ($tiposDeCita as $tiposDeCita1) {
+														  ?>
+														  		<option value="<?php echo $tiposDeCita1['idTipoCita']?>"><?php echo $tiposDeCita1['nombre']?></option>
+														  <?php	  
+															  }
+													      ?>
+													     												      
+													    </select>
+													    <label><?php echo $lang_agenda[0]//Tipos de cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="YYYY/MM/DD" id="editar_fecha_cita" name="fecha_cita" type="text" class="validate calendarioFecha" maxlength="10">
+          												<label id="label_editar_fecha_cita" for="editar_fecha_cita" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[20]//Fecha cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="H:M" id="editar_hora_cita" name="editar_hora_cita" type="text" class="validate hora" maxlength="5">
+          												<label id="label_editar_hora_cita" for="editar_hora_cita" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[21]//Hora cita?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="H" id="editar_duracion_citaHoras" name="editar_duracion_citaHoras" type="text" class="validate duracionHoras" maxlength="2">
+          												<label id="label_editar_duracion_citaHoras" for="editar_duracion_citaHoras" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[22]//Duración cita (Horas)?></label>
+									    			</div>
+									    			
+									    			<div class="col s12 m3 l3 input-field">
+									    				<input placeholder="M" id="editar_duracion_citaMinutos" name="editar_duracion_citaMinutos" type="text" class="validate duracionMinutos" maxlength="2">
+          												<label id="label_editar_duracion_citaMinutos" for="duracion_editar_citaMinutos" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"><?php echo $lang_agenda[23]//Duración cita (Minutos)?></label>
+									    			</div>
+									    			
+									    			<div class="input-field col s12" id="divOtrosUsuarios">
+													    <select multiple id="editar_otrosUsuarios" name="editar_otrosUsuarios[]">
+													    	
+													    	<?php
+												      
+														      	foreach ($usuariosActivos as $usuariosActivos1) {
+															?>
+																	<option value="<?php echo $usuariosActivos1['idUsuario']?>"><?php echo "(".$usuariosActivos1['identificacion'].") ".$usuariosActivos1['nombre']." ".$usuariosActivos1['apellido']  ?></option>
+															<?php  
+																  }
+														      
+														      ?>													         
+													    </select>
+													    <label><?php echo $lang_agenda[32]//usuarios vinculados?></label>
+													</div>
+									    			
+									    			<div class="input-field col s12 m12 l12">
+											          <textarea id="editar_cita_observaciones" name="editar_cita_observaciones" class="materialize-textarea"></textarea>
+											          <label id="label_editar_cita_observaciones" for="editar_cita_observaciones"><?php echo $lang_agenda[33]//Observaciones?></label>
+											        </div>
+											        
+											        <input type="hidden" id="idCitaEditar" name="idCitaEditar" value="0" />
+											        
+											        <div class="input-field col s12 m12 l12 right-align">
+											        	<a class="waves-effect waves-light btn red" onclick="cancelarEdicionCita()"><?php echo $lang_botones[5]//Cancelar?></a>
+											        	<a class="waves-effect waves-light btn" onclick="guardarEdicionCita()"><?php echo $lang_botones[4]//Editar?></a>
+											        </div>
+									    			
+									    		
+									    	</div><!-- Fin div para agendar cita-->
+									    	
+									    	<!-- Div para pintar el calendario-->
+									    	<div id='calendar' class="col s12 m12 l12"></div>
+								    	
+								    	</div><!-- Fin row-->
+								    	
+								    	
+								    	
+								    	
+								    	
+								    	
+								    	
+								    	
+								    	
+								    </div><!-- Fin contenido tab calendario-->
+								    <div id="horarios" class="col s12">
+								    	
+								    	<br>
+								    	
+								    	<?php
+				    		//saber si tiene permisos para ver los horarios de los usuarios
+							if(!in_array("97", $_SESSION['permisos_usuario'] )){
+								?>
+								    <h4 class="center-align">
+						        		<i class="fa fa-ban" aria-hidden="true"></i>
+						        		<?php echo $lang_general[16]//No tienes permiso para acceder aquí.?>
+						        	</h4>
+								<?php
+							}else{
+								?>
+								    	
+								    	<div class="row">
+								    		<div class="col s12">
+								    			<div class="input-field col s12 teal lighten-5">
+											    <select id="selectUsuario_horario" name="selectUsuario_horario" onchange="consultarHorarioUsuario()">
+											      <option value="" disabled selected><?php echo $lang_agenda[34]//Elegir usuario para ver su horario?></option>
+											      <?php
+											      
+											      //saber si tiene permisos para ver los horarios de otros usuarios
+														if(in_array("98", $_SESSION['permisos_usuario'] )){
+																$swp2 = 1;
+															}else{
+																$swp2 = 0;
+															}
+											      
+											      	foreach ($usuariosActivos as $usuariosActivos1) {
+											      		
+														if($swp2 == 0){
+												      			if ($usuariosActivos1['idUsuario'] == $_SESSION['usuario_idUsuario']) {
+															?>
+																	<option value="<?php echo $usuariosActivos1['idUsuario']?>"><?php echo "(".$usuariosActivos1['identificacion'].") ".$usuariosActivos1['nombre']." ".$usuariosActivos1['apellido']  ?></option>
+															<?php		  
+																  }//fin if si es el mismo usuario
+												      		}else{
+												      		?>
+												      				<option value="<?php echo $usuariosActivos1['idUsuario']?>"><?php echo "(".$usuariosActivos1['identificacion'].") ".$usuariosActivos1['nombre']." ".$usuariosActivos1['apellido']  ?></option>
+												      		<?php	
+												      		}//fin else
+														
+														 
+													  }//fin foreach
+											      
+											      ?>											      
+											    </select>
+											    <label><?php echo $lang_agenda[9]//Usuarios?></label>
+											  </div>
+								    		</div>
+								    	</div>
+								    	
+								    	
+								    	<div class="row">
+								    				
+												    <div class="col s12">
+												      <ul class="tabs">
+												        <li class="tab col s3"><a class="black-text active" href="#horarioSemana"><?php echo $lang_agenda[35]//Horarío semana?></a></li>
+												        <li class="tab col s3"><a class="black-text" href="#horarioFecha"><?php echo $lang_agenda[36]//Horarío en fecha?></a></li>
+												        <li class="tab col s3"><a class="black-text" href="#recesos"><?php echo $lang_agenda[37]//Recesos?></a></li>
+												        <li class="tab col s3"><a class="black-text" href="#recesosFecha"><?php echo $lang_agenda[38]//Recesos en fecha?></a></li>
+												      </ul>
+												    </div>
+												    
+												    <div id="horarioSemana" class="col s12">
+												    	<br/>
+												    	
+												    	<div class="row">											    		
+												    	
+														    	<table class="bordered">
+														    		
+														    		<thead>
+														    			<tr>
+														    				<th><?php echo $lang_agenda[39]//Día?></th>
+														    				<th><?php echo $lang_agenda[40]//Estado?></th>
+														    				<th><?php echo $lang_agenda[41]//Hora inicio jornada?></th>
+														    				<th><?php echo $lang_agenda[42]//Hora fin jornada?></th>
+														    				<th></th>
+														    			</tr>
+														    		</thead>
+														    		<tbody>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[43]//Lunes?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Lunes" onclick="ActivarDesactivarDia(this.id)"/>
+																		      		<label for="Lunes" ></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+														    						<input disabled id="inicioJornadaLunes" type="text" class="validate hora" onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+														    						<label id="label_inicioJornadaLunes" for="inicioJornadaLunes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+														    							<?php echo $lang_agenda[44]//<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+														    						</label> 
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaLunes" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaLunes" for="finJornadaLunes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarLunes" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[46]//Martes?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Martes" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Martes"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaMartes" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaMartes" for="inicioJornadaMartes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaMartes" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaMartes" for="finJornadaMartes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarMartes" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[47]//Miércoles?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Miercoles" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Miercoles"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaMiercoles" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaMiercoles" for="inicioJornadaMiercoles" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaMiercoles" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaMiercoles" for="finJornadaMiercoles" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarMiercoles" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[48]//Jueves?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Jueves" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Jueves"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaJueves" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaJueves" for="inicioJornadaJueves" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaJueves" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaJueves" for="finJornadaJueves" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarJueves" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[49]//Viernes?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Viernes" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Viernes"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaViernes" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaViernes"  for="inicioJornadaViernes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaViernes" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaViernes"  for="finJornadaViernes" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarViernes" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[50]//Sábado?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Sabado" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Sabado"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaSabado" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaSabado" for="inicioJornadaSabado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaSabado" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaSabado" for="finJornadaSabado" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarSabado" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    			<tr>
+														    				<td><?php echo $lang_agenda[51]//Domingo?></td>
+														    				<td>
+														    					<p>
+																		      		<input disabled="disabled" type="checkbox" id="Domingo" onclick="ActivarDesactivarDia(this.id)" />
+																		      		<label for="Domingo"></label>
+																		    	</p>
+																		    </td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="inicioJornadaDomingo" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_inicioJornadaDomingo" for="inicioJornadaDomingo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<div class="input-field">	
+															    					<input disabled id="finJornadaDomingo" type="text" class="validate hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+															    					<label id="label_finJornadaDomingo" for="finJornadaDomingo" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+															    						<?php echo $lang_agenda[44]//Selecciona o escribe -(14:45)-?>
+															    					</label>
+														    					</div>
+														    				</td>
+														    				<td>
+														    					<i id="copiarDomingo" onclick="copiarHorarioOtrosDias(this.id)" class="fa fa-clone fa-2x tooltipped" aria-hidden="true" style="cursor: pointer;" data-position="bottom" data-delay="50" data-tooltip="<?php echo $lang_agenda[45]//Copiar horario en otros días?>" ></i>
+														    				</td>
+														    			</tr>
+														    		</tbody>
+														    		
+														    	</table>
+												    	</div><!-- Fin row-->
+												    	<div class="row">
+												    		<div class="col s12 right-align">
+												    			<span id="mensajeGuardado" style="display: none;"><?php echo $lang_agenda[52]//Horario guardado correctamente!?></span>
+												    			<a class="waves-effect red btn" onclick="limpiarHorarioSemana()"><?php echo $lang_botones[10]//Limpiar?></a>
+												    			<a class="waves-effect waves-light btn" onclick="guardarHorarioSemana()"><?php echo $lang_agenda[53]//Guardar horario?></a>												    			
+												    		</div>
+												    	</div>
+												    </div><!-- Fin contenido horario semana-->
+												    
+												    <div id="horarioFecha" class="col s12">
+												    	<br/>
+												    	
+												    	<div class="row">
+												    		
+												    		<div class="col s12 m2 l2 input-field">
+												    			<input id="fecha_horarioFecha" type="text" class="validate calendarioFecha">
+          														<label id='label_fecha_horarioFecha' for="fecha_horarioFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[54]//Fecha?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m4 l4 input-field">
+												    			<input id="fecha_horarioInicioFecha" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+          														<label id='label_fecha_horarioInicioFecha' for="fecha_horarioInicioFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[55]//Hora de inicio.-(13:20)-?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m4 l4 input-field">
+												    			<input id="fecha_horarioFinFecha" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+          														<label id='label_fecha_horarioFinFecha' for="fecha_horarioFinFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[56]//Hora de fin.-(14:45)-?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m2 l2 input-field">
+												    			<span id="mensajeGuardadoFecha" style="display: none;"><?php echo $lang_agenda[57]//Horario para la fecha guardado!?></span>
+												    			<span id="mensajeActualizadoFecha" style="display: none;"><?php echo $lang_agenda[58]//Horario para la fecha actualizado!?></span>
+												    			<a class="btn-floating waves-effect waves-light" onclick="guardarHorarioFecha()"><i class="material-icons">add</i></a>
+												    		</div>
+												    		
+												    	</div><!-- Fin row-->
+												    	
+												    	<div class="row">
+												    		<div class="col s12">
+												    			 <ul class="collection with-header">
+															        <li class="collection-header">
+															        	<h4 class="center-align"><?php echo $lang_agenda[59]//Horarios en fechas?></h4>
+															        </li>	
+															        
+															       	<div id="div_contenidoHorarioFechas">
+															       		
+															       	</div>
+															      </ul>
+												    		</div>
+												    	</div>
+												    	
+												    </div><!-- Fin tab horariofecha-->
+												    
+												    <div id="recesos" class="col s12">
+												    	<br/>
+												    	<ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	
+													        	<h5>
+													        		<?php echo $lang_agenda[43]//Lunes?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('0')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso0" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio0" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio0' for="recesoDias_horaInicio0" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//<?php echo $lang_agenda[60]//Hora inicio del receso?>?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin0" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin0' for="recesoDias_horaFin0" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('0')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('0')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso0-->
+													        	
+													        </li>
+													        <div id="div_recesos0">
+													        	
+													        </div>
+													    </ul>
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[46]//Martes?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('1')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso1" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio1" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio1' for="recesoDias_horaInicio1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin1" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin1' for="recesoDias_horaFin1" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('1')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('1')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso1-->
+													        </li>
+													        <div id="div_recesos1">
+													        	
+													        </div>
+													    </ul>
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[47]//Miércoles?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('2')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso2" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio2" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio2' for="recesoDias_horaInicio2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin2" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin2' for="recesoDias_horaFin2" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('2')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('2')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso2-->
+													        </li>
+													        <div id="div_recesos2">
+													        	
+													        </div>
+													    </ul>
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[48]//Jueves?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('3')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso3" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio3" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio3' for="recesoDias_horaInicio3" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin3" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin3' for="recesoDias_horaFin3" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('3')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('3')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso3-->
+													        </li>
+													        <div id="div_recesos3">
+													        	
+													        </div>
+													    </ul>
+													    
+													    
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[49]//Viernes?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('4')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso4" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio4" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio4' for="recesoDias_horaInicio4" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin4" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin4' for="recesoDias_horaFin4" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('4')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('4')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoRecesoViernes-->
+													        </li>
+													        <div id="div_recesos4">
+													        	
+													        </div>
+													    </ul>
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[50]//Sabado?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('5')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso5" style="display: none; ">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio5" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio5' for="recesoDias_horaInicio5" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin5" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin5' for="recesoDias_horaFin5" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//Hora fin del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('5')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('5')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso5-->
+													        </li>
+													        <div id="div_recesos5">
+													        	
+													        </div>
+													    </ul>
+													    
+													    <ul class="collection with-header">
+													        <li class="collection-header center-align">
+													        	<h5>
+													        		<?php echo $lang_agenda[51]//Domingo?>
+													        		<a class="btn-floating waves-effect waves-light" onclick="nuevoRecesoDia('6')"><i class="material-icons">add</i></a>
+													        	</h5>
+													        	<div id="div_nuevoReceso6" style="display: none;">
+													        		
+													        		<div class="row">
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaInicio6" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaInicio6' for="recesoDias_horaInicio6" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[60]//Hora inicio del receso?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m3 l3 input-field">
+													        				<input id="recesoDias_horaFin6" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+			          														<label id='label_recesoDias_horaFin6' for="recesoDias_horaFin6" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+			          															<?php echo $lang_agenda[61]//<?php echo $lang_agenda[61]//Hora fin del receso?>?>
+			          														</label>
+													        			</div>
+													        			
+													        			<div class="col s12 m4 l4 input-field">
+													        				<span id="mensajeRecesoDia" style="display: none;">Receso guardado correctamente!</span>
+													        				<a class="waves-effect waves-light btn red" onclick="cancelarGuardadoRecesoDia('6')">Cancelar</a>
+													        				<a class="waves-effect waves-light btn" onclick="guardarRecesoDia('6')">Guardar</a>													        				
+													        			</div>
+													        		</div>
+													        		
+													        	</div><!-- Fin div_nuevoReceso6-->
+													        </li>
+													        <div id="div_recesos6">
+													        	
+													        </div>
+													    </ul>
+												    	
+												    	
+												    </div><!-- Fin conenido receso semana-->
+												    
+												    <div id="recesosFecha" class="col s12">
+												    	<br/>
+												    	
+												    	<br/>
+												    	
+												    	<div class="row">
+												    		
+												    		<div class="col s12 m2 l2 input-field">
+												    			<input id="fecha_recesoFecha" type="text" class="validate calendarioFecha">
+          														<label id='label_fecha_recesoFecha' for="fecha_recesoFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[54]//Fecha?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m4 l4 input-field">
+												    			<input id="fecha_recesoInicioFecha" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+          														<label id='label_fecha_recesoInicioFecha' for="fecha_recesoInicioFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[62]//Inicio receso.-(14:45)-?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m4 l4 input-field">
+												    			<input id="fecha_recesoFinFecha" type="text" class="validate  hora"  onkeypress="return soloNumerosDosPuntos(event)" maxlength="5">
+          														<label id='label_fecha_recesoFinFecha' for="fecha_recesoFinFecha" data-error="<?php echo $lang_error[0]//Debe completar este campo?>" data-success="<?php echo $lang_error[1]//Ok?>" style="width:95%; text-align: left;"  >
+          															<?php echo $lang_agenda[63]//Fin receso.-(14:45)-?>
+          														</label>
+												    		</div>
+												    		
+												    		<div class="col s12 m2 l2 input-field">
+												    			<span id="mensajeGuardadoFechaReceso" style="display: none;"><?php echo $lang_agenda[64]//Receso para la fecha guardado!?></span>												    			
+												    			<a class="btn-floating waves-effect waves-light" onclick="guardarRecesoFecha()"><i class="material-icons">add</i></a>
+												    		</div>
+												    		
+												    	</div><!-- Fin row-->
+												    	
+												    	<div class="row">
+												    		<div class="col s12">
+												    			 <ul class="collection with-header">
+															        <li class="collection-header">
+															        	<h4 class="center-align"><?php echo $lang_agenda[65]//Recesos en fechas?></h4>
+															        </li>	
+															        
+															       	<div id="div_contenidoRecesosFechas">
+															       		
+															       	</div>
+															      </ul>
+												    		</div>
+												    	</div>
+												    	
+												    	
+												    	
+												    	
+												    </div><!-- Fin tab recesosFecha-->
+												    
+								    	</div><!-- Fin row-->
+								    	
+								    	
+								    	
+								    	
+								    	<?php
+								    	}//fin else para el permiso de ver horarios
+								    	?>
+								    </div><!-- Fin tab horarios -->
+								    
+								</div><!--Fin row -->
+
+
+
+							</li>
+							
+						</ul>
+						
+					</div>				
+					
+				</div><!-- Fin row-->
+				
+
+			 </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+</main>

@@ -1,0 +1,136 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_perfil[1]//Identificación?></th>
+			<th><?php echo $lang_reportes[70]//Nombre?></th>
+			<th><?php echo $lang_perfil[3]//Apellidos?></th>		
+			<th><?php echo $lang_general[0]//Teléfono?></th>
+			<th><?php echo $lang_general[2]//Celular?></th>
+			<th>E-mail</th>
+			<th><?php echo $lang_general[3]//Dirección?></th>
+			<th><?php echo $lang_barrios[9]//Ciudad?></th>
+			<th><?php echo $lang_barrios[8]//Barrio?></th>	
+			<th><?php echo $lang_reportes[9]//Pacientes?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoPropietarios as $listadoPropietarios1) {
+		
+		$cantidadPacientes = $objetoReportes->propietarios_cantidadPacientes($listadoPropietarios1['idPropietario']);
+		
+?>
+		<tr>
+			<td><?php echo $listadoPropietarios1['identificacion'] ?></td>	
+			<td><?php echo $listadoPropietarios1['nombre']?></td>
+			<td><?php echo $listadoPropietarios1['apellido']?></td>
+			<td><?php echo $listadoPropietarios1['telefono']?></td>		
+			<td><?php echo $listadoPropietarios1['celular']?></td>
+			<td><?php echo $listadoPropietarios1['email']?></td>
+			<td><?php echo $listadoPropietarios1['direccion']?></td>
+			<td><?php echo $listadoPropietarios1['nombreCiudad']?></td>
+			<td><?php echo $listadoPropietarios1['nombreBarrio']?></td>
+			<td><?php echo $cantidadPacientes ?></td>
+					
+			
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none ;" id="exportarHCalculo">
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th><?php echo $lang_perfil[1]//Identificación?></th>
+			<th><?php echo $lang_reportes[70]//Nombre?></th>
+			<th><?php echo $lang_perfil[3]//Apellidos?></th>		
+			<th><?php echo $lang_general[0]//Teléfono?></th>
+			<th><?php echo $lang_general[2]//Celular?></th>
+			<th>E-mail</th>
+			<th><?php echo $lang_general[3]//Dirección?></th>
+			<th><?php echo $lang_barrios[10]//País?></th>
+			<th><?php echo $lang_barrios[9]//Ciudad?></th>
+			<th><?php echo $lang_barrios[8]//Barrio?></th>	
+			<th><?php echo $lang_reportes[115]//Cantidad pacientes?></th>
+			<th><?php echo $lang_reportes[20]//Pacientes?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+	$contador = 1;
+	foreach ($listadoPropietariosExportar as $listadoPropietarios1) {
+		
+		$pacientes = $objetoReportes->propietario_listarPacientes($listadoPropietarios1['idPropietario']);
+
+		
+?>
+		<tr>
+			<td><?php echo $contador?></td>
+			<td><?php echo $listadoPropietarios1['identificacion'] ?></td>	
+			<td><?php echo $listadoPropietarios1['nombre']?></td>
+			<td><?php echo $listadoPropietarios1['apellido']?></td>
+			<td><?php echo $listadoPropietarios1['telefono']?></td>		
+			<td><?php echo $listadoPropietarios1['celular']?></td>
+			<td><?php echo $listadoPropietarios1['email']?></td>
+			<td><?php echo $listadoPropietarios1['direccion']?></td>
+			<td><?php echo $listadoPropietarios1['nombrePais']?></td>
+			<td><?php echo $listadoPropietarios1['nombreCiudad']?></td>
+			<td><?php echo $listadoPropietarios1['nombreBarrio']?></td>
+			<td><?php echo sizeof($pacientes) ?></td>
+			<td>
+				
+			<?php
+				if(sizeof($pacientes) > 0){
+				
+			?>	
+				<table>
+					<tr>
+						<th><?php echo $lang_reportes[70]//Nombre?></th>
+						<th><?php echo $lang_reportes[108]//Especie?></th>
+						<th><?php echo $lang_reportes[109]//Raza?></th>
+					</tr>
+				
+				<?php foreach ($pacientes as $pacientes1) { ?>
+						<tr>
+							<td><?php echo $pacientes1['nombre']?></td>
+							<td><?php echo $pacientes1['nombreEspecie']?></td>
+							<td><?php echo $pacientes1['nombreRaza']?></td>
+						</tr>
+				<?php } ?>
+				
+				</table>
+				
+				<?php
+					}
+				?>
+				
+			</td>
+			
+		</tr>
+<?php		
+		$contador = $contador +1;
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+	
+</div>
+<!-- Contenido para exportar a excel-->
+
+

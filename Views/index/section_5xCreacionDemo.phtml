@@ -1,0 +1,52 @@
+<?php 
+
+require_once('../../Config/config.php');//se importa las configuraciones
+ $idiomaIndex = Config::getUserLanguage();
+            
+			$lang_form = array();
+			
+			
+            switch ($idiomaIndex) {
+            	case 'es':
+            		$lang_form[0]	= "Listo!. tu cuenta demo se ha creado. Verifica tu E-mail.";
+            		break;
+            		
+            	case 'en':
+            		$lang_form[0] = "Ready!. Your demo account has been created. Verify your Email.";
+            		break;
+            	
+            	default:
+            		$lang_form[0]	= "Listo!. tu cuenta demo se ha creado. Verifica tu E-mail.";
+            		break;
+            }
+			
+			
+
+?>
+
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />	    
+	    <!--<p class="flow-text">Adquiere una cuenta y recibe gratis la inscripción en el directorio</p>-->
+	    
+	     <div class="container">
+	    
+    	    <div class="row">
+              <div class="col s12 m12 l12">
+                <div class="card-panel">
+                  
+                  <div  class="card-content">
+                  
+                  		<h3 class="center-align"><?php echo $lang_form[0]//Listo!. tu cuenta demo se ha creado. Verifica tu E-mail.?></h3>
+            	                                           
+                  </div>
+                </div>
+              </div>
+            </div><!-- fin row-->
+        
+        </div><!-- fin container -->
+        

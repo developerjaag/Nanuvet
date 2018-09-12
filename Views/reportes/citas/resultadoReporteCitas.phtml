@@ -1,0 +1,126 @@
+
+<table class="bordered highlight responsive-table">
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[48]//Duración?></th>
+			<th><?php echo $lang_reportes[49]//Tipo cita?></th>
+			<th><?php echo $lang_reportes[33] //Paciente?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>
+			<th><?php echo $lang_reportes[50]//Usuarios?></th>
+			<th><?php echo $lang_reportes[51]//Estado?></th>
+			<th><?php echo $lang_reportes[52]//Motivo cancelación?></th>
+			<th><?php echo $lang_reportes[53]//Usuario cancela?></th>
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoCitas as $listadoCitas1) {
+		
+		$usuariosCita = $objetoReportes->citas_usuariosCita($listadoCitas1['idAgendaCita']);
+		
+		if($listadoCitas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//"H";
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoCitas1['fecha']?></td>
+			<td><?php echo $listadoCitas1['duracionHoras'].":".$listadoCitas1['duracionMinutos']?></td>
+			<td><?php echo $listadoCitas1['nombreTipoCita']?></td>
+			<td><?php echo $listadoCitas1['nombreMascota']." (".$sexo.")"?></td>
+			<td><?php echo "(".$listadoCitas1['identificacionPropietario'].") ".$listadoCitas1['nombrePropietario']." ".$listadoCitas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoCitas1['telefono']?></td>
+			<td>
+				<?php foreach ($usuariosCita as $usuariosCita1) {
+					?>
+						<?php echo "- ".$usuariosCita1['nombre']." ".$usuariosCita1['apellido']."<br />"?>
+					<?php	
+				} ?>
+			</td>
+			<td><?php echo $listadoCitas1['estado']?></td>
+			<td><?php echo $listadoCitas1['motivoCancelacion']?></td>
+			<td><?php echo $listadoCitas1['nombreUsuario']." ".$listadoCitas1['apellidoUsuario']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoCitas1['observaciones']?></td>
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+
+
+<!-- Contenido para exportar a excel-->
+<div style="display: none;" id="exportarHCalculo">
+	
+	
+	
+<table>
+	<thead>
+		<tr>
+			<th><?php echo $lang_reportes[27]//Fecha?></th>
+			<th><?php echo $lang_reportes[48]//Duración?></th>
+			<th><?php echo $lang_reportes[49]//Tipo cita?></th>
+			<th><?php echo $lang_reportes[33] //Paciente?></th>
+			<th><?php echo $lang_reportes[54]//Sexo?></th>
+			<th><?php echo $lang_reportes[18]//Propietario?></th>
+			<th><?php echo $lang_reportes[32]//Teléfono?></th>
+			<th><?php echo $lang_reportes[50]//Usuarios?></th>
+			<th><?php echo $lang_reportes[51]//Estado?></th>
+			<th><?php echo $lang_reportes[52]//Motivo cancelación?></th>
+			<th><?php echo $lang_reportes[53]//Usuario cancela?></th>
+			<th><?php echo $lang_reportes[38]//Observaciones?></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+<?php
+
+	foreach ($listadoCitasExportar as $listadoCitas1) {
+		
+		$usuariosCita = $objetoReportes->citas_usuariosCita($listadoCitas1['idAgendaCita']);
+		
+		if($listadoCitas1['sexoMascota'] == "M"){
+			$sexo = "M";
+		}else{
+			$sexo = $lang_reportes[35];//"H";
+		}
+		
+?>
+		<tr>
+			<td><?php echo $listadoCitas1['fecha']?></td>
+			<td><?php echo $listadoCitas1['duracionHoras'].":".$listadoCitas1['duracionMinutos']?></td>
+			<td><?php echo $listadoCitas1['nombreTipoCita']?></td>
+			<td><?php echo $listadoCitas1['nombreMascota']?></td>
+			<td><?php echo $sexo ?></td>
+			<td><?php echo "(".$listadoCitas1['identificacionPropietario'].") ".$listadoCitas1['nombrePropietario']." ".$listadoCitas1['apellidoPropietario']?></td>
+			<td><?php echo $listadoCitas1['telefono']?></td>
+			<td>
+				<?php foreach ($usuariosCita as $usuariosCita1) {
+					?>
+						<?php echo "- ".$usuariosCita1['nombre']." ".$usuariosCita1['apellido']."<br />"?>
+					<?php	
+				} ?>
+			</td>
+			<td><?php echo $listadoCitas1['estado']?></td>
+			<td><?php echo $listadoCitas1['motivoCancelacion']?></td>
+			<td><?php echo $listadoCitas1['nombreUsuario']." ".$listadoCitas1['apellidoUsuario']?></td>
+			<td style="max-width: 150px;"><?php echo $listadoCitas1['observaciones']?></td>
+		</tr>
+<?php		
+	}
+?>
+	</tbody>
+	
+</table>
+	
+</div>
+<!-- Contenido para exportar a excel-->
+

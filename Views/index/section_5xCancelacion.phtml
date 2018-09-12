@@ -1,0 +1,139 @@
+<?php 
+
+require_once('../../Config/config.php');//se importa las configuraciones
+ $idiomaIndex = Config::getUserLanguage();
+            
+			$lang_form = array();
+			
+			
+            switch ($idiomaIndex) {
+            	case 'es':
+            		$lang_form[0]	= "Adquiere el software";
+            		$lang_form[1]	= "Cantidad de licencias";
+            		$lang_form[2]	= "(Precio anual)";
+            		$lang_form[3]	= "Continuar";
+            		$lang_form[4]	= "Crear cuenta demo (15 días)";
+					
+            		break;
+            		
+            	case 'en':
+					
+		
+					$lang_form[0]	= "Purchase the software";
+            		$lang_form[1]	= "Number of licenses";
+            		$lang_form[2]	= "(Annual Price)";
+            		$lang_form[3]	= "Continue";
+            		$lang_form[4]	= "Create demo account (15 days)";
+					
+				
+            		break;
+            	
+            	default:
+            		$lang_form[0]	= "Adquiere el software";
+            		$lang_form[1]	= "Cantidad de licencias";
+            		$lang_form[2]	= "(Precio anual)";
+            		$lang_form[3]	= "Continuar";
+            		$lang_form[4]	= "Crear cuenta demo (15 días)";
+					
+            		break;
+            }
+			
+			
+
+?>
+
+
+
+        <br />
+        <br />
+        <br />
+	    <h1><?php echo $lang_form[0]//Adquiere el software?></h1>
+	    
+	    <!--<p class="flow-text">Adquiere una cuenta y recibe gratis la inscripción en el directorio</p>-->
+	    
+	     <div class="container">
+	        
+	    
+	    
+    	    <div class="row">
+              <div class="col s12 m12 l12">
+                <div class="card-panel">
+                  
+                  <div id="cardContentDemo" class="card-content">
+                  
+            	        
+            	        
+            	        <form id="form_compra" name="form_compra" action="" method="post">
+            	            <input type="hidden" name="hidden_compra" id="hidden_compra" value="compra"/>
+            	            
+            	         <div class="row">
+            	             
+            	             <div class="col l6 m6 s6">
+            	                 <p>
+                                  <input class="with-gap" name="group1" type="radio" id="test1" checked/>
+                                  <label for="test1">COP ($)</label>
+                                </p>
+            	             </div>
+            	             <div class="col l6 m6 s6">
+            	                 <p>
+                                  <input class="with-gap" name="group1" type="radio" id="test1" disabled="disabled" />
+                                  <label for="test1">USD ($)</label>
+                                </p>
+            	             </div>
+            	         </div>     
+            	            
+                          <div class="row">
+                              
+                           <div class="input-field col s12 l10 m12">
+                             
+                                <select id="select_precio" name="select_precio">
+                                  
+                                  <?php
+                                    $selected = "selected";
+                                    $tamano = sizeof($precios["precios"]);
+                                    
+                                    for($i=0; $i < $tamano; $i++){
+                                      
+                                  ?>
+                                      
+                                      <option value="<?php echo $precios['precios'][$i]['id']?>" <?php echo $selected?>><?php echo $precios["precios"][$i]["display"] ?></option>
+                                      
+                                      
+                                  <?php  
+                                      $selected = "";
+                                    }//fin for
+                                  
+                                  ?>
+                                  
+                                </select>
+                                <label><?php echo $lang_form[1]//Cantidad de licencias?> <strong><?php echo $lang_form[2]//(Precio anual)?></strong></label>
+                                
+                            </div>
+                            
+                            <div class="input-field col s12 l2 m12">
+                                <a class="waves-effect waves-light btn" onclick="continuarCompra()"><?php echo $lang_form[3]//Continuar?></a>
+                            </div>
+                            
+                          </div>
+                          
+                        </form>
+                        
+                        <div class="row">
+                        	<div class="col s12">
+                        		<a class="waves-effect waves-light blue btn" onclick="crearDemo()"><?php echo $lang_form[4]//Crear cuenta demo (15 días)?></a>
+                        	</div>
+                        </div>                                    
+                  </div>
+                </div>
+              </div>
+            </div><!-- fin row-->
+        
+        </div><!-- fin container -->
+        
+        
+        <script>
+		    $(document).ready(function () {
+		    	//para los select
+    			$('select').material_select();
+		    });
+		  </script>
